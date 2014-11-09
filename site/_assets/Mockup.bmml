@@ -1,0 +1,14 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1512" measuredH="743" mockupW="1200" mockupH="720">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="312" y="23" w="1200" h="720" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Local%20Learners%0Ahttp%3A//locallearners.com</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Image" x="537" y="113" w="318" h="115" measuredW="77" measuredH="79" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Logo</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
