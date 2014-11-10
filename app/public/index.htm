@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html ng-app="localLearnerApp">
   <head>
     <title>Local Learners</title>
     <link rel="stylesheet" href="css/style.css" />
@@ -7,7 +7,9 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="_js/main.js"></script>
+    <script type="text/javascript" src="_js/controllers/testController.js"></script>
   </head>
   <body>
 
@@ -18,6 +20,10 @@
     <section>
       <h1>Local Learners</h1>
     </section>
+
+    <div ng-controller="TestController">
+        <p>{{request.name}}</p>
+    </div>
 
     <footer>
       <div></div>

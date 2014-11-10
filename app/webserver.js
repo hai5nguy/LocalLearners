@@ -4,7 +4,7 @@ var app = express();
 //var app = require('http').createServer(app);
 //var io = require('socket.io')(server);
 
-var port = 3000;
+var port = 5000;
 
 
 app.listen(port, function() {
