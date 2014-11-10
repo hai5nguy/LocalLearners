@@ -6,10 +6,15 @@
     "type": "git",
     "url": "https://github.com/nmhai3/LocalLearners.git"
   },
-  "author": "Hai Nguyen, Alissa Renz, The Jared Wilcurt",
+  "author": "Hai N, Alissa Renz, The Jared Wilcurt",
   "license": "MIT",
   "homepage": "https://github.com/nmhai3/LocalLearners",
   "dependencies": {
     "express": "^4.10.2"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-express-server": "^0.4.19"
   }
 }

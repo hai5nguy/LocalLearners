@@ -2,11 +2,6 @@
   "name": "LocalLearners",
   "version": "0.0.1",
   "homepage": "https://github.com/nmhai3/LocalLearners",
-  "authors": [
-    "Hai Nguyen",
-    "Alissa Renz",
-    "The Jared Wilcurt"
-  ],
   "description": "Site to augment local learners meetup group",
   "license": "MIT",
   "private": true,
