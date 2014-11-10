@@ -14,7 +14,7 @@
 
 
     /////////////////////////////////////////////////////
-    //                 CONCAT & MINIFY                 //
+    //          CONCAT & MINIFY INTO ONE FILE          //
     /////////////////////////////////////////////////////
 
     _console-error-fix.js // Goes first to prevent console errors in older browsers
