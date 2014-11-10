@@ -1,0 +1,15 @@
+{
+  "name": "LocalLearners",
+  "version": "0.0.1",
+  "description": "Site to augment Local Learners meetup group",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nmhai3/LocalLearners.git"
+  },
+  "author": "Hai Nguyen, Alissa Renz, The Jared Wilcurt",
+  "license": "MIT",
+  "homepage": "https://github.com/nmhai3/LocalLearners",
+  "dependencies": {
+    "express": "^4.10.2"
+  }
+}
