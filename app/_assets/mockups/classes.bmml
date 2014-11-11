@@ -1,8 +1,8 @@
 <mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="846" measuredH="748" mockupW="821" mockupH="736">
   <controls>
-    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="25" y="12" w="637" h="736" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="25" y="12" w="637" h="736" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>A%20Web%20Page%0Ahttp%3A//www.locallearners.net/categories</text>
+        <text>Categories%20of%20Classes%20-%20Local%20Learners%0Ahttp%3A//www.locallearners.net/categories</text>
       </controlProperties>
     </control>
     <control controlID="2" controlTypeID="com.balsamiq.mockups::MenuBar" x="25" y="81" w="637" h="38" measuredW="62" measuredH="29" zOrder="1" locked="false" isInGroup="-1">

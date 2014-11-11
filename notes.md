@@ -1,12 +1,15 @@
 #Need to do:
-* Finish user stories (TJW)
-* Create Balsamiq Mockups (AR)
-* Set up Bower (HMN)
+* ~~Finish user stories (TJW/AR/HMN)~~
+* ~~Create Balsamiq Mockups (AR)~~
 * Set up site in Angular (HMN)
-* Set up Twitter-Bootstrap (AR)
-* Set up Sass Boilerplate (TJW)
-* Arrange next project time (TJW/HMN/AR)
-* Revamp "about" statement (Leah)
+* Set up Bower (HMN)
+* ~~Set up Twitter-Bootstrap (TJW)~~
+* ~~Set up Sass Boilerplate (TJW)~~
+* Revamp "about" statement on Meetup (Leah)
+* Connect to Meetup using API (HMN/TJW)
+* OAUTH login (HMN)
+* Convert markup to be bootstrap compliant (AR)
+* Finish Logo (TJW)
 
 #Want to do:
 * 

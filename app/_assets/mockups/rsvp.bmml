@@ -4,7 +4,7 @@
       <controlProperties>
         <borderStyle>square</borderStyle>
         <color>16777215</color>
-        <text>http%3A//www.locallearners.com</text>
+        <text>Local%20Learners%20-%20Try%20something%20new%20today%2C%20for%20free%21%0Ahttp%3A//www.locallearners.com</text>
       </controlProperties>
     </control>
     <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="344" y="270" w="639" h="190" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
@@ -283,10 +283,10 @@
         <text>Make%20A%20Suggestion</text>
       </controlProperties>
     </control>
-    <control controlID="46" controlTypeID="com.balsamiq.mockups::Button" x="911" y="846" w="-1" h="-1" measuredW="58" measuredH="27" zOrder="44" locked="false" isInGroup="-1">
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::Button" x="896" y="848" w="-1" h="-1" measuredW="70" measuredH="27" zOrder="44" locked="false" isInGroup="-1">
       <controlProperties>
         <size>11</size>
-        <text>See%20All</text>
+        <text>See%20More</text>
       </controlProperties>
     </control>
     <control controlID="47" controlTypeID="com.balsamiq.mockups::HRule" x="360" y="879" w="607" h="-1" measuredW="100" measuredH="10" zOrder="45" locked="false" isInGroup="-1">
@@ -299,26 +299,20 @@
         <text>Footer</text>
       </controlProperties>
     </control>
-    <control controlID="49" controlTypeID="com.balsamiq.mockups::Image" x="709" y="253" w="10" h="12" measuredW="512" measuredH="512" zOrder="47" locked="false" isInGroup="-1">
-      <controlProperties>
-        <src>./assets/downward-arrow.png</src>
-        <text/>
-      </controlProperties>
-    </control>
-    <control controlID="50" controlTypeID="com.balsamiq.mockups::Label" x="785" y="247" w="-1" h="-1" measuredW="25" measuredH="20" zOrder="48" locked="false" isInGroup="-1">
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::Label" x="785" y="247" w="-1" h="-1" measuredW="25" measuredH="20" zOrder="47" locked="false" isInGroup="-1">
       <controlProperties>
         <size>12</size>
         <text>Host</text>
       </controlProperties>
     </control>
-    <control controlID="55" controlTypeID="com.balsamiq.mockups::Button" x="418" y="555" w="63" h="27" measuredW="60" measuredH="27" zOrder="49" locked="false" isInGroup="-1">
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::Button" x="418" y="555" w="63" h="27" measuredW="60" measuredH="27" zOrder="48" locked="false" isInGroup="-1">
       <controlProperties>
         <color>13369344</color>
         <size>14</size>
         <text>RSVP</text>
       </controlProperties>
     </control>
-    <control controlID="59" controlTypeID="com.balsamiq.mockups::VCurly" x="157" y="507" w="180" h="157" measuredW="180" measuredH="140" zOrder="50" locked="false" isInGroup="-1">
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::VCurly" x="157" y="507" w="180" h="157" measuredW="180" measuredH="140" zOrder="49" locked="false" isInGroup="-1">
       <controlProperties>
         <direction>right</direction>
         <text>Rollover%20Effect%3A%20Darkened%20Image%20+%20MeetUp-like%20RSVP%20Button</text>
@@ -329,27 +323,27 @@
         <color>13421772</color>
       </controlProperties>
     </control>
-    <control controlID="62" controlTypeID="com.balsamiq.mockups::Canvas" x="481" y="536" w="350" h="64" measuredW="100" measuredH="70" zOrder="51" locked="false" isInGroup="-1"/>
-    <control controlID="63" controlTypeID="com.balsamiq.mockups::Canvas" x="481" y="597" w="350" h="164" measuredW="100" measuredH="70" zOrder="52" locked="false" isInGroup="-1"/>
-    <control controlID="65" controlTypeID="com.balsamiq.mockups::Button" x="481" y="754" w="350" h="45" measuredW="152" measuredH="27" zOrder="53" locked="false" isInGroup="-1">
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::Canvas" x="481" y="536" w="350" h="64" measuredW="100" measuredH="70" zOrder="50" locked="false" isInGroup="-1"/>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::Canvas" x="481" y="597" w="350" h="164" measuredW="100" measuredH="70" zOrder="51" locked="false" isInGroup="-1"/>
+    <control controlID="65" controlTypeID="com.balsamiq.mockups::Button" x="481" y="754" w="350" h="45" measuredW="152" measuredH="27" zOrder="52" locked="false" isInGroup="-1">
       <controlProperties>
         <color>13369344</color>
         <text>RSVP%20WITH%20MEETUP</text>
       </controlProperties>
     </control>
-    <control controlID="66" controlTypeID="com.balsamiq.mockups::Label" x="490" y="605" w="-1" h="-1" measuredW="76" measuredH="21" zOrder="54" locked="false" isInGroup="-1">
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::Label" x="490" y="605" w="-1" h="-1" measuredW="76" measuredH="21" zOrder="53" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>true</bold>
         <text>About%20Class</text>
       </controlProperties>
     </control>
-    <control controlID="68" controlTypeID="com.balsamiq.mockups::Label" x="490" y="651" w="-1" h="-1" measuredW="83" measuredH="21" zOrder="55" locked="false" isInGroup="-1">
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::Label" x="490" y="651" w="-1" h="-1" measuredW="83" measuredH="21" zOrder="54" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>true</bold>
         <text>Prerequisites</text>
       </controlProperties>
     </control>
-    <control controlID="70" controlTypeID="com.balsamiq.mockups::Label" x="556" y="547" w="-1" h="-1" measuredW="200" measuredH="26" zOrder="56" locked="false" isInGroup="-1">
+    <control controlID="70" controlTypeID="com.balsamiq.mockups::Label" x="556" y="547" w="-1" h="-1" measuredW="200" measuredH="26" zOrder="55" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>true</bold>
         <color>0</color>
@@ -357,7 +351,7 @@
         <text>Class%20Name%20Goes%20Here</text>
       </controlProperties>
     </control>
-    <control controlID="71" controlTypeID="com.balsamiq.mockups::Label" x="581" y="569" w="-1" h="-1" measuredW="148" measuredH="20" zOrder="57" locked="false" isInGroup="-1">
+    <control controlID="71" controlTypeID="com.balsamiq.mockups::Label" x="581" y="569" w="-1" h="-1" measuredW="148" measuredH="20" zOrder="56" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <color>10066329</color>
@@ -365,34 +359,40 @@
         <text>Class%20Date%20/%20Location%20Here</text>
       </controlProperties>
     </control>
-    <control controlID="74" controlTypeID="com.balsamiq.mockups::Label" x="490" y="622" w="335" h="-1" measuredW="248" measuredH="19" zOrder="58" locked="false" isInGroup="-1">
+    <control controlID="74" controlTypeID="com.balsamiq.mockups::Label" x="490" y="622" w="335" h="-1" measuredW="248" measuredH="19" zOrder="57" locked="false" isInGroup="-1">
       <controlProperties>
         <size>11</size>
         <text>Blah%20Blah%20Blah%20Blah%20..%20Class%20Information%20Goes%20Here</text>
       </controlProperties>
     </control>
-    <control controlID="76" controlTypeID="com.balsamiq.mockups::Label" x="490" y="668" w="-1" h="-1" measuredW="312" measuredH="19" zOrder="59" locked="false" isInGroup="-1">
+    <control controlID="76" controlTypeID="com.balsamiq.mockups::Label" x="490" y="668" w="-1" h="-1" measuredW="312" measuredH="19" zOrder="58" locked="false" isInGroup="-1">
       <controlProperties>
         <size>11</size>
         <text>This%20is%20not%20a%20beginner%20course.%20Students%20must%20know%20how%20to%20play</text>
       </controlProperties>
     </control>
-    <control controlID="82" controlTypeID="com.balsamiq.mockups::Label" x="490" y="681" w="-1" h="-1" measuredW="244" measuredH="19" zOrder="60" locked="false" isInGroup="-1">
+    <control controlID="82" controlTypeID="com.balsamiq.mockups::Label" x="490" y="681" w="-1" h="-1" measuredW="244" measuredH="19" zOrder="59" locked="false" isInGroup="-1">
       <controlProperties>
         <size>11</size>
         <text>a%20few%20chords%20and%20be%20familiar%20with%20guitar%20anatomy.</text>
       </controlProperties>
     </control>
-    <control controlID="83" controlTypeID="com.balsamiq.mockups::Label" x="490" y="706" w="-1" h="-1" measuredW="58" measuredH="21" zOrder="61" locked="false" isInGroup="-1">
+    <control controlID="83" controlTypeID="com.balsamiq.mockups::Label" x="490" y="706" w="-1" h="-1" measuredW="58" measuredH="21" zOrder="60" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>true</bold>
         <text>Materials</text>
       </controlProperties>
     </control>
-    <control controlID="84" controlTypeID="com.balsamiq.mockups::Label" x="490" y="723" w="-1" h="-1" measuredW="144" measuredH="19" zOrder="62" locked="false" isInGroup="-1">
+    <control controlID="84" controlTypeID="com.balsamiq.mockups::Label" x="490" y="723" w="-1" h="-1" measuredW="144" measuredH="19" zOrder="61" locked="false" isInGroup="-1">
       <controlProperties>
         <size>11</size>
         <text>Students%20should%20bring%20guitar.</text>
+      </controlProperties>
+    </control>
+    <control controlID="86" controlTypeID="com.balsamiq.mockups::ComboBox" x="853" y="478" w="113" h="-1" measuredW="112" measuredH="21" zOrder="62" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>10</size>
+        <text>Filter%20by%20Category</text>
       </controlProperties>
     </control>
   </controls>

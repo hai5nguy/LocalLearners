@@ -1,8 +1,8 @@
-<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="840" measuredH="560" mockupW="815" mockupH="548">
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1055" measuredH="560" mockupW="1030" mockupH="548">
   <controls>
-    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="25" y="12" w="603" h="548" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="25" y="12" w="603" h="548" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>A%20Web%20Page%0Ahttp%3A//www.locallearners.net/categories</text>
+        <text>Categories%20of%20Classes%20-%20Local%20Learners%0Ahttp%3A//locallearners.net/categories</text>
       </controlProperties>
     </control>
     <control controlID="2" controlTypeID="com.balsamiq.mockups::MenuBar" x="25" y="81" w="602" h="38" measuredW="62" measuredH="29" zOrder="1" locked="false" isInGroup="-1">
@@ -294,17 +294,17 @@
         <color>13421772</color>
       </controlProperties>
     </control>
-    <control controlID="107" controlTypeID="com.balsamiq.mockups::Label" x="246" y="442" w="161" h="-1" measuredW="157" measuredH="24" zOrder="17" locked="false" isInGroup="-1">
+    <control controlID="107" controlTypeID="com.balsamiq.mockups::Label" x="124" y="442" w="161" h="-1" measuredW="157" measuredH="24" zOrder="17" locked="false" isInGroup="-1">
       <controlProperties>
         <color>16777215</color>
         <size>16</size>
         <text>Don%27t%20see%20your%20class%3F</text>
       </controlProperties>
     </control>
-    <control controlID="108" controlTypeID="com.balsamiq.mockups::Button" x="256" y="471" w="136" h="27" measuredW="114" measuredH="27" zOrder="18" locked="false" isInGroup="-1">
+    <control controlID="108" controlTypeID="com.balsamiq.mockups::Button" x="137" y="471" w="136" h="27" measuredW="106" measuredH="27" zOrder="18" locked="false" isInGroup="-1">
       <controlProperties>
         <size>12</size>
-        <text>Request%20a%20Class</text>
+        <text>Request%20it%20here</text>
       </controlProperties>
     </control>
     <control controlID="109" controlTypeID="com.balsamiq.mockups::HRule" x="45" y="410" w="567" h="-1" measuredW="100" measuredH="10" zOrder="19" locked="false" isInGroup="-1">
@@ -374,7 +374,11 @@
     </control>
     <control controlID="126" controlTypeID="__group__" x="475" y="286" w="137" h="111" measuredW="137" measuredH="111" zOrder="8" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
-        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="137" h="111" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="126"/>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="137" h="111" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="126">
+          <controlProperties>
+            <color>16770457</color>
+          </controlProperties>
+        </control>
         <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="8" y="7" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="1" locked="false" isInGroup="126">
           <controlProperties>
             <icon>SaveIcon%7Cxsmall</icon>
@@ -390,37 +394,60 @@
             <color>15658734</color>
           </controlProperties>
         </control>
-        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="8" y="32" w="69" h="-1" measuredW="50" measuredH="18" zOrder="4" locked="false" isInGroup="126">
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="8" y="32" w="109" h="-1" measuredW="73" measuredH="18" zOrder="4" locked="false" isInGroup="126">
           <controlProperties>
             <size>10</size>
-            <text>WordPress</text>
+            <text>WordPress%20%2822%29</text>
           </controlProperties>
         </control>
-        <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="8" y="50" w="109" h="-1" measuredW="80" measuredH="18" zOrder="5" locked="false" isInGroup="126">
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="8" y="50" w="109" h="-1" measuredW="101" measuredH="18" zOrder="5" locked="false" isInGroup="126">
           <controlProperties>
             <size>10</size>
-            <text>Creating%20E-Books</text>
+            <text>Creating%20E-Books%20%2816%29</text>
           </controlProperties>
         </control>
-        <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="8" y="68" w="66" h="-1" measuredW="48" measuredH="18" zOrder="6" locked="false" isInGroup="126">
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="8" y="68" w="109" h="-1" measuredW="69" measuredH="18" zOrder="6" locked="false" isInGroup="126">
           <controlProperties>
             <size>10</size>
-            <text>JavaScript</text>
+            <text>JavaScript%20%2812%29</text>
           </controlProperties>
         </control>
-        <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="8" y="86" w="65" h="-1" measuredW="47" measuredH="18" zOrder="7" locked="false" isInGroup="126">
+        <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="8" y="86" w="109" h="-1" measuredW="63" measuredH="18" zOrder="7" locked="false" isInGroup="126">
           <controlProperties>
             <size>10</size>
-            <text>Photoshop</text>
+            <text>Photoshop%20%285%29</text>
           </controlProperties>
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="127" controlTypeID="com.balsamiq.mockups::RedX" x="246" y="436" w="152" h="69" measuredW="240" measuredH="104" zOrder="23" locked="false" isInGroup="-1"/>
-    <control controlID="128" controlTypeID="com.balsamiq.mockups::VCurly" x="636" y="425" w="204" h="88" measuredW="180" measuredH="140" zOrder="24" locked="false" isInGroup="-1">
+    <control controlID="128" controlTypeID="com.balsamiq.mockups::VCurly" x="636" y="425" w="204" h="88" measuredW="180" measuredH="140" zOrder="23" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Should%20really%20offer%20an%20equal%20split%20of%20choices%20to%20either%20make%20a%20class%20suggestion%20or%20teach%20a%20class%20listed%20above.%20Dual%2C%206-col%20horizontal%20buttons%3F</text>
       </controlProperties>
     </control>
+    <control controlID="129" controlTypeID="com.balsamiq.mockups::Label" x="327" y="442" w="211" h="-1" measuredW="202" measuredH="24" zOrder="24" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <size>16</size>
+        <text>See%20a%20class%20you%20can%20teach%3F</text>
+      </controlProperties>
+    </control>
+    <control controlID="130" controlTypeID="com.balsamiq.mockups::Button" x="355" y="471" w="155" h="27" measuredW="140" measuredH="27" zOrder="25" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>12</size>
+        <text>Sign%20up%20to%20teach%20here</text>
+      </controlProperties>
+    </control>
+    <control controlID="131" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="596" y="314" w="-1" h="83" measuredW="16" measuredH="100" zOrder="26" locked="false" isInGroup="-1"/>
+    <control controlID="132" controlTypeID="com.balsamiq.mockups::TextArea" x="855" y="209" w="-1" h="-1" measuredW="200" measuredH="140" zOrder="27" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>545684</borderColor>
+        <color>15658734</color>
+        <state>up</state>
+        <text>Screw%20the%20masonry%20idea%20for%20now.%20It%27s%20super%20easy%20to%20just%20add%20a%20scrollbar%20if%20the%20content%20overflows.%20Requested%20classes%20should%20be%20followed%20by%20a%20number%20in%20parenthesis%20representing%20the%20amount%20of%20people%20requesting%20the%20class.%20See%20Technology.</text>
+      </controlProperties>
+    </control>
+    <control controlID="135" controlTypeID="com.balsamiq.mockups::ScratchOut" x="639" y="416" w="-1" h="-1" measuredW="205" measuredH="107" zOrder="28" locked="false" isInGroup="-1"/>
+    <control controlID="136" controlTypeID="com.balsamiq.mockups::ScratchOut" x="639" y="56" w="128" h="107" measuredW="205" measuredH="107" zOrder="29" locked="false" isInGroup="-1"/>
   </controls>
 </mockup>

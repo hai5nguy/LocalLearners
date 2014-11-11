@@ -147,19 +147,19 @@
         <text>Teach</text>
       </controlProperties>
     </control>
-    <control controlID="42" controlTypeID="com.balsamiq.mockups::Image" x="1006" y="313" w="708" h="241" measuredW="1015" measuredH="333" zOrder="24" locked="false" isInGroup="-1">
+    <control controlID="42" controlTypeID="com.balsamiq.mockups::Image" x="1006" y="313" w="708" h="241" measuredW="77" measuredH="79" zOrder="24" locked="false" isInGroup="-1">
       <controlProperties>
         <src>./assets/Meetup%2520Example.png</src>
         <text/>
       </controlProperties>
     </control>
-    <control controlID="43" controlTypeID="com.balsamiq.mockups::Image" x="1006" y="644" w="684" h="220" measuredW="1016" measuredH="370" zOrder="25" locked="false" isInGroup="-1">
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::Image" x="1006" y="644" w="684" h="220" measuredW="77" measuredH="79" zOrder="25" locked="false" isInGroup="-1">
       <controlProperties>
         <src>./assets/Skillshare%2520Example.png</src>
         <text/>
       </controlProperties>
     </control>
-    <control controlID="44" controlTypeID="com.balsamiq.mockups::Image" x="1006" y="913" w="684" h="210" measuredW="983" measuredH="322" zOrder="26" locked="false" isInGroup="-1">
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::Image" x="1006" y="913" w="684" h="210" measuredW="77" measuredH="79" zOrder="26" locked="false" isInGroup="-1">
       <controlProperties>
         <src>./assets/Dabble%2520Example.png</src>
         <text/>
@@ -379,13 +379,7 @@
         <text>Footer</text>
       </controlProperties>
     </control>
-    <control controlID="77" controlTypeID="com.balsamiq.mockups::Image" x="704" y="252" w="10" h="12" measuredW="512" measuredH="512" zOrder="58" locked="false" isInGroup="-1">
-      <controlProperties>
-        <src>./assets/downward-arrow.png</src>
-        <text/>
-      </controlProperties>
-    </control>
-    <control controlID="78" controlTypeID="com.balsamiq.mockups::Label" x="774" y="247" w="-1" h="-1" measuredW="25" measuredH="20" zOrder="59" locked="false" isInGroup="-1">
+    <control controlID="78" controlTypeID="com.balsamiq.mockups::Label" x="774" y="247" w="-1" h="-1" measuredW="25" measuredH="20" zOrder="58" locked="false" isInGroup="-1">
       <controlProperties>
         <size>12</size>
         <text>Host</text>
