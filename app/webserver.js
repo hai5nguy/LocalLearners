@@ -13,6 +13,7 @@ app.listen(port, function() {
 
 app.use(express.static(__dirname + '/public'));
 
+
 //console.log("dirname: ", __dirname);
 //app.use('/bower_components', express.static(__dirname + '/bower_components'));
 

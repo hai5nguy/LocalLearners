@@ -8,14 +8,18 @@
     <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="_js/main.js"></script>
-    <script type="text/javascript" src="_js/controllers/testController.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/controllers/testController.js"></script>
+    <script type="text/javascript" src="js/controllers/LoginController.js"></script>
   </head>
   <body>
 
     <header>
       <div></div>
     </header>
+
+    <ng-view></ng-view>  <!--put this in the right location -hmn -->
 
     <section>
       <h1>Local Learners</h1>
