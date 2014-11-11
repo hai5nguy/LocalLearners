@@ -55,10 +55,11 @@
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/controllers/LoginController.js"></script>
+    <script type="text/javascript" src="js/controllers/MainController.js"></script>
+    <script type="text/javascript" src="js/controllers/ProfileController.js"></script>
 
   </head>
-  <body>
+  <body ng-controller="MainController">
 
     <header>
       <a href="/index.html"><img src="/img/logo.png" alt="Local Learners Logo" title="" class="logo" /></a>
@@ -86,7 +87,7 @@
     </header>
 
     <section>
-      <ng-view></ng-view>  <!--put this in the right location -hmn -->
+        <div ng-include="appSettings.userProfileTemplateUrl"></div>
     </section>
 
     <footer>
