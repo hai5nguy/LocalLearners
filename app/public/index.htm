@@ -1,0 +1,56 @@
+<!doctype html>
+<html ng-app="localLearnerApp">
+  <head>
+    <title>Local Learners</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="text/javascript" src="//localhost:35729/livereload.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="_js/main.js"></script>
+    <script type="text/javascript" src="_js/controllers/testController.js"></script>
+  </head>
+  <body>
+
+    <header>
+      <nav></nav>
+    </header>
+
+    <section>
+      <h1>Local Learners</h1>
+    </section>
+
+    <div ng-controller="TestController">
+        <p>{{request.name}}</p>
+    </div>
+
+    <footer>
+      <a href="#">Contact</a>
+      <a href="#">Feedback</a>
+      <a href="#">Meetup page</a>
+      <a href="#">About</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Help/FAQ</a>
+    </footer>
+
+
+    <form>
+      <p>Request a Class:</p>
+      <label for="courseName">Course Name:</label> <input placeholder="Intro to Guitar" name="courseName" type="text"/>
+      <label for="requestCategory">Category:</label>
+      <select>
+        <option>Art</option>
+        <option>Automotive and Vehicles</option>
+        <option>Business and Finance</option>
+        <option>Music</option>
+        <option>Pets and Animals</option>
+        <option>Software</option>
+        <option>Need to fill in more categories later and change the markup here to match Bootstrap standards. Also I'm not awake right now.</option>
+      </select>
+    </form>
+
+
+  </body>
+</html>
