@@ -1,8 +1,53 @@
 <!doctype html>
-<html ng-app="localLearnerApp">
+<html lang="en" ng-app="localLearnerApp">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />    <!-- Must be first item in <Head> -->
     <title>Local Learners</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8"                                                                                  />
+    <meta name="description"                     content="Local Learners is a free to join group for trying new things!" />
+    <meta name="keywords"                        content="learning, education, skills, sharing, community, free" />
+    <meta http-equiv="Expires"                   content="0"                                               />
+    <meta name="viewport"                        content="width=device-width, initial-scale=1.0"           />
+    <meta name="subject"                         content="Free, community based learning."                 />
+    <meta name="copyright"                       content="Local Learners"                                  />
+    <meta name="language"                        content="EN"                                              />
+    <meta name="robots"                          content="index,follow"                                    />
+    <meta name="author"                          content="Hai Nguyen, hai@hainsoftware.com"                />
+    <meta name="designer"                        content="Alissa Renz and The Jared Wilcurt"               />
+    <meta name="reply-to"                        content="admin@locallearners.net"                         />
+    <meta name="owner"                           content="Hai Nguyen"                                      />
+    <meta name="rating"                          content="General"                                         />
+    <meta name="HandheldFriendly"                content="True"                                            />
+    <meta name="application-name"                content="Local Learners"                                  />
+    <meta http-equiv="cleartype"                 content="on"                                              />
+    <meta name="msapplication-navbutton-color"   content="#FFFFFF"                                         />
+    <meta name="msapplication-TileColor"         content="#FFFFFF"                                         />
+    <meta name="msapplication-square70x70logo"   content="/img/meta/mstile01sm.png"                        />
+    <meta name="msapplication-square150x150logo" content="/img/meta/mstile02md.png"                        />
+    <meta name="msapplication-wide310x150logo"   content="/img/meta/mstile03wd.png"                        />
+    <meta name="msapplication-square310x310logo" content="/img/meta/mstile04lg.png"                        />
+    <meta name="apple-mobile-web-app-title"      content="Local Learners"                                  />
+    <meta name="apple-mobile-web-app-capable"    content="yes"   /> <!-- "yes" hides Safari navbar in iOS -->
+    <meta name="apple-touch-fullscreen"          content="yes"                                             />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"                                     />
+    <link rel="apple-touch-icon"             href="/img/meta/apl-57.png"  type="image/png" sizes="57x57"   />
+    <link rel="apple-touch-icon-precomposed" href="/img/meta/apl-57.png"  type="image/png" sizes="57x57"   />
+    <link rel="apple-touch-icon"             href="/img/meta/apl-72.png"  type="image/png" sizes="72x72"   />
+    <link rel="apple-touch-icon-precomposed" href="/img/meta/apl-72.png"  type="image/png" sizes="72x72"   />
+    <link rel="apple-touch-icon"             href="/img/meta/apl-114.png" type="image/png" sizes="114x114" />
+    <link rel="apple-touch-icon-precomposed" href="/img/meta/apl-114.png" type="image/png" sizes="114x114" />
+    <link rel="apple-touch-icon"             href="/img/meta/apl-144.png" type="image/png" sizes="144x144" />
+    <link rel="apple-touch-icon-precomposed" href="/img/meta/apl-144.png" type="image/png" sizes="144x144" />
+    <link rel="apple-touch-startup-image"    href="/img/meta/apl-str.png" type="image/png"                 />
+    <link rel="fluid-icon"                   href="/img/meta/fluid.png"   type="image/png"                 />
+    <link rel="icon"                         href="/favicon.ico"          type="image/x-icon"              />
+    <link rel="shortcut icon"                href="/favicon.ico"          type="image/ico"                 />
+    <link rel="stylesheet"                   href="/css/style.css"        type="text/css"                  />
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
     <script type="text/javascript" src="//localhost:35729/livereload.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
@@ -12,17 +57,37 @@
     <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/controllers/testController.js"></script>
     <script type="text/javascript" src="js/controllers/LoginController.js"></script>
+
   </head>
   <body>
 
     <header>
-      <div></div>
+      <a href="/index.html"><img src="/img/locallearnerslogo.png" alt="Local Learners Logo" title="" class="logo" /></a>
+      <nav>
+        <ul>
+          <li>Classes
+            <ul>
+              <li>Upcoming Classes</li>
+              <li>Categories</li>
+              <li>Request a Class</li>
+            </ul>
+          </li>
+          <li>Teach</li>
+          <li>Host</li>
+        </ul>
+      </nav>
+      <div id="SearchNav">
+        <form action="http://www.google.com/search" method="get">
+          <input type="hidden" name="output" value="googleabout" />
+          <input type="hidden" name="sitesearch" value="locallearners.net" />
+          <input type="text" name="q" class="NavSearch" />
+          <input type="image" src="/img/search.png" value="submit" alt="Submit" />
+        </form>
+      </div>
     </header>
 
-    <ng-view></ng-view>  <!--put this in the right location -hmn -->
-
     <section>
-      <h1>Local Learners</h1>
+      <ng-view></ng-view>  <!--put this in the right location -hmn -->
     </section>
 
     <div ng-controller="TestController">
@@ -30,7 +95,13 @@
     </div>
 
     <footer>
-      <div></div>
+      <a href="#">Contact</a>
+      <a href="#">Feedback</a>
+      <a href="#">Meetup page</a>
+      <a href="#">About</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Help/FAQ</a>
     </footer>
 
   </body>

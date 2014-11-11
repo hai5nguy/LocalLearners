@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Hai Nguyen        -- Lead, Front-End Development, Back-End Development
+    Alissa Renz       -- Mockups, Design
+    The Jared Wilcurt -- Design, HTML, CSS, Sass, JS, Testing, Responsive Design
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3, Sass, JavaScript, Angular, jQuery, Node.JS, Express, Bower, Grunt
+    Twitter Bootstrap, Normalize, CSS Browser Selector, Flying Focus, Console Error Fix
+    Balsamiq, SublimeText, ScoutApp, Google Drive, GitHub
+    Photoshop, Illustrator, Png Optimizer, PNGOUTWin, PNGGauntlet, ImageOptim
+    Rename-It!, FileSearchEX, IETester
+    Designed and developed on Windows 7 Professional 64-Bit and OSX Yosemite
