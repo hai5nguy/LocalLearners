@@ -55,14 +55,13 @@
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-    <script type="text/javascript" src="js/controllers/testController.js"></script>
     <script type="text/javascript" src="js/controllers/LoginController.js"></script>
 
   </head>
   <body>
 
     <header>
-      <a href="/index.html"><img src="/img/locallearnerslogo.png" alt="Local Learners Logo" title="" class="logo" /></a>
+      <a href="/index.html"><img src="/img/logo.png" alt="Local Learners Logo" title="" class="logo" /></a>
       <nav>
         <ul>
           <li>Classes
@@ -89,10 +88,6 @@
     <section>
       <ng-view></ng-view>  <!--put this in the right location -hmn -->
     </section>
-
-    <div ng-controller="TestController">
-        <p>{{request.name}}</p>
-    </div>
 
     <footer>
       <a href="#">Contact</a>
