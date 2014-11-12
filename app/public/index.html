@@ -77,28 +77,56 @@
   <body ng-controller="MainController">
 
     <header>
-      <a href="index.html"><img src="img/logo.png" alt="Local Learners Logo" title="" class="logo" /></a>
-      <nav>
-        <ul>
-          <li>Classes
-            <ul>
-              <li>Upcoming Classes</li>
-              <li>Categories</li>
-              <li>Request a Class</li>
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <!-- added inline styling until logo is finished -->
+            <a class="navbar-brand" href="index.html"><img src="img/logo.png" alt="Local Learners Logo" title="" class="logo" style="width:80px;height:26px;border:1px solid #AAA;" /></a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Classes <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Upcoming Classes</a></li>
+                  <li><a href="#">Categories</a></li>
+                  <li><a href="#">Request a Class</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Teach</a></li>
+              <li><a href="#">Host</a></li>
             </ul>
-          </li>
-          <li>Teach</li>
-          <li>Host</li>
-        </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <form class="navbar-form navbar-left" role="search" action="http://www.google.com/search" method="get">
+                <div class="form-group">
+                  <input type="hidden" name="output" value="googleabout" />
+                  <input type="hidden" name="sitesearch" value="locallearners.net" />
+                  <input type="text"   name="q" class="form-control" placeholder="Search" />
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Username <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">View Profile</a></li>
+                  <li><a href="#">Account Settings</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Log Out</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
       </nav>
-      <div id="SearchNav">
-        <form action="http://www.google.com/search" method="get">
-          <input type="hidden" name="output" value="googleabout" />
-          <input type="hidden" name="sitesearch" value="locallearners.net" />
-          <input type="text" name="q" class="NavSearch" />
-          <input type="image" src="img/search.png" value="submit" alt="Submit" />
-        </form>
-      </div>
     </header>
 
     <section>
