@@ -31,7 +31,7 @@
         <text>Teach</text>
       </controlProperties>
     </control>
-    <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="692" y="95" w="24" h="-1" measuredW="25" measuredH="20" zOrder="7" locked="false" isInGroup="-1">
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="692" y="95" w="30" h="-1" measuredW="25" measuredH="20" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
         <size>12</size>
         <text>Host</text>
@@ -39,7 +39,7 @@
     </control>
     <control controlID="246" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="277" y="17" w="603" h="837" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
       <controlProperties>
-        <text>A%20Web%20Page%0Ahttp%3A//www.locallearners.net/faq</text>
+        <text>Help%20and%20FAQ%20-%20Local%20Learners%0Ahttp%3A//locallearners.net/faq</text>
       </controlProperties>
     </control>
     <control controlID="247" controlTypeID="com.balsamiq.mockups::FieldSet" x="277" y="789" w="603" h="39" measuredW="200" measuredH="170" zOrder="1" locked="false" isInGroup="-1">

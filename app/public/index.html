@@ -22,47 +22,62 @@
     <meta http-equiv="cleartype"                 content="on"                                              />
     <meta name="msapplication-navbutton-color"   content="#FFFFFF"                                         />
     <meta name="msapplication-TileColor"         content="#FFFFFF"                                         />
-    <meta name="msapplication-square70x70logo"   content="/img/meta/mstile01sm.png"                        />
-    <meta name="msapplication-square150x150logo" content="/img/meta/mstile02md.png"                        />
-    <meta name="msapplication-wide310x150logo"   content="/img/meta/mstile03wd.png"                        />
-    <meta name="msapplication-square310x310logo" content="/img/meta/mstile04lg.png"                        />
+    <meta name="msapplication-square70x70logo"   content="img/meta/mstile01sm.png"                         />
+    <meta name="msapplication-square150x150logo" content="img/meta/mstile02md.png"                         />
+    <meta name="msapplication-wide310x150logo"   content="img/meta/mstile03wd.png"                         />
+    <meta name="msapplication-square310x310logo" content="img/meta/mstile04lg.png"                         />
     <meta name="apple-mobile-web-app-title"      content="Local Learners"                                  />
     <meta name="apple-mobile-web-app-capable"    content="yes"   /> <!-- "yes" hides Safari navbar in iOS -->
     <meta name="apple-touch-fullscreen"          content="yes"                                             />
     <meta name="apple-mobile-web-app-status-bar-style" content="black"                                     />
-    <link rel="apple-touch-icon"             href="/img/meta/apl-57.png"  type="image/png" sizes="57x57"   />
-    <link rel="apple-touch-icon-precomposed" href="/img/meta/apl-57.png"  type="image/png" sizes="57x57"   />
-    <link rel="apple-touch-icon"             href="/img/meta/apl-72.png"  type="image/png" sizes="72x72"   />
-    <link rel="apple-touch-icon-precomposed" href="/img/meta/apl-72.png"  type="image/png" sizes="72x72"   />
-    <link rel="apple-touch-icon"             href="/img/meta/apl-114.png" type="image/png" sizes="114x114" />
-    <link rel="apple-touch-icon-precomposed" href="/img/meta/apl-114.png" type="image/png" sizes="114x114" />
-    <link rel="apple-touch-icon"             href="/img/meta/apl-144.png" type="image/png" sizes="144x144" />
-    <link rel="apple-touch-icon-precomposed" href="/img/meta/apl-144.png" type="image/png" sizes="144x144" />
-    <link rel="apple-touch-startup-image"    href="/img/meta/apl-str.png" type="image/png"                 />
-    <link rel="fluid-icon"                   href="/img/meta/fluid.png"   type="image/png"                 />
-    <link rel="icon"                         href="/favicon.ico"          type="image/x-icon"              />
-    <link rel="shortcut icon"                href="/favicon.ico"          type="image/ico"                 />
-    <link rel="stylesheet"                   href="/css/style.css"        type="text/css"                  />
+    <link rel="apple-touch-icon"             href="img/meta/apl-57.png"  type="image/png" sizes="57x57"    />
+    <link rel="apple-touch-icon-precomposed" href="img/meta/apl-57.png"  type="image/png" sizes="57x57"    />
+    <link rel="apple-touch-icon"             href="img/meta/apl-72.png"  type="image/png" sizes="72x72"    />
+    <link rel="apple-touch-icon-precomposed" href="img/meta/apl-72.png"  type="image/png" sizes="72x72"    />
+    <link rel="apple-touch-icon"             href="img/meta/apl-114.png" type="image/png" sizes="114x114"  />
+    <link rel="apple-touch-icon-precomposed" href="img/meta/apl-114.png" type="image/png" sizes="114x114"  />
+    <link rel="apple-touch-icon"             href="img/meta/apl-144.png" type="image/png" sizes="144x144"  />
+    <link rel="apple-touch-icon-precomposed" href="img/meta/apl-144.png" type="image/png" sizes="144x144"  />
+    <link rel="apple-touch-startup-image"    href="img/meta/apl-str.png" type="image/png"                  />
+    <link rel="fluid-icon"                   href="img/meta/fluid.png"   type="image/png"                  />
+    <link rel="icon"                         href="favicon.ico"          type="image/x-icon"               />
+    <link rel="shortcut icon"                href="favicon.ico"          type="image/ico"                  />
+    <link rel="stylesheet"                   href="css/style.css"        type="text/css"                   />
 
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
+    <!--  ___________________________________________________________________________________  -->
+    <!-- |                          LIVE RELOAD, JQUERY, BOOTSTRAP                           | -->
+    <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
     <script type="text/javascript" src="//localhost:35729/livereload.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript">window.jQuery || document.write('<script src="js/vendors/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
+    <script type="text/javascript">$.fn.modal || document.write('<script src="js/vendors/bootstrap.min.js"><\/script>')</script> <!-- Local fallback -->
+
+    <!--  ___________________________________________________________________________________  -->
+    <!-- |                                   ANGULAR STUFF                                   | -->
+    <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/controllers/MainController.js"></script>
     <script type="text/javascript" src="js/controllers/ProfileController.js"></script>
+
+    <!--  ___________________________________________________________________________________  -->
+    <!-- |                               PLUGINS AND CUSTOM JS                               | -->
+    <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
+    <script type="text/javascritp" src="js/plugins/_console-error-fix.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascritp" src="js/plugins/_crossbrowser.js"></script>
+    <script type="text/javascritp" src="js/plugins/_flying-focus.js"></script>
 
   </head>
   <body ng-controller="MainController">
 
     <header>
-      <a href="/index.html"><img src="/img/logo.png" alt="Local Learners Logo" title="" class="logo" /></a>
+      <a href="index.html"><img src="img/logo.png" alt="Local Learners Logo" title="" class="logo" /></a>
       <nav>
         <ul>
           <li>Classes
@@ -81,13 +96,13 @@
           <input type="hidden" name="output" value="googleabout" />
           <input type="hidden" name="sitesearch" value="locallearners.net" />
           <input type="text" name="q" class="NavSearch" />
-          <input type="image" src="/img/search.png" value="submit" alt="Submit" />
+          <input type="image" src="img/search.png" value="submit" alt="Submit" />
         </form>
       </div>
     </header>
 
     <section>
-        <div ng-include="appSettings.userProfileTemplateUrl"></div>
+      <div ng-include="appSettings.userProfileTemplateUrl"></div>
     </section>
 
     <footer>
