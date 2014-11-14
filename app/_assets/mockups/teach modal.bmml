@@ -1,0 +1,42 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1163" measuredH="648" mockupW="888" mockupH="604">
+  <controls>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="275" y="44" w="888" h="604" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>A%20Web%20Page%0Ahttp%3A//</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Accordion" x="524" y="195" w="350" h="253" measuredW="150" measuredH="105" zOrder="1" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>Teach%20A%20Course%21</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::ComboBox" x="622" y="235" w="229" h="-1" measuredW="96" measuredH="24" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Technology</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="549" y="237" w="-1" h="-1" measuredW="60" measuredH="21" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <text>Category%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::List" x="547" y="294" w="304" h="91" measuredW="100" measuredH="126" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>HTML%20%286%29%0AIntro%20to%20Python%20%282%29%0APhotoshop%20Basics%20%2862%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="835" y="294" w="-1" h="91" measuredW="16" measuredH="100" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Label" x="549" y="271" w="-1" h="-1" measuredW="300" measuredH="21" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <text>Check%20if%20your%20class%20has%20been%20requested%20already%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Button" x="609" y="400" w="242" h="27" measuredW="233" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>My%20class%20hasn%27t%20been%20requested%20yet</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
