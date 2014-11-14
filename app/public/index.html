@@ -54,40 +54,36 @@
     <script type="text/javascript" src="//localhost:35729/livereload.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script type="text/javascript">window.jQuery || document.write('<script src="js/vendors/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
-    <script type="text/javascript">$.fn.modal || document.write('<script src="js/vendors/bootstrap.min.js"><\/script>')</script> <!-- Local fallback -->
+    <script type="text/javascript">window.jQuery || document.write('<script src="components/common/vendors/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
+    <script type="text/javascript">$.fn.modal || document.write('<script src="components/common/vendors/bootstrap.min.js"><\/script>')</script> <!-- Local fallback -->
 
     <!--  ___________________________________________________________________________________  -->
     <!-- |                                   ANGULAR STUFF                                   | -->
     <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="index.js"></script>
-    <script type="text/javascript" src="js/controllers/MainController.js"></script>
+
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="indexCtrl.js"></script>
+
     <script type="text/javascript" src="js/controllers/ProfileController.js"></script>
 
     <!--  ___________________________________________________________________________________  -->
     <!-- |                               PLUGINS AND CUSTOM JS                               | -->
     <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
-<<<<<<< HEAD
-    <script type="text/javascritp" src="js/plugins/_console-error-fix.js"></script>
-    <script type="text/javascritp" src="js/plugins/_crossbrowser.js"></script>
-    <script type="text/javascritp" src="js/plugins/_flying-focus.js"></script>
-=======
-    <script type="text/javascritpt" src="js/plugins/_console-error-fix.js"></script>
-    <script type="text/javascriptt" src="js/main.js"></script>
-    <script type="text/javascritpt" src="js/plugins/_crossbrowser.js"></script>
-    <script type="text/javascritpt" src="js/plugins/_flying-focus.js"></script>
->>>>>>> 4b8574446a521ed6772c5c95aad0fb69ad0dedc4
+    <script type="text/javascritp" src="components/common/plugins/_console-error-fix.js"></script>
+    <script type="text/javascritp" src="components/common/plugins/_crossbrowser.js"></script>
+    <script type="text/javascritp" src="components/common/plugins/_flying-focus.js"></script>
+    <script type="text/javascritpt" src="components/common/plugins/_console-error-fix.js"></script>
+    <script type="text/javascritpt" src="components/common/plugins/_crossbrowser.js"></script>
+    <script type="text/javascritpt" src="components/common/plugins/_flying-focus.js"></script>
 
   </head>
-  <body ng-controller="MainController">
+  <body ng-controller="IndexCtrl">
 
     <header ng-include="appSettings.headerUrl"></header>
 
-    <section>
-      <div ng-include="appSettings.userProfileTemplateUrl"></div>
-    </section>
+    <ng-view></ng-view>
 
     <footer ng-include="appSettings.footerUrl"></footer>
 
