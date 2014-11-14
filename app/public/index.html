@@ -81,11 +81,11 @@
   </head>
   <body ng-controller="IndexCtrl">
 
-    <header ng-include="appSettings.headerUrl"></header>
+    <header ng-include="appSettings.url.header"></header>
 
     <ng-view></ng-view>
 
-    <footer ng-include="appSettings.footerUrl"></footer>
+    <footer ng-include="appSettings.url.footer"></footer>
 
   </body>
 </html>
