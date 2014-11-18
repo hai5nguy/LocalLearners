@@ -9,4 +9,8 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute'])
                 templateUrl: 'components/teach/teach.html',
                 controller: 'TeachCtrl'
             })
+            .when('/request', {
+                templateUrl: 'components/request/request.html',
+                controller: 'RequestCtrl'
+            })
     });
