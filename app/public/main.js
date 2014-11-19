@@ -5,9 +5,21 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute'])
                 templateUrl: 'components/main/main.html',
                 controller: 'MainCtrl'
             })
+            .when('/classes', {
+                templateUrl: 'components/classes/classes.html',
+                controller: 'ClassesCtrl'
+            })
             .when('/teach', {
                 templateUrl: 'components/teach/teach.html',
                 controller: 'TeachCtrl'
+            })
+            .when('/host', {
+                templateUrl: 'components/host/host.html',
+                controller: 'HostCtrl'
+            })
+            .when('/categories', {
+                templateUrl: 'components/categories/categories.html',
+                controller: 'CategoriesCtrl'
             })
             .when('/request', {
                 templateUrl: 'components/request/request.html',
@@ -36,5 +48,17 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute'])
             .when('/help', {
                 templateUrl: 'components/help/help.html',
                 controller: 'HelpCtrl'
+            })
+            .when('/profile', {
+                templateUrl: 'components/profile/profile.html',
+                controller: 'ProfileCtrl'
+            })
+            .when('/account', {
+                templateUrl: 'components/account/account.html',
+                controller: 'AccountCtrl'
+            })
+            .when('/logout', {
+                templateUrl: 'components/logout/logout.html',
+                controller: 'LogoutCtrl'
             })
     });
