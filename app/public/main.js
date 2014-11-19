@@ -13,4 +13,28 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute'])
                 templateUrl: 'components/request/request.html',
                 controller: 'RequestCtrl'
             })
+            .when('/contact', {
+                templateUrl: 'components/contact/contact.html',
+                controller: 'ContactCtrl'
+            })
+            .when('/feedback', {
+                templateUrl: 'components/feedback/feedback.html',
+                controller: 'FeedbackCtrl'
+            })
+            .when('/about', {
+                templateUrl: 'components/about/about.html',
+                controller: 'AboutCtrl'
+            })
+            .when('/privacy', {
+                templateUrl: 'components/privacy/privacy.html',
+                controller: 'PrivacyCtrl'
+            })
+            .when('/terms', {
+                templateUrl: 'components/terms/terms.html',
+                controller: 'TermsCtrl'
+            })
+            .when('/help', {
+                templateUrl: 'components/help/help.html',
+                controller: 'HelpCtrl'
+            })
     });
