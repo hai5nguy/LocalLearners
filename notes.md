@@ -14,6 +14,7 @@
 * Revise scritp for video
 * Make AE anim for intro graphic and lower thirds
 * Test CSS for various image sizes
+* Categories lists need to all be pulled from the same place.
 
 #Want to do:
 * Kick ass awesome Video thingy

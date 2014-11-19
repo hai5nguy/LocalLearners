@@ -30,8 +30,8 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute'])
                 controller: 'ContactCtrl'
             })
             .when('/feedback', {
-                templateUrl: 'components/feedback/feedback.html',
-                controller: 'FeedbackCtrl'
+                templateUrl: 'components/contact/contact.html',
+                controller: 'ContactCtrl'
             })
             .when('/about', {
                 templateUrl: 'components/about/about.html',
