@@ -28,9 +28,9 @@
  * Contact (AR)
  * Account (TJW)
  * Categories (TJW)
- * Host (TJW)
+ * ~~Host (TJW)~~
  * ~~Logout (TJW)~~
- * Privacy (TJW)
+ * ~~Privacy (TJW)~~
  * Terms (TJW)
  * Profile (HMN)
 
