@@ -29,7 +29,7 @@
  * Account (TJW)
  * Categories (TJW)
  * Host (TJW)
- * Logout (TJW)
+ * ~~Logout (TJW)~~
  * Privacy (TJW)
  * Terms (TJW)
  * Profile (HMN)
