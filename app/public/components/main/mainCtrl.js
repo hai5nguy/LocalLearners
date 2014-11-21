@@ -1,0 +1,3 @@
+localLearnerApp.controller('MainCtrl', function() {
+
+});

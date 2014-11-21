@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 //                tasks: ['sass']
 //            },
             publicfolder: {
-                files: ['app/public/**.*'],
+                files: ['app/public/**'],
                 tasks:  [ 'restart-web-server' ],
                 options: {
                     spawn: true
