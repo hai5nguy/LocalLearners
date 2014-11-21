@@ -1,4 +1,4 @@
-var localLearnerApp = angular.module('localLearnerApp',['ngRoute'])
+var localLearnerApp = angular.module('localLearnerApp',['ngRoute', 'ngResource'])
     .config(function($routeProvider) {
         $routeProvider
             .when('/', {
