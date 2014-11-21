@@ -57,6 +57,10 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute'])
                 templateUrl: 'components/request/request.html',
                 controller: 'RequestCtrl'
             })
+            .when('/requested', {
+                templateUrl: 'components/requested/requested.html',
+                controller: 'RequestedCtrl'
+            })
             .when('/signin', {
                 templateUrl: 'components/login/login.html',
                 controller: 'LoginCtrl'

@@ -4,8 +4,8 @@
 # TEAM
 
     Hai Nguyen        -- Lead, Front-End Development, Back-End Development
-    Alissa Renz       -- Mockups, Design
-    The Jared Wilcurt -- Design, HTML, CSS, Sass, JS, Testing, Responsive Design
+    The Jared Wilcurt -- Project Management, UX Architecture, Design, Markup, Bootstrap, Angular, JS, Sass, Testing, Responsive Design
+    Alissa Renz       -- Mockups, Design, Markup, Bootstrap, Angular, JS
 
 # TECHNOLOGY COLOPHON
 
