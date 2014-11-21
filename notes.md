@@ -13,7 +13,7 @@
 * Connect to Meetup using API (HMN/TJW)
 * Finish Logo (TJW)
 * Biz Card (TJW)
-* Revise scritp for video (TJW)
+* Revise script for video (TJW)
 * Make AE anim for intro graphic and lower thirds (TJW)
 * Categories lists need to all be pulled from the same place. (HMN)
 * Create default category backgrounds. (TJW/AR)
@@ -37,6 +37,7 @@
 
 #Want to do:
 * Kick ass awesome Video thingy
+* Map of event locations
 
 #Nice to have:
-* 
+*
