@@ -21,10 +21,10 @@
 * JS the FAQ list (AR)
 * Auto Scrolling stuff in Angular (HMN)
 * Page markup and content assignments
- * About (AR)
+ * ~~About (AR)~~
  * Help (AR)
- * Classes (AR)
- * Contact (AR)
+ * ~~Classes (AR)~~
+ * ~~Contact (AR)~~
  * Account (TJW)
  * Categories (TJW)
  * ~~Host (TJW)~~
