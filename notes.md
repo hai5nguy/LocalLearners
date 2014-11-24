@@ -8,11 +8,11 @@
 * ~~Set up site in Angular (HMN)~~
 * ~~Narrow down Categories (TJW/AR)~~
 * ~~Convert markup to be bootstrap compliant (AR)~~
+* ~~Finish Logo (TJW)~~
+* ~~Biz Card (TJW)~~
 * Connect to database (HMN)
 * Revamp "about" statement on Meetup (Leah)
 * Connect to Meetup using API (HMN/TJW)
-* Finish Logo (TJW)
-* Biz Card (TJW)
 * Revise script for video (TJW)
 * Make AE anim for intro graphic and lower thirds (TJW)
 * Categories lists need to all be pulled from the same place. (HMN)
@@ -20,7 +20,6 @@
 * Investigate custom @locallearners.net email (HMN)
 * JS the FAQ list (AR)
 * Auto Scrolling stuff in Angular (HMN)
-* Launch on this Sunday! (HMN/AR/TJW)
 * Page markup and content assignments
  * About (AR)
  * Help (AR)
