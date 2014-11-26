@@ -1,9 +1,11 @@
 @charset "utf-8";                           // Character type for the stylesheet
 
 //Stuff that goes at the start
-//@import "_ven.bootstrap.min.scss";        // Minified Bootstrap CSS renamed to SCSS
-//@import "_ven.bootstrap-theme.min.scss";  // Minified default theme renamed to SCSS
-@import "_ven.bootswatch-darkly.scss";      // Bootstrap with Bootwatch Theme: Darkly
+//@import "_ven.bootstrap.min.scss";        // Minified Bootstrap and default theme renamed
+//@import "_ven.bootswatch-darkly.scss";    // Bootstrap with Bootwatch Theme: Darkly
+//@import "_ven.bootswatch-spacelab.scss";  // Bootstrap with Bootwatch Theme: Spacelab
+//@import "_ven.bootswatch-sandstone.scss"; // Bootstrap with Bootwatch Theme: Sandstone
+@import "_ven.bootswatch-flatly.scss";      // Bootstrap with Bootwatch Theme: Flatly
 @import "_var.sass";                        // Sass Variables and Mixins - Does not effect page, but other Sass files reference this file.
 
 //Stuff that effects every page
