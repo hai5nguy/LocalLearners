@@ -1,1 +1,80 @@
-<h1>FAQ/Help</h1>
+<section>
+  <div class="container">
+    <h2 class="page-header">Frequently Asked Questions</h2>
+    <ul id="faqQuestions" class="list-unstyled"></ul>
+    <hr />
+    <div class="panel panel-primary" id="faqAnswers">
+      <div class="panel-heading">
+        <a>What is Local Learners?</a>
+      </div>
+      <div class="panel-body">
+        <p>Local Learners is a free to join group dedicated to providing new experiences for people. We allow anyone who has something to teach a way to do so. We try to help find teachers for heavily requested topics. And we try to find facilities for teachers to use for their meet ups.</p>
+      </div>
+      <div class="panel-heading">
+        <a>Are the teachers any good?</a>
+      </div>
+      <div class="panel-body">
+        <p>We've never had any complaints, and that's a pretty good track record in our books. You should know going in that we allow ANYONE to teach. This means anyone from amatuers and hobbyists to professionals and world class experts could host. Teachers typically provide a little back story of their experience when hosting an event. This should give you a good idea of what to expect.</p>
+        <p>Plus almost all lessons are free, so you're bound to learn something new, even from a noobie teacher. Just remember that it's all about having fun and trying something new, not getting it perfect your first try.</p>
+      </div>
+      <div class="panel-heading">
+        <a>Do I have to pay to take a class?</a>
+      </div>
+      <div class="panel-body">
+        <p>All of our classes are free!</p>
+        <p>We want the barrier of entry to be low to make sure anyone who wants to learn, can. So classes are always free. However...</p>
+        <ul>
+          <li>We do allow for teachers to charge to cover the cost of materials. This isn't the same as requiring someone to bring your own.</li>
+          <li>For some classes, there is an obvious cost incurred on the learner, such as a cooking class. You would be expected to purchase and bring your own ingredients. So in that case, it costs you money for the ingredients but not the class.</li>
+          <li>In other scenarios the teacher may provide the materials and have you pay when you show up. For example, a class on how to use a pottery wheel may charge $5 when you arrive to cover the cost of the clay you'll be using that evening.</li>
+        </ul>
+      </div>
+      <div class="panel-heading">
+        <a>How do I know if I am the right skill level for a class?</a>
+      </div>
+      <div class="panel-body">
+        <p>The pre-requisites section of a class should give you an indication of what level you should be at. If you're not sure, just send the teacher a message on Meetup.</p>
+      </div>
+      <div class="panel-heading">
+        <a>Do I need to bring anything to class?</a>
+      </div>
+      <div class="panel-body">
+        <p>Check the prerequisites section of the meetup to see if any materials are required.</p>
+      </div>
+      <div class="panel-heading">
+        <a>I don't see my class. How do I request one?</a>
+      </div>
+      <div class="panel-body">
+        <p><a href="#">Click here</a> to go to the requests page. As soon as we find a teacher for that class, we'll let you know!</p>
+      </div>
+      <div class="panel-heading">
+        <a>My place of business would be a great venue. How do we host?</a>
+      </div>
+      <div class="panel-body">
+        <p><a href="#">Click here</a> to view the Host page. Hosting can be a great way to increase traffic to your business and bring in new customers.</p>
+      </div>
+    </div>
+    <p class="text-right">Don't see your question? <a href="#">Contact us directly!</a></p>
+  </div>
+</section>
+
+
+<script>
+// locate anchors, assign index-based name attr, and push questions to array
+var faqQuestions = [];
+$(".panel-heading a").each(function(index) {
+  $(this).attr("name", index);
+  faqQuestions.push($(this).text());
+});
+
+// append, listify and assign index anchor to each question
+$.each(faqQuestions, function(index) {
+    $("ul#faqQuestions").append(
+        $("<li>", {}).append(
+            $("<a>", { href: '#' + index }).text(
+                (faqQuestions[index])
+            )
+        )
+    );
+});
+</script>
