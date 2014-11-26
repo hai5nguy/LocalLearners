@@ -1,20 +1,97 @@
 
+<style>
+.chatbox {
+    display: inline-block;
+    border-radius: 4px;
+    margin: 3px 0px;
+    padding: 4px 10px;
+    clear: both;
+    font-size: 15px;
+    color: #EEE;
+}
+.chatbox a {
+  color: #FFF;
+}
+.chatbox-r {
+  position: relative;
+  background: #88B7D5;
+  border: 2px solid #C2E1F5;
+  text-align: left;
+  float: left;
+}
+.chatbox-r:after,
+.chatbox-r:before {
+  right: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.chatbox-r:after {
+  border-color: rgba(136, 183, 213, 0);
+  border-right-color: #88B7D5;
+  border-width: 6px;
+  margin-top: -6px;
+}
+.chatbox-r:before {
+  border-color: rgba(194, 225, 245, 0);
+  border-right-color: #C2E1F5;
+  border-width: 9px;
+  margin-top: -9px;
+}
+.chatbox-l {
+  position: relative;
+  background: #D58D94;
+  border: 2px solid #F5C4C4;
+  text-align: right;
+  float: right;
+}
+.chatbox-l:after, .chatbox-l:before {
+  left: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.chatbox-l:after {
+  border-color: rgba(213, 141, 148, 0);
+  border-left-color: #D58D94;
+  border-width: 6px;
+  margin-top: -6px;
+}
+.chatbox-l:before {
+  border-color: rgba(245, 196, 196, 0);
+  border-left-color: #F5C4C4;
+  border-width: 9px;
+  margin-top: -9px;
+}
+#teachVidQA p {
+    clear: both;
+}
+</style>
+
 <!-- Teach Header -->
-<section>
+<section id="teachVidQA">
   <div class="container">
     <div class="row">
-      <div class="col-md-6 pull-left col-sm-6">
-        <iframe src="https://www.youtube.com/embed/l_Hjpa5TXes" frameborder="0" allowfullscreen class="col-md-12" style="height:300px"></iframe>
+      <div class="col-md-6 pull-left col-sm-12 col-xs-12">
+        <iframe src="https://www.youtube.com/embed/l_Hjpa5TXes" frameborder="0" allowfullscreen class="col-md-12 col-sm-12 col-xs-12" style="height:300px"></iframe>
       </div>
-      <div class="col-md-6 col-sm-6">
+      <div class="col-md-6 col-sm-12 col-xs-12">
         <h3>Becoming a teacher is easy!</h3>
-        <h4>Do I need to be a professional to teach?</h4>
-        <p>Nope! If you know enough to teach, GO FOR IT!</p>
-        <h4>What classes are people looking to take?</h4>
-        <p>View the top requests below or see this page.</p>
-        <h4>I want to teach, but need a location!</h4>
-        <p>Click here! We're happy to help!</p>
-        <p>Have more questions? See Full FAQ.</p>
+        <p class="chatbox chatbox-l">Do I need to be a professional to teach?</p>
+        <p class="chatbox chatbox-r">Nope! If you know enough to teach, GO FOR IT!</p>
+        <p class="chatbox chatbox-l">What classes are people looking to take?</p>
+        <p class="chatbox chatbox-r">View the top requests below or see <a href="/#/requested">this page</a>.</p>
+        <p class="chatbox chatbox-l">I want to teach, but need a location!</p>
+        <p class="chatbox chatbox-r"><a href="/#/locations">Click here!</a> We're happy to help!</p>
+        <p class="pull-right">Have more questions? See <a href="/#/faq">Full FAQ</a>.</p>
       </div>
     </div>
   </div>

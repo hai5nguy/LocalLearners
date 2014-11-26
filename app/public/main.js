@@ -25,6 +25,10 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute', 'ngResource']
                 templateUrl: 'components/contact/contact.html',
                 controller: 'ContactCtrl'
             })
+            .when('/faq', {
+                templateUrl: 'components/help/help.html',
+                controller: 'HelpCtrl'
+            })
             .when('/feedback', {
                 templateUrl: 'components/contact/contact.html',
                 controller: 'ContactCtrl'
@@ -36,6 +40,10 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute', 'ngResource']
             .when('/host', {
                 templateUrl: 'components/host/host.html',
                 controller: 'HostCtrl'
+            })
+            .when('/locations', {
+                templateUrl: 'components/contact/contact.html',
+                controller: 'ContactCtrl'
             })
             .when('/login', {
                 templateUrl: 'components/login/login.html',
