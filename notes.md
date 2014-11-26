@@ -11,10 +11,13 @@
 * ~~Finish Logo (TJW)~~
 * ~~Biz Card (TJW)~~
 * ~~Create default category backgrounds. (TJW/AR)~~
+* ~~JS the FAQ list (AR)~~
 * Page markup and content assignments
  * ~~About (AR)~~
+ * ~~Account (TJW)~~
  * ~~Classes (AR)~~
  * ~~Contact (AR)~~
+ * ~~Help (AR)~~
  * ~~Host (TJW)~~
  * ~~Logout (TJW)~~
  * ~~Privacy (TJW)~~
@@ -27,14 +30,9 @@
 * Make AE anim for intro graphic and lower thirds (TJW)
 * Categories lists need to all be pulled from the same place. (HMN)
 * Investigate custom @locallearners.net email (HMN)
-* JS the FAQ list (AR)
 * Auto Scrolling stuff in Angular (HMN)
 * Page markup and content assignments
- * Help (AR)
- * Account (TJW)
- * Categories (TJW)
  * Terms (TJW)
- * Profile (HMN)
 
 
 #Want to do:

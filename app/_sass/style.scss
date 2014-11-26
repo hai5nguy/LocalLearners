@@ -12,6 +12,7 @@
 @import "_footer.sass";                     // CSS for the footer at the bottom of every page
 
 //Stuff that effects specific pages
+@import "_account.sass";                    // For the Account/Account Settings page
 @import "_host.sass";                       // For the Host page
 
 //Stuff that goes at the end
