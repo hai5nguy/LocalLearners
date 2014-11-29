@@ -7,7 +7,6 @@
     padding: 4px 10px;
     clear: both;
     font-size: 15px;
-    color: #EEE;
 }
 .chatbox a {
   color: #FFF;
@@ -18,6 +17,7 @@
   border: 2px solid #C2E1F5;
   text-align: left;
   float: left;
+  color: #EEF;
 }
 .chatbox-r:after,
 .chatbox-r:before {
@@ -48,6 +48,7 @@
   border: 2px solid #F5C4C4;
   text-align: right;
   float: right;
+  color: #FEE;
 }
 .chatbox-l:after, .chatbox-l:before {
   left: 100%;
@@ -114,22 +115,22 @@
           <div class="form-group">
             <label for="requestCategory">Category:</label>
             <select class="form-control" name="requestCategory">
-              <option>Automotive</option>
-              <option>Business & Finance</option>
-              <option>Culinary</option>
-              <option>DIY</option>
-              <option>Fitness & Health</option>
-              <option>Games</option>
-              <option>History & Social Studies</option>
-              <option>Language</option>
-              <option>Literature & Writing</option>
-              <option>Music & Audio</option>
-              <option>Performing Arts</option>
-              <option>Science</option>
-              <option>Sports</option>
-              <option>Technology</option>
-              <option>Visual Arts</option>
-              <option>Other</option>
+              <option value="automotive">Automotive</option>
+              <option value="business_finance">Business & Finance</option>
+              <option value="culinary">Culinary</option>
+              <option value="diy">DIY</option>
+              <option value="fitness_health">Fitness & Health</option>
+              <option value="games">Games</option>
+              <option value="history_social_studies">History & Social Studies</option>
+              <option value="language">Language</option>
+              <option value="literature_writing">Literature & Writing</option>
+              <option value="music_audio">Music & Audio</option>
+              <option value="performing_arts">Performing Arts</option>
+              <option value="science">Science</option>
+              <option value="sports">Sports</option>
+              <option value="technology">Technology</option>
+              <option value="visual_arts">Visual Arts</option>
+              <option value="other">Other</option>
             </select>
           </div>
           <div class="form-group">
@@ -141,7 +142,7 @@
             <input name="classLocation" type="text" class="form-control"/>
           </div>
           <div class="form-group">
-            <label for="classDescription">Description</label>
+            <label for="classDescription">Class Description</label>
             <textarea name="classDescription" class="form-control"></textarea>
           </div>
           <div class="form-group">
@@ -186,31 +187,31 @@
         <div class="col-md-4 col-md-offset-8 col-sm-7 col-sm-offset-5">
           <form class="form">
             <div class="form-group">
-              <label for="filterCategory" class="pull-right">Filter By Category</label>
-                <select class="form-control input-sm">
-                  <option>All Categories</option>
-                  <option>Automotive</option>
-                  <option>Business & Finance</option>
-                  <option>Culinary</option>
-                  <option>DIY</option>
-                  <option>Fitness & Health</option>
-                  <option>Games</option>
-                  <option>History & Social Studies</option>
-                  <option>Language</option>
-                  <option>Literature & Writing</option>
-                  <option>Music & Audio</option>
-                  <option>Performing Arts</option>
-                  <option>Science</option>
-                  <option>Sports</option>
-                  <option>Technology</option>
-                  <option>Visual Arts</option>
-                  <option>Other</option>
-                </select>
+              <label for="filterCategory">Filter by Category:</label>
+              <select class="form-control input-sm">
+                <option>All Categories</option>
+                <option>Automotive</option>
+                <option>Business & Finance</option>
+                <option>Culinary</option>
+                <option>DIY</option>
+                <option>Fitness & Health</option>
+                <option>Games</option>
+                <option>History & Social Studies</option>
+                <option>Language</option>
+                <option>Literature & Writing</option>
+                <option>Music & Audio</option>
+                <option>Performing Arts</option>
+                <option>Science</option>
+                <option>Sports</option>
+                <option>Technology</option>
+                <option>Visual Arts</option>
+                <option>Other</option>
+              </select>
             </div>
           </form>
         </div>
         <div>
-          <ol>
+          <ol class="clearfix">
             <li>Intro to Photoshop               <span class="badge">68</span></li>
             <li>Intermediate Guitar              <span class="badge">52</span></li>
             <li>Using a Pottery Wheel            <span class="badge">40</span></li>

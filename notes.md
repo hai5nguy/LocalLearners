@@ -34,7 +34,6 @@
 * Page markup and content assignments
  * Terms (TJW)
 
-
 #Want to do:
 * Kick ass awesome Video thingy
 * Map of event locations
