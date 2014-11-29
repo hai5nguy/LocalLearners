@@ -1,10 +1,10 @@
 var localLearnerApp = angular.module('localLearnerApp',['ngResource', 'ngRoute'])
     .config(function($routeProvider, $locationProvider) {
         $routeProvider
-//            .when('/', {
-//                templateUrl: 'components/main/main.html',
-//                controller: 'MainCtrl'
-//            })
+            .when('/', {
+                templateUrl: 'components/main/main.html',
+                controller: 'MainCtrl'
+            })
             .when('/about', {
                 templateUrl: 'components/about/about.html'
                 //controller: 'AboutCtrl'
