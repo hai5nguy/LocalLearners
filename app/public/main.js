@@ -1,29 +1,33 @@
-var localLearnerApp = angular.module('localLearnerApp',['ngRoute', 'ngResource'])
-    .config(function($routeProvider) {
+var localLearnerApp = angular.module('localLearnerApp',['ngResource', 'ngRoute'])
+    .config(function($routeProvider, $locationProvider) {
         $routeProvider
-            .when('/', {
-                templateUrl: 'components/main/main.html',
-                controller: 'MainCtrl'
-            })
+//            .when('/', {
+//                templateUrl: 'components/main/main.html',
+//                controller: 'MainCtrl'
+//            })
             .when('/about', {
-                templateUrl: 'components/about/about.html',
-                controller: 'AboutCtrl'
+                templateUrl: 'components/about/about.html'
+                //controller: 'AboutCtrl'
             })
             .when('/account', {
                 templateUrl: 'components/account/account.html',
                 controller: 'AccountCtrl'
             })
+            .when('/authenticate', {
+                templateUrl: 'components/authenticate/authenticate.html',
+                controller: 'AuthenticateCtrl'
+            })
             .when('/categories', {
-                templateUrl: 'components/categories/categories.html',
-                controller: 'CategoriesCtrl'
+                templateUrl: 'components/categories/categories.html'
+                //controller: 'CategoriesCtrl'
             })
             .when('/classes', {
                 templateUrl: 'components/classes/classes.html',
                 controller: 'ClassesCtrl'
             })
             .when('/contact', {
-                templateUrl: 'components/contact/contact.html',
-                controller: 'ContactCtrl'
+                templateUrl: 'components/contact/contact.html'
+                //controller: 'ContactCtrl'
             })
             .when('/faq', {
                 templateUrl: 'components/help/help.html',
@@ -78,11 +82,14 @@ var localLearnerApp = angular.module('localLearnerApp',['ngRoute', 'ngResource']
                 controller: 'LogoutCtrl'
             })
             .when('/teach', {
-                templateUrl: 'components/teach/teach.html',
-                controller: 'TeachCtrl'
+                templateUrl: 'components/teach/teach.html'
+                //controller: 'TeachCtrl'
             })
             .when('/terms', {
                 templateUrl: 'components/terms/terms.html',
                 controller: 'TermsCtrl'
-            })
+            });
+
+        $locationProvider.html5Mode(true);
+
     });
