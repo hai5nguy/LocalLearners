@@ -31,6 +31,7 @@ module.exports = function(grunt) {
         express: {
             webserver: {
                 options: {
+                    port: 5000,
                     script: 'app/webserver.js'
                 }
             }
