@@ -13,7 +13,7 @@ localLearnerApp.controller('AuthenticateCtrl', function ($routeParams, $location
 
     console.log('meetupprofiletoken', MeetupProfile.accessToken);
 
-    //$location.url('/');
+    $location.url('/');
 });
 
 //function parseMeetupTokenHash(hashString) {

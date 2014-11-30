@@ -1,5 +1,6 @@
-localLearnerApp.factory('MeetupProfile', function($resource) {
+localLearnerApp.factory('MeetupProfile', function($resource, $rootScope, $http) {
     var _accessToken;
+    var _authenticated = false;
 
     return {
         login: function() {
@@ -10,11 +11,24 @@ localLearnerApp.factory('MeetupProfile', function($resource) {
             if (!hashString) return;
             var pairs = hashString.split('&');
             this.accessToken = pairs[2].split('=')[1];
+            this.authenticated = true;
+            this.getProfileInfo();
+            $rootScope.$broadcast('userAuthenticated');
         },
 
         get accessToken() { return _accessToken; },
-        set accessToken(token) { _accessToken = token }
+        set accessToken(token) { _accessToken = token; },
 
+        get authenticated() { return _authenticated },
+        set authenticated(value) { _authenticated = value; },
+
+        get name() { return 'blah'; },
+
+        getProfileInfo: function() {
+            $http({method: 'GET', url: 'https://api.meetup.com/2/member/self?access_token=' + this.accessToken, headers: {'Authorization': 'Bearer '+ this.accessToken}}).then(function(response){
+                console.log(response);
+            });
+        }
 
     }
 });

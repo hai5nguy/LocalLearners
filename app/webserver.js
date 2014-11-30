@@ -13,7 +13,7 @@ app.listen(port, function() {
 
 app.use(express.static(__dirname + '/public'));
 
-app.all('/authenticate', function(req, res) {
+app.all('/*', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
