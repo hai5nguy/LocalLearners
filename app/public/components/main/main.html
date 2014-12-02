@@ -1,9 +1,71 @@
+<!-- Request Class Modal -->
+<div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-labelledby="requestModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="requestModalLabel">Request a Class</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form">
+          <div class="form-group">
+            <label for="requestName">Lesson Name:</label>
+            <input placeholder="Intro to Guitar" name="requestName" type="text" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="requestCategory">Category:</label>
+            <select class="form-control" name="requestCategory">
+              <option value="automotive">Automotive</option>
+              <option value="business_finance">Business & Finance</option>
+              <option value="culinary">Culinary</option>
+              <option value="diy">DIY</option>
+              <option value="fitness_health">Fitness & Health</option>
+              <option value="games">Games</option>
+              <option value="history_social_studies">History & Social Studies</option>
+              <option value="language">Language</option>
+              <option value="literature_writing">Literature & Writing</option>
+              <option value="music_audio">Music & Audio</option>
+              <option value="performing_arts">Performing Arts</option>
+              <option value="science">Science</option>
+              <option value="sports">Sports</option>
+              <option value="technology">Technology</option>
+              <option value="visual_arts">Visual Arts</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-block">Submit Request</button>
+      </div>
+    </div>
+  </div>
+</div> <!-- /Request Class Modal -->
+
+<!-- Class Info Modal -->
+<div class="modal fade" id="classModal" tabindex="-1" role="dialog" aria-labelledby="classModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="classModalLabel">Class Title Here</h4>
+      </div>
+      <div class="modal-body">
+        ...Dynamic class info based on click event here...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">RSVP</button>
+      </div>
+    </div>
+  </div>
+</div> <!-- /Class Info Modal -->
+
 <div class="jumbotron">
   <div class="container">
     <div class="row col-md-8 col-md-offset-2 text-center">
       <h2>Try Somethin' New!</h2>
       <p>Local Learners is a free to join group for trying new things.</p>
-      <a class="btn btn-primary btn-lg white-txt" href="/request" role="button">Request a Class</a>
+      <a class="btn btn-primary btn-lg white-txt" role="button" data-toggle="modal" data-target="#requestModal">Request a Class</a>
       <a class="btn btn-primary btn-lg white-txt" href="/teach"   role="button">Teach a Class</a>
     </div>
   </div>
@@ -39,7 +101,7 @@
   <div class="row">
     <!-- classes start -->
     <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default">
+      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
         <img src="img/class/history.png" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
           <div class="row">
@@ -58,7 +120,7 @@
     </div>
 
     <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default">
+      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
         <img src="img/class/technology.png" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
           <div class="row">
@@ -77,7 +139,7 @@
     </div>
 
     <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default">
+      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
         <img src="img/class/games.png" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
           <div class="row">
@@ -96,7 +158,7 @@
     </div>
 
     <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default">
+      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
         <img src="img/class/diy.png" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
           <div class="row">
@@ -115,7 +177,7 @@
     </div>
 
     <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default">
+      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
         <img src="img/class/culinary.png" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
           <div class="row">
@@ -134,7 +196,7 @@
     </div>
 
     <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default">
+      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
         <img src="img/class/other.png" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
           <div class="row">
@@ -239,6 +301,20 @@
   <hr />
   <div class="jumbotron text-center">
     <p>Don't see your class?</p>
-    <a class="btn btn-primary btn-lg white-txt" href="/request" role="button">Suggest a Class</a>
+    <a class="btn btn-primary btn-lg white-txt" role="button" data-toggle="modal" data-target="#requestModal">Suggest a Class</a>
   </div>
 </div>
+
+
+<script>
+// Dynamic Class Info Modals, straight from Boostrap website
+$('#classModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); // Button that triggered the modal
+  var classInfo = button.data('classInfo'); // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  modal.find('.modal-title').text('Corresponding class title goes here: ' + classInfo);
+  modal.find('.modal-body').text('Corresponding class info goes here: ' + classInfo);
+});
+</script>
