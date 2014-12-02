@@ -32,3 +32,52 @@ img
 
 .white-txt
     color: #FFF
+
+.hai
+    display: block
+    min-width: 320px
+    position: absolute
+    top: 160px
+    left: 0px
+    background: #F5EEEE
+    border: 13px solid #A55
+    border-left: 0px
+    border-radius: 0px 200px 200px 0px
+    margin: 0px
+    padding: 30px 40px 30px 21px
+    color: #B34848
+    font-family: tahoma, arial, sans-serif
+    font-size: 24px
+    font-weight: bold
+    text-align: left
+    text-shadow: 1px 1px 4px rgba(123, 63, 63, 0.5)
+    box-shadow: -2px 5px 6px rgba(0,0,0,0.2), inset 0px 0px 8px rgba(255,0,0,0.75)
+    vertical-align: middle
+    z-index: 999999999999999999
+    -webkit-animation: haiSlide 1s
+    &:before
+        content: "!"
+        display: block
+        height: 45px
+        width: 45px
+        position: absolute
+        top: -13px
+        right: -21px
+        background: #F9F5F5
+        border: 6px solid #C34646
+        border-radius: 200px
+        margin: 0px
+        padding: 0px 11px 0px 14px
+        color: #F75B5B
+        font-size: 19px
+        line-height: 30px
+        cursor: pointer
+        text-shadow: 1px 1px 4px rgba(123, 63, 63, 0.5)
+        box-shadow: -2px 5px 6px rgba(0, 0, 0, 0.16),inset 0px 0px 8px rgba(123, 88, 88, 0.75)
+        z-index: 99999999999999999
+
+@-webkit-keyframes haiSlide
+    from
+        left: -1920px
+    to
+        left: 0px
