@@ -90,19 +90,13 @@
   </head>
   <body ng-controller="IndexCtrl">
 
-    <div class="hai">yooooo {{userAuthenticated}}</div>
+    <div id="hai"><a href="#hai">yooooo {{userAuthenticated}}</a></div>
 
     <header ng-include="appSettings.url.header"></header>
 
     <ng-view></ng-view>
 
     <footer ng-include="appSettings.url.footer"></footer>
-
-    <script>
-        $(".hai").click( function() {
-            $(".hai").animate({left:"-1920px"}, 2000);
-        })
-    </script>
 
   </body>
 </html>
