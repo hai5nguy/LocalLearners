@@ -12,6 +12,7 @@ app.listen(app.get('port'), function() {
     console.log("Web server running on http://localhost:" + app.get('port'));
 });
 
+app.use('/test', express.static(__dirname + '/public/index.html?' + process.env.testkey + '=' + process.env.testvalue));
 app.use('/', express.static(__dirname + '/public/index.html'));
 app.use(express.static(__dirname + '/public'));
 
