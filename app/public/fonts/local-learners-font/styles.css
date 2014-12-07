@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "local-learners-font";
+  src:url("fonts/local-learners-font.eot");
+  src:url("fonts/local-learners-font.eot?#iefix") format("embedded-opentype"),
+    url("fonts/local-learners-font.woff") format("woff"),
+    url("fonts/local-learners-font.ttf") format("truetype"),
+    url("fonts/local-learners-font.svg#local-learners-font") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+[data-icon]:before {
+  font-family: "local-learners-font" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "local-learners-font" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-automotive:before {
+  content: "a";
+}
+.icon-business:before {
+  content: "c";
+}
+.icon-culinary:before {
+  content: "b";
+}
+.icon-diy:before {
+  content: "d";
+}
+.icon-fitness:before {
+  content: "e";
+}
+.icon-literature:before {
+  content: "i";
+}
+.icon-music:before {
+  content: "j";
+}
+.icon-other:before {
+  content: "l";
+}
+.icon-performing-arts:before {
+  content: "k";
+}
+.icon-science:before {
+  content: "m";
+}
+.icon-language:before {
+  content: "h";
+}
+.icon-visual-arts:before {
+  content: "n";
+}
+.icon-sports:before {
+  content: "o";
+}
+.icon-technology:before {
+  content: "p";
+}
+.icon-history:before {
+  content: "q";
+}
+.icon-games:before {
+  content: "g";
+}
