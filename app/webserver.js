@@ -4,17 +4,24 @@ var app = express();
 //var app = require('http').createServer(app);
 //var io = require('socket.io')(server);
 
-var port = process.env.PORT || 5000;
+
+app.set('port', (process.env.PORT || 5000));
+
+//console.log('testkey', process.env.testkey);
+//console.log('testvalue', process.env.testvalue);
 
 
-app.listen(port, function() {
-    console.log("Web server running on http://localhost:" + port);
+app.get('/test', function(req, res) {
+    res.send('key:' + process.env.testkey + ' value: ' + process.env.testvalue);
 });
 
+//app.use('/test', express.static(__dirname + '/public/test.html?' + process.env.testkey + '=' + process.env.testvalue));
+app.use('/', express.static(__dirname + '/public/index.html'));
 app.use(express.static(__dirname + '/public'));
 
-app.all('/*', function(req, res) {
-    res.sendFile(__dirname + '/public/index.html');
+
+app.listen(app.get('port'), function() {
+    console.log("Web server running on http://localhost:" + app.get('port'));
 });
 
 
