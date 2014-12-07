@@ -11,8 +11,10 @@
   "homepage": "https://github.com/nmhai3/LocalLearners",
   "dependencies": {
     "express": "^4.10.2",
+    "express-session": "^1.9.3",
     "passport": "^0.2.1",
-    "passport-meetup": "^0.1.2"
+    "passport-http-bearer": "^1.0.1",
+    "passport-oauth": "^1.0.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
