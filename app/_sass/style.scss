@@ -12,9 +12,11 @@
 @import "_main.sass";                       // Main CSS for the site
 @import "_header.sass";                     // CSS for the header and navigation at the top of each page
 @import "_footer.sass";                     // CSS for the footer at the bottom of every page
+@import "_customfont.scss";                 // This is the CSS for our custom font containing category icons
 
 //Stuff that effects specific pages
 @import "_account.sass";                    // For the Account/Account Settings page
+@import "_homepage.sass";                   // For the homepage of the site
 @import "_host.sass";                       // For the Host page
 
 //Stuff that goes at the end

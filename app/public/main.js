@@ -29,6 +29,10 @@ var localLearnerApp = angular.module('localLearnerApp',['ngResource', 'ngRoute']
                 templateUrl: 'components/contact/contact.html'
                 //controller: 'ContactCtrl'
             })
+            .when('/customfont', {
+                templateUrl: 'components/customfont/customfont.html'
+                //controller: 'customfontCtrl'
+            })
             .when('/faq', {
                 templateUrl: 'components/help/help.html',
                 controller: 'HelpCtrl'
