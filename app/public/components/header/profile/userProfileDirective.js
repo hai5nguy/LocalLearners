@@ -22,18 +22,20 @@ localLearnerApp.directive('llUserProfile', function(MeetupProfile, $rootScope) {
         restrict: 'E',
         replace: true,
         templateUrl: 'components/header/profile/profile.html',
-        controller: function($scope, MeetupProfile) {
-            $scope.userAuthenticated = MeetupProfile.authenticated;
-            $scope.Profile = MeetupProfile;
-
-            $scope.$on('userAuthenticated', function() {
-                $scope.$apply();
-
-
-            });
+        controller: function($scope) {
+            console.log("yoooo");
+           $scope.userAuthenticated = false;
+//            $scope.Profile = MeetupProfile;
+//
+//            $scope.$on('userAuthenticated', function() {
+//                $scope.$apply();
+//
+//
+//            });
 
             $scope.signIn = function() {
-                var url = 'https://secure.meetup.com/oauth2/authorize?client_id=h0dl8qkd82gbjan5cpr8plb4jq&response_type=token&redirect_uri=http://localhost:5000/authenticate/?returnurl=/';
+
+                var url = '/authenticate';
                 window.location = url;
             }
         }

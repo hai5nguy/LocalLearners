@@ -13,10 +13,10 @@ var localLearnerApp = angular.module('localLearnerApp',['ngResource', 'ngRoute']
                 templateUrl: 'components/account/account.html',
                 controller: 'AccountCtrl'
             })
-            .when('/authenticate', {
-                templateUrl: 'components/authenticate/authenticate.html',
-                controller: 'AuthenticateCtrl'
-            })
+//            .when('/authenticate', {
+//                templateUrl: 'components/authenticate/authenticate.html',
+//                controller: 'AuthenticateCtrl'
+//            })
             .when('/categories', {
                 templateUrl: 'components/categories/categories.html'
                 //controller: 'CategoriesCtrl'

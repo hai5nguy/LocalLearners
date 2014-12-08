@@ -10,7 +10,7 @@ localLearnerApp.controller('LoggedOutCtrl', function($scope) {
         var left = (screen.width/2)-(width/2);
         var top = (screen.height/2)-(height/2);
         var url = 'https://secure.meetup.com/oauth2/authorize?client_id=h0dl8qkd82gbjan5cpr8plb4jq&response_type=token&redirect_uri=http://localhost:5000/authenticate/?returnurl=/';
-        window.location = url;
+        window.location = "/authorize";
         //window.open(url, '', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
     }
 
