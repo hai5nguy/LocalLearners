@@ -24,6 +24,20 @@ Request: This page should just be a modal that appears whenever "request a class
 Requested: Have the URL be able to handle sorting and filtering. locallearners.net/#/requested?category=music&sort=popular
 Upcoming Classes: URL to hand sorting and filtering. locallearners.net/#/classes?category=history&sort=oldest
 
+#Alissa Ponderings
+Main
+▪	Category Select Filter isn’t set up to read/show All Categories
+	⁃	Since Angular is filtering based on category, there is no class associated with ‘All Categories’
+▪	Changed class category property values on backend (lowercase, hyphenated); corresponding values need to be added to front-end category filter
+▪	Need to convert date of class to numeric number in order to sort by date in Angular
+	⁃	Create a custom filter? https://docs.angularjs.org/api/ng/filter/orderBy
+▪	When there are no classes to display, default apology message should appear and offer a link to suggest a class
+▪	ClassCtrl should be a Controller of its own since it will also be used on another page (Upcoming Classes)
+▪	When modals pop up, click-off should escape out of window
+	⁃	“The modal plugin toggles your hidden content on demand, via data attributes or JavaScript. It also adds.modal-open to the <body> to override default scrolling behavior and generates a .modal-backdrop to provide a click area for dismissing shown modals when clicking outside the modal.” - Bootstrap Reference
+		⁃	This isn’t the case. When .modal-backdrop is added to the DOM, it is done so as a separate div below the modal’s div, and it has no height, thus making it unclickable. I’ve read once that it’s a Bootstrap version issue — not sure if this is the case.
+▪	Modals should appear at ~33% from the top of page (currently too close to top)
+
 #Done
 * ~~Finish user stories (TJW/AR/HMN)~~
 * ~~Create Balsamiq Mockups (AR)~~
