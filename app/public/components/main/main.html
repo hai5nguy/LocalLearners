@@ -71,57 +71,39 @@
   </div>
 </div>
 
+<!-- Upcoming Classes -->
 <div class="container">
   <div class="row">
     <div class="col-md-6 col-sm-6 col-xs-6">
       <h4><a href="/classes">Upcoming Classes</a></h4>
     </div>
     <div class="col-md-2 pull-right">
-      <p><select class="form-control input-sm">
-            <option selected>All Categories</option>
-            <option>Automotive</option>
-            <option>Business</option>
-            <option>Culinary</option>
-            <option>DIY</option>
-            <option>Fitness</option>
-            <option>Games</option>
-            <option>History</option>
-            <option>Language</option>
-            <option>Literature</option>
-            <option>Music</option>
-            <option>Other</option>
-            <option>Performing Arts</option>
-            <option>Science</option>
-            <option>Sports</option>
-            <option>Technology</option>
-            <option>Visual Arts</option>
-          </select></p>
+      <select class="form-control input-sm" ng-model="category">
+        <option selected>All Categories</option>
+        <option>Automotive</option>
+        <option>Business</option>
+        <option>Culinary</option>
+        <option>DIY</option>
+        <option>Fitness</option>
+        <option>Games</option>
+        <option>History</option>
+        <option>Language</option>
+        <option>Literature</option>
+        <option>Music</option>
+        <option>Other</option>
+        <option>Performing Arts</option>
+        <option>Science</option>
+        <option>Sports</option>
+        <option>Technology</option>
+        <option>Visual Arts</option>
+      </select>
     </div>
   </div>
-  <div class="row">
-    <!-- classes start -->
-    <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-        <img src="img/class/history.png" class="img-responsive" alt="Class Title - Category" />
-        <div class="panel-body text-right">
-          <div class="row">
-            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-              <h2><span class="glyphicon glyphicon-ok"></span></h2>
-              <p>RSVP</p>
-            </div>
-            <div class="col-md-8 col-sm-6">
-              <h4>January 1, 1997</h4>
-              <p class="small">Downtown</p>
-              <span class="small badge glyphicon glyphicon-user">14</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="col-md-4 col-sm-6 col-xs-6">
+  <div class="row" ng-controller="MainCtrl">
+    <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="class in availClasses | filter:category | limitTo:6">
       <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-        <img src="img/class/technology.png" class="img-responsive" alt="Class Title - Category" />
+        <img src="img/class/{{class.image}}" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
           <div class="row">
             <div class="text-left col-md-4 col-sm-6 hidden-xs">
@@ -129,167 +111,47 @@
               <p>RSVP</p>
             </div>
             <div class="col-md-8 col-sm-6">
-              <h4>January 1, 1997</h4>
-              <p class="small">Downtown</p>
+              <h5>{{ class.date }}</h5>
+              <p class="small">{{ class.location }}</p>
               <span class="small badge glyphicon glyphicon-user">14</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-        <img src="img/class/games.png" class="img-responsive" alt="Class Title - Category" />
-        <div class="panel-body text-right">
-          <div class="row">
-            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-              <h2><span class="glyphicon glyphicon-ok"></span></h2>
-              <p>RSVP</p>
-            </div>
-            <div class="col-md-8 col-sm-6">
-              <h4>January 1, 1997</h4>
-              <p class="small">Downtown</p>
-              <span class="small badge glyphicon glyphicon-user">14</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-        <img src="img/class/diy.png" class="img-responsive" alt="Class Title - Category" />
-        <div class="panel-body text-right">
-          <div class="row">
-            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-              <h2><span class="glyphicon glyphicon-ok"></span></h2>
-              <p>RSVP</p>
-            </div>
-            <div class="col-md-8 col-sm-6">
-              <h4>January 1, 1997</h4>
-              <p class="small">Downtown</p>
-              <span class="small badge glyphicon glyphicon-user">14</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-        <img src="img/class/culinary.png" class="img-responsive" alt="Class Title - Category" />
-        <div class="panel-body text-right">
-          <div class="row">
-            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-              <h2><span class="glyphicon glyphicon-ok"></span></h2>
-              <p>RSVP</p>
-            </div>
-            <div class="col-md-8 col-sm-6">
-              <h4>January 1, 1997</h4>
-              <p class="small">Downtown</p>
-              <span class="small badge glyphicon glyphicon-user">14</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4 col-sm-6 col-xs-6">
-      <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-        <img src="img/class/other.png" class="img-responsive" alt="Class Title - Category" />
-        <div class="panel-body text-right">
-          <div class="row">
-            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-              <h2><span class="glyphicon glyphicon-ok"></span></h2>
-              <p>RSVP</p>
-            </div>
-            <div class="col-md-8 col-sm-6">
-              <h4>January 1, 1997</h4>
-              <p class="small">Downtown</p>
-              <span class="small badge glyphicon glyphicon-user">14</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> <!-- /classes -->
+  </div>
   <a href="/classes" class="btn btn-default pull-right">See More</a>
-</div>
+</div> <!-- End Upcoming Classes -->
 
-<div class="container">
-  <hr />
+<!-- Most Requested Classes -->
+<div class="container" ng-controller="MainCtrl">
+  <hr>
   <h3 class="lead">Most Requested Classes</h3>
   <div class="row">
     <div class="col-md-4">
       <ul class="list-group">
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
+        <li class="list-group-item" ng-repeat="class in reqClasses | orderBy:'-requests' | limitTo:4">
+          <span class="badge">{{class.requests}}</span>
+          <span class="badge pull-left"><span class="glyphicon icon-{{class.category}}"></span></span>
+          {{ class.name }}
         </li>
       </ul>
     </div>
     <div class="col-md-4">
       <ul class="list-group">
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
+        <li class="list-group-item" ng-repeat="class in reqClasses | orderBy:'-requests' | limitTo:8 | limitTo:-4">
+          <span class="badge">{{class.requests}}</span>
+          <span class="badge pull-left"><span class="glyphicon icon-{{class.category}}"></span></span>
+          {{ class.name }}
         </li>
       </ul>
     </div>
     <div class="col-md-4">
       <ul class="list-group">
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
-        </li>
-        <li class="list-group-item">
-          <span class="badge">14</span>
-          <span class="badge pull-left"><span class="glyphicon glyphicon-music"></span></span>
-          Intro to Guitar
+        <li class="list-group-item" ng-repeat="class in reqClasses | orderBy:'-requests' | limitTo:12 | limitTo:-4">
+          <span class="badge">{{class.requests}}</span>
+          <span class="badge pull-left"><span class="glyphicon icon-{{class.category}}"></span></span>
+          {{ class.name }}
         </li>
       </ul>
     </div>
