@@ -3,9 +3,11 @@ var app = express();
 var passport = require('passport');
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 var session = require('express-session');
+var Client = require('node-rest-client').Client;
 
-//var session = require('express-session');
+var client = new Client();
 
+var USER_SESSION = {};
 
 //var app = require('http').createServer(app);
 //var io = require('socket.io')(server);
@@ -31,6 +33,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
 app.use(passport.initialize());
 
 passport.use('provider', new OAuth2Strategy({
@@ -43,23 +46,47 @@ passport.use('provider', new OAuth2Strategy({
     function(accessToken, refreshToken, profile, done) {
         console.log('accessToken ', accessToken);
         console.log('refreshToken ', refreshToken);
-        console.log('profile ', profile);
+        console.log('profile ', profile.id);
         console.log('done ', done);
+        ACCESS_TOKEN = accessToken;
         return done(null, { name: 'blah'}, {});
     })
 );
-
-
 
 app.get('/authenticate', passport.authenticate('provider'));
 
 app.get('/authenticate/callback',
     passport.authenticate('provider', {
-        successRedirect: '/success',
         failureRedirect: '/fail'
-    })
+    }),
+    function (req, res) {
+        console.log('blah1');
+        USER_SESSION = req.session;
+        USER_SESSION.profile = {};
+        USER_SESSION.profile = { isAuthenticated: true, accessToken: ACCESS_TOKEN };
+        res.redirect('/');
+    }
 );
 
+app.get('/rest/v1/userprofile', function(req, res) {
+    if (USER_SESSION.profile && USER_SESSION.profile.isAuthenticated) {
+        //res.json({ name: 'namevalue', accessToken: USER_SESSION.accessToken });
+
+        var args = {
+            headers: { Authorization: 'Bearer ' + USER_SESSION.profile.accessToken }
+        };
+        client.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
+            function (data, response) {
+                console.log('data ', data);
+                //console.log('response', response);
+                res.json({ thumb_link: data.photo.thumb_link });
+            }
+        );
+
+    } else {
+        res.json({ error: 'not authenticated' });
+    }
+});
 
 
 //console.log('testkey', process.env.testkey);
@@ -86,12 +113,10 @@ app.get('/authenticate/callback',
 //app.use('/test', express.static(__dirname + '/public/test.html?' + process.env.testkey + '=' + process.env.testvalue));
 //app.use('/', express.static(__dirname + '/public/index.html'));
 app.use(express.static(__dirname + '/public'));
-//
-//app.use(session({
-//    secret: 'keyboard cat',
-//    resave: false,
-//    saveUninitialized: true
-//}));
+
+
+
+
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).

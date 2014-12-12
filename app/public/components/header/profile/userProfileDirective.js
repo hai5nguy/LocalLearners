@@ -1,4 +1,4 @@
-localLearnerApp.directive('llUserProfile', function(MeetupProfile, $rootScope) {
+localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope) {
 
     var useTemplate = 'components/header/profile/profile.html';
 
@@ -38,6 +38,9 @@ localLearnerApp.directive('llUserProfile', function(MeetupProfile, $rootScope) {
                 var url = '/authenticate';
                 window.location = url;
             }
+
+            $scope.userProfile = MeetupProfileSvc.getUserProfile();
+            console.log($scope.userProfile);
         }
     }
 });

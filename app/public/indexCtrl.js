@@ -1,5 +1,5 @@
 localLearnerApp
-    .controller('IndexCtrl', function($scope, MeetupProfile) {
+    .controller('IndexCtrl', function($scope, MeetupProfileSvc) {
         //console.log('accesstoken', MeetupProfile.accessToken);
         $scope.appSettings = {
             url: {
@@ -7,7 +7,7 @@ localLearnerApp
                 footer: 'components/footer/footer.html'
             }
         }
-        $scope.userAuthenticated =  MeetupProfile.authenticated
+        $scope.userAuthenticated =  MeetupProfileSvc.authenticated
 
 //        $scope.test = function() { return MeetupProfile.accessToken; }
 
