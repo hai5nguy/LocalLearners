@@ -13,7 +13,7 @@ module.exports = function(grunt) {
                 files: ['app/public/**'],
                 tasks:  [ 'restart-web-server' ],
                 options: {
-                    spawn: true
+                    nospawn: true
                 }
             }
         },
