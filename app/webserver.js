@@ -77,7 +77,7 @@ app.get('/rest/v1/userprofile', function(req, res) {
         };
         client.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
             function (data, response) {
-                console.log('data ', data);
+                console.log('data ', data.photo);
                 //console.log('response', response);
                 res.json({ thumb_link: data.photo.thumb_link });
             }
