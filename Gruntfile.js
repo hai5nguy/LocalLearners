@@ -5,10 +5,10 @@ module.exports = function(grunt) {
             options: {
                 livereload: true
             },
-//            sass: {
-//                files: ['design/sass/**/*.{scss,sass}'],
-//                tasks: ['sass']
-//            },
+            sass: {
+                files: ['app/_sass/**/*.{scss,sass}'],
+                tasks: ['sass']
+            },
             publicfolder: {
                 files: ['app/public/**'],
                 tasks:  [ 'restart-web-server' ],
@@ -17,17 +17,17 @@ module.exports = function(grunt) {
                 }
             }
         },
-//        sass: {
-//            options: {
-//                style: 'expanded',
-//                sourcemap: 'none'
-//            },
-//            dist: {
-//                files: {
-//                    'app/public/_style/style.css': 'design/sass/style.scss'
-//                }
-//            }
-//        },
+        sass: {
+            options: {
+                style: 'expanded',
+                sourcemap: 'none'
+            },
+            dist: {
+                files: {
+                    'app/public/css/style.css': 'app/_sass/style.scss'
+                }
+            }
+        },
         express: {
             webserver: {
                 options: {
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
         }
     });
 
-    //grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-express-server');
 
