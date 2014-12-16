@@ -100,8 +100,8 @@
     </div>
   </div>
 
-  <div class="row" ng-controller="MainCtrl">
-    <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="class in availClasses | filter:category | limitTo:6">
+  <div class="row">
+    <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="class in availClasses | limitTo:6">
       <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
         <img src="img/class/{{class.image}}" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
@@ -124,7 +124,7 @@
 </div> <!-- End Upcoming Classes -->
 
 <!-- Most Requested Classes -->
-<div class="container" ng-controller="MainCtrl">
+<div class="container">
   <hr>
   <h3 class="lead">Most Requested Classes</h3>
   <div class="row">
