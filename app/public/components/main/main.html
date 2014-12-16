@@ -79,7 +79,7 @@
     </div>
     <div class="col-md-2 pull-right">
       <select class="form-control input-sm" ng-model="category">
-        <option selected>All Categories</option>
+        <option selected value="">All Categories</option>
         <option>Automotive</option>
         <option>Business</option>
         <option>Culinary</option>
@@ -101,7 +101,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="class in availClasses | limitTo:6">
+    <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="class in availClasses | filter:category | limitTo:6">
       <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
         <img src="img/class/{{class.image}}" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
