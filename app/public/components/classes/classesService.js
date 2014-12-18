@@ -7,7 +7,14 @@ localLearnerApp.factory('ClassesService', function () {
             var settings = _.extend(defaultOptions, options);
 
             var availableClasses = [
-                {name:'Intro to Guitar',date:'December 18, 2015',location:'Downtown',category:'music',image:'music.png'},
+                {
+                    name:'Intro to Guitar',
+                    description:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quasi fugiat esse dignissimos deserunt, itaque illo, facilis unde? Voluptatibus quibusdam dolores cum numquam, molestias laboriosam modi. Ad illum, eveniet debitis.',
+                    date:'December 18, 2015',
+                    location:'Downtown',
+                    category:'music',
+                    image:'music.png'
+                },
                 {name:'Advanced CSS Techniques',date:'October 5, 2015',location:'Fishers',category:'technology',image:'technology.png'},
                 {name:'Basketweaving',date:'March 1, 2015',location:'Carmel',category:'DIY',image:'diy.png'},
                 {name:'Ultimate Frisbee 101',date:'August 4, 2015',location:'Downtown',category:'sports',image:'sports.png'},

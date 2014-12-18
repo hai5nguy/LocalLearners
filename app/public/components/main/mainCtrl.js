@@ -13,6 +13,10 @@ localLearnerApp.controller('MainCtrl', function($scope, ClassesService) {
 
     $scope.availClasses = ClassesService.getAvailableClasses();
 
+    $scope.getClassInfo = function(availClass) {
+        $scope.availClass = availClass; // binds clicked class to scope
+    };
+
     $scope.reqClasses = [
         {name:'Intro to Photoshop',category:'technology',requests:5},
         {name:'Intermediate Guitar',category:'music',requests:34},

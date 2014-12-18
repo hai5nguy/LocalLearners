@@ -48,10 +48,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="classModalLabel">Class Title Here</h4>
+        <h4 class="modal-title" id="classModalLabel">{{ availClass.name }}</h4>
       </div>
       <div class="modal-body">
-        ...Dynamic class info based on click event here...
+        <p><strong>Date: </strong>{{availClass.date}}</p>
+        <p><strong>Location: </strong>{{availClass.location}}</p>
+        <p><strong>Description: </strong>{{availClass.description}}</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary">RSVP</button>
@@ -78,8 +80,8 @@
       <h4><a href="/classes">Upcoming Classes</a></h4>
     </div>
     <div class="col-md-2 pull-right">
-      <select class="form-control input-sm" ng-model="category">
-        <option selected value="">All Categories</option>
+      <select class="form-control input-sm" ng-click="getAvailableClasses(options)">
+        <option selected>All Categories</option>
         <option>Automotive</option>
         <option>Business</option>
         <option>Culinary</option>
@@ -101,9 +103,9 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="class in availClasses | filter:category | limitTo:6">
+    <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="availClass in availClasses | limitTo:6" ng-click="getClassInfo(availClass)">
       <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-        <img src="img/class/{{class.image}}" class="img-responsive" alt="Class Title - Category" />
+        <img src="img/class/{{availClass.image}}" class="img-responsive" alt="Class Title - Category" />
         <div class="panel-body text-right">
           <div class="row">
             <div class="text-left col-md-4 col-sm-6 hidden-xs">
@@ -111,8 +113,8 @@
               <p>RSVP</p>
             </div>
             <div class="col-md-8 col-sm-6">
-              <h5>{{ class.date }}</h5>
-              <p class="small">{{ class.location }}</p>
+              <h5>{{ availClass.date }}</h5>
+              <p class="small">{{ availClass.location }}</p>
               <span class="small badge glyphicon glyphicon-user">14</span>
             </div>
           </div>
@@ -130,28 +132,28 @@
   <div class="row">
     <div class="col-md-4">
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="class in reqClasses | orderBy:'-requests' | limitTo:4">
-          <span class="badge">{{class.requests}}</span>
-          <span class="badge pull-left"><span class="glyphicon icon-{{class.category}}"></span></span>
-          {{ class.name }}
+        <li class="list-group-item" ng-repeat="reqClass in reqClasses | orderBy:'-requests' | limitTo:4">
+          <span class="badge">{{reqClass.requests}}</span>
+          <span class="badge pull-left"><span class="glyphicon icon-{{reqClass.category}}"></span></span>
+          {{ reqClass.name }}
         </li>
       </ul>
     </div>
     <div class="col-md-4">
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="class in reqClasses | orderBy:'-requests' | limitTo:8 | limitTo:-4">
-          <span class="badge">{{class.requests}}</span>
-          <span class="badge pull-left"><span class="glyphicon icon-{{class.category}}"></span></span>
-          {{ class.name }}
+        <li class="list-group-item" ng-repeat="reqClass in reqClasses | orderBy:'-requests' | limitTo:8 | limitTo:-4">
+          <span class="badge">{{reqClass.requests}}</span>
+          <span class="badge pull-left"><span class="glyphicon icon-{{reqClass.category}}"></span></span>
+          {{ reqClass.name }}
         </li>
       </ul>
     </div>
     <div class="col-md-4">
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="class in reqClasses | orderBy:'-requests' | limitTo:12 | limitTo:-4">
-          <span class="badge">{{class.requests}}</span>
-          <span class="badge pull-left"><span class="glyphicon icon-{{class.category}}"></span></span>
-          {{ class.name }}
+        <li class="list-group-item" ng-repeat="reqClass in reqClasses | orderBy:'-requests' | limitTo:12 | limitTo:-4">
+          <span class="badge">{{reqClass.requests}}</span>
+          <span class="badge pull-left"><span class="glyphicon icon-{{reqClass.category}}"></span></span>
+          {{ reqClass.name }}
         </li>
       </ul>
     </div>
@@ -166,17 +168,3 @@
     <a class="btn btn-primary btn-lg white-txt" role="button" data-toggle="modal" data-target="#requestModal">Suggest a Class</a>
   </div>
 </div>
-
-
-<script>
-// Dynamic Class Info Modals, straight from Boostrap website
-$('#classModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget); // Button that triggered the modal
-  var classInfo = button.data('classInfo'); // Extract info from data-* attributes
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this);
-  modal.find('.modal-title').text('Corresponding class title goes here: ' + classInfo);
-  modal.find('.modal-body').text('Corresponding class info goes here: ' + classInfo);
-});
-</script>
