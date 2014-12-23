@@ -68,6 +68,18 @@ app.get('/authenticate/callback',
     }
 );
 
+app.get('/rest/v1/echo', function (req, res) {
+    res.json({ message: 'this is the local learner restful api.  With more implementation, you can send me instructions to create data, read data, update data, and delete data'});
+});
+
+app.get('/rest/v1/echo/:id', function (req, res) {
+    var result = {
+        message: 'you\'ve successfully called the echo method with an id parameter',
+        id_you_sent_me: req.params.id
+    }
+    res.json(result);
+});
+
 app.get('/rest/v1/userprofile', function(req, res) {
     if (USER_SESSION.profile && USER_SESSION.profile.isAuthenticated) {
         //res.json({ name: 'namevalue', accessToken: USER_SESSION.accessToken });
@@ -77,9 +89,35 @@ app.get('/rest/v1/userprofile', function(req, res) {
         };
         client.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
             function (data, response) {
-                console.log('data ', data.photo);
+                console.log('data ', data);
                 //console.log('response', response);
-                res.json({ thumb_link: data.photo.thumb_link });
+                res.json({
+                    userId: data.id,
+                    accessToken: USER_SESSION.profile.accessToken,
+                    thumb_link: data.photo.thumb_link
+                });
+            }
+        );
+    } else {
+        res.json({ userId: null, accessToken: null });
+    }
+});
+
+app.get('/rest/v1/login', function(req, res) {
+    if (USER_SESSION.profile && USER_SESSION.profile.isAuthenticated) {
+        //res.json({ name: 'namevalue', accessToken: USER_SESSION.accessToken });
+
+        var args = {
+            headers: { Authorization: 'Bearer ' + USER_SESSION.profile.accessToken }
+        };
+        client.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
+            function (data, response) {
+                console.log('data ', data);
+                //console.log('response', response);
+                res.json({
+                    userId: data.id,
+                    thumb_link: data.photo.thumb_link
+                });
             }
         );
 

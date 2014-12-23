@@ -23,8 +23,7 @@ localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope
         replace: true,
         templateUrl: 'components/header/profile/profile.html',
         controller: function($scope) {
-            console.log("yoooo");
-           $scope.userAuthenticated = true;
+//            console.log("yoooo");
 //            $scope.Profile = MeetupProfile;
 //
 //            $scope.$on('userAuthenticated', function() {
@@ -39,12 +38,21 @@ localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope
                 window.location = url;
             }
 
-            AuthenticationSvc.getUser().success(function(data) {
-                $scope.userProfile = data;
-            })
+            AuthenticationSvc.initialize();
+//            AuthenticationSvc.getUserProfile2().success(function(data) {
+
+            $scope.user = {
+                isAuthenticated: function() { return AuthenticationSvc.isAuthenticated() }
+            };
+            //$scope.userAuthenticated = AuthenticationSvc.isAuthenticated();
+
+
+            $scope.userProfile = { thumb_link: 'http://placekitten.com/g/50/50' };
+//                $scope.userProfile = data;
+
             //$scope.userProfile = AuthenticationSvc.getUser();
 
-            //$scope.userProfile = { thumb_link: 'http://placekitten.com/g/100/100' };
+            //$scope.userProfile = { thumb_link: 'http://placekitten.com/g/50/50' };
 
             console.log('userprofile directive', $scope.userProfile);
         }
