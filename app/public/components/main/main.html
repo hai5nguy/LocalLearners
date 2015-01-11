@@ -105,7 +105,9 @@
   <div class="row">
     <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="availClass in availClasses | limitTo:6" ng-click="getClassInfo(availClass)">
       <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-        <img src="img/class/{{availClass.image}}" class="img-responsive" alt="Class Title - Category" />
+        <span class="upcomingCategory"><a href="{{ availClass.catlink }}">{{ availClass.catname }}</a></span>
+        <img src="img/class/{{availClass.image}}" class="img-responsive upcomingImage" alt="Class Title - Category" />
+        <span class="upcomingTitle truncate col-md-12 col-sm-12 col-xs-12">{{ availClass.name }}</span>
         <div class="panel-body text-right">
           <div class="row">
             <div class="text-left col-md-4 col-sm-6 hidden-xs">
