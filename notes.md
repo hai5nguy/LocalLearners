@@ -63,3 +63,24 @@ Main
  * ~~Host (TJW)~~
  * ~~Logout (TJW)~~
  * ~~Privacy (TJW)~~
+
+
+
+
+
+
+
+
+
+
+
+
+ ME:
+Teach Page: wrap IM in a box to look like an IM
+
+ALISSA:
+Request a class, takes you to a page
+Clicking outside of "Request a Class" modal on homepage should hide it.
+Click on an upcoming class and a modal pops up. Clicking outside of the model should close it.
+
+Submit button on Host page should do something eventually?
