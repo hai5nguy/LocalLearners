@@ -7,6 +7,7 @@
 * Categories lists need to all be pulled from the same place. (HMN)
 * Investigate custom @locallearners.net email (HMN)
 * Auto Scrolling stuff in Angular (HMN)
+*
 
 #Want to do:
 * Kick ass awesome Video thingy

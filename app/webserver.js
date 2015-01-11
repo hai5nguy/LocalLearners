@@ -1,10 +1,12 @@
 var express = require('express');
-var app = express();
 var passport = require('passport');
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 var session = require('express-session');
 var Client = require('node-rest-client').Client;
+var cookieParser = require('cookie-parser');
+var MongoStore = require('connect-mongo')(session);
 
+var app = express();
 var client = new Client();
 
 var USER_SESSION = {};
@@ -13,6 +15,8 @@ var USER_SESSION = {};
 //var io = require('socket.io')(server);
 
 app.set('port', (process.env.PORT || 5000));
+
+app.use(cookieParser());
 
 var MEETUP_KEY = process.env.MEETUP_KEY || 'h0dl8qkd82gbjan5cpr8plb4jq';
 var MEETUP_SECRET = process.env.MEETUP_SECRET || 'seagvb265dc9j1vm53q9pvu9r8';
@@ -31,7 +35,10 @@ passport.deserializeUser(function(obj, done) {
 app.use(session({
     secret: 'blah',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: new MongoStore({
+        url: 'mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa'
+    })
 }));
 
 app.use(passport.initialize());
@@ -48,8 +55,8 @@ passport.use('provider', new OAuth2Strategy({
         console.log('refreshToken ', refreshToken);
         console.log('profile ', profile.id);
         console.log('done ', done);
-        ACCESS_TOKEN = accessToken;
-        return done(null, { name: 'blah'}, {});
+        //ACCESS_TOKEN = accessToken;
+        return done(null, { accessToken: accessToken }, {} );
     })
 );
 
@@ -60,16 +67,21 @@ app.get('/authenticate/callback',
         failureRedirect: '/fail'
     }),
     function (req, res) {
-        console.log('blah1');
-        USER_SESSION = req.session;
-        USER_SESSION.profile = {};
-        USER_SESSION.profile = { isAuthenticated: true, accessToken: ACCESS_TOKEN };
+        //console.log('req ', req);
+//        USER_SESSION = req.session;
+//        USER_SESSION.profile = {};
+//        USER_SESSION.profile = { isAuthenticated: true, accessToken: ACCESS_TOKEN };
+        //req.session.accessToken = ACCESS_TOKEN;
+
+        req.session.accessToken = req.user.accessToken;
         res.redirect('/');
     }
 );
 
 app.get('/rest/v1/echo', function (req, res) {
-    res.json({ message: 'this is the local learner restful api.  With more implementation, you can send me instructions to create data, read data, update data, and delete data'});
+    var data = { session: req.session };
+    res.json(data);
+    //res.json({ message: 'this is the local learner restful api.  With more implementation, you can send me instructions to create data, read data, update data, and delete data'});
 });
 
 app.get('/rest/v1/echo/:id', function (req, res) {
