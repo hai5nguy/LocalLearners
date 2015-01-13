@@ -84,3 +84,7 @@ Clicking outside of "Request a Class" modal on homepage should hide it.
 Click on an upcoming class and a modal pops up. Clicking outside of the model should close it.
 
 Submit button on Host page should do something eventually?
+
+HAI:
+implement logout
+replace dummy data with meetup data
