@@ -1,4 +1,4 @@
-localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationSvc) {
+localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationSvc, AUTH_EVENTS) {
 
     var useTemplate = 'components/header/profile/profile.html';
 
@@ -47,14 +47,23 @@ localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope
             //$scope.userAuthenticated = AuthenticationSvc.isAuthenticated();
 
 
-            $scope.userProfile = { thumb_link: 'http://placekitten.com/g/50/50' };
+            //$scope.userProfile = { thumb_link: 'http://placekitten.com/g/50/50' };
 //                $scope.userProfile = data;
 
             //$scope.userProfile = AuthenticationSvc.getUser();
 
+            $rootScope.$on(AUTH_EVENTS.loginSuccess, function(event, data) {
+                //console.log('event ', event);
+                //console.log('data ', data);
+
+
+                $scope.userProfile = data;
+
+
+            });
             //$scope.userProfile = { thumb_link: 'http://placekitten.com/g/50/50' };
 
-            console.log('userprofile directive', $scope.userProfile);
+            //console.log('userprofile directive', $scope.userProfile);
         }
     }
 });

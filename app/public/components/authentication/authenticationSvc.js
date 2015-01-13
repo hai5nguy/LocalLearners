@@ -23,7 +23,7 @@ localLearnerApp.factory('AuthenticationSvc', function($http, $rootScope, UserPro
             //return false;
             var authenticated = !!UserProfile.userId;
 
-            console.log('authenticationsvc isauthenticated ', UserProfile, authenticated);
+            //console.log('authenticationsvc isauthenticated ', UserProfile, authenticated);
 
             return authenticated;
         },
@@ -34,7 +34,7 @@ localLearnerApp.factory('AuthenticationSvc', function($http, $rootScope, UserPro
                 console.log('authenticationsvc success', userProfile);
 
                 if (!!userProfile.userId) {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, userProfile);
                 } else {
                     $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
                 }

@@ -27,7 +27,7 @@ localLearnerApp.factory('ClassesService', function () {
 
             var filter = settings.category === '' ? {} : { category: settings.category };
             var result = _.where(availableClasses, filter);
-            console.log('getavailableclasses result ', result);
+            //console.log('getavailableclasses result ', result);
 
             return result;
 
