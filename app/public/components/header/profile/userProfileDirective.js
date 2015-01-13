@@ -1,4 +1,4 @@
-localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationSvc, AUTH_EVENTS) {
+localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationSvc, AUTH_EVENTS, UserProfile) {
 
     var useTemplate = 'components/header/profile/profile.html';
 
@@ -21,7 +21,7 @@ localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: 'components/header/profile/profile.html',
+        templateUrl: 'components/header/profile/userProfileDirective.html',
         controller: function($scope) {
 //            console.log("yoooo");
 //            $scope.Profile = MeetupProfile;
@@ -33,9 +33,10 @@ localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope
 //            });
 
             $scope.signIn = function() {
-
-                var url = '/authenticate';
-                window.location = url;
+                AuthenticationSvc.login();
+            }
+            $scope.signOut = function() {
+                AuthenticationSvc.logout();
             }
 
             AuthenticationSvc.initialize();
@@ -56,9 +57,7 @@ localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope
                 //console.log('event ', event);
                 //console.log('data ', data);
 
-
-                $scope.userProfile = data;
-
+                $scope.userProfile = UserProfile;
 
             });
             //$scope.userProfile = { thumb_link: 'http://placekitten.com/g/50/50' };

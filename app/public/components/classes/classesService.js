@@ -1,4 +1,4 @@
-localLearnerApp.factory('ClassesService', function () {
+localLearnerApp.factory('ClassesService', function (UserProfile) {
     return {
         getAvailableClasses: function(options) {
             var defaultOptions = {
@@ -27,7 +27,6 @@ localLearnerApp.factory('ClassesService', function () {
 
             var filter = settings.category === '' ? {} : { category: settings.category };
             var result = _.where(availableClasses, filter);
-            //console.log('getavailableclasses result ', result);
 
             return result;
 

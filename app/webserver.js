@@ -54,9 +54,9 @@ passport.use('provider', new OAuth2Strategy({
     },
     function(accessToken, refreshToken, profile, done) {
         console.log('accessToken ', accessToken);
-        console.log('refreshToken ', refreshToken);
-        console.log('profile ', profile.id);
-        console.log('done ', done);
+        //console.log('refreshToken ', refreshToken);
+        //console.log('profile ', profile.id);
+        //console.log('done ', done);
         //ACCESS_TOKEN = accessToken;
         return done(null, { accessToken: accessToken }, {} );
     })
@@ -69,27 +69,21 @@ app.get('/authenticate/callback',
         failureRedirect: '/fail'
     }),
     function (req, res) {
-        //console.log('req ', req);
-//        USER_SESSION = req.session;
-//        USER_SESSION.profile = {};
-//        USER_SESSION.profile = { isAuthenticated: true, accessToken: ACCESS_TOKEN };
-        //req.session.accessToken = ACCESS_TOKEN;
-
         meetupProfile.getProfile(req.user.accessToken, function(profile) {
             req.session.profile = profile;
-            //console.log('req.user', req.session.profile);
-
             res.redirect('/');
-
         });
 
     }
 );
 
+app.get('/logout', function(req, res) {
+    req.session.destroy();
+});
+
 app.get('/rest/v1/echo', function (req, res) {
     var data = { session: req.session };
     res.json(data);
-    //res.json({ message: 'this is the local learner restful api.  With more implementation, you can send me instructions to create data, read data, update data, and delete data'});
 });
 
 app.get('/rest/v1/echo/:id', function (req, res) {
@@ -100,36 +94,33 @@ app.get('/rest/v1/echo/:id', function (req, res) {
     res.json(result);
 });
 
-app.get('/rest/v1/userprofile', function(req, res) {
-    if (req.session.profile) {
-        res.json(req.session.profile);
-    } else {
-        res.json({ userId: null, accessToken: null });
-    }
+app.get('/rest/v1/profile', function(req, res) {
+    res.json(req.session.profile);
 });
 
-app.get('/rest/v1/login', function(req, res) {
-    if (USER_SESSION.profile && USER_SESSION.profile.isAuthenticated) {
-        //res.json({ name: 'namevalue', accessToken: USER_SESSION.accessToken });
 
-        var args = {
-            headers: { Authorization: 'Bearer ' + USER_SESSION.profile.accessToken }
-        };
-        client.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
-            function (data, response) {
-                console.log('data ', data);
-                //console.log('response', response);
-                res.json({
-                    userId: data.id,
-                    thumb_link: data.photo.thumb_link
-                });
-            }
-        );
-
-    } else {
-        res.json({ error: 'not authenticated' });
-    }
-});
+//app.get('/rest/v1/login', function(req, res) {
+//    if (USER_SESSION.profile && USER_SESSION.profile.isAuthenticated) {
+//        //res.json({ name: 'namevalue', accessToken: USER_SESSION.accessToken });
+//
+//        var args = {
+//            headers: { Authorization: 'Bearer ' + USER_SESSION.profile.accessToken }
+//        };
+//        client.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
+//            function (data, response) {
+//                //console.log('data ', data);
+//                //console.log('response', response);
+//                res.json({
+//                    userId: data.id,
+//                    thumb_link: data.photo.thumb_link
+//                });
+//            }
+//        );
+//
+//    } else {
+//        res.json({ error: 'not authenticated' });
+//    }
+//});
 
 
 //console.log('testkey', process.env.testkey);

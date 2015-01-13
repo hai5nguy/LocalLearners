@@ -13,7 +13,7 @@ var getProfile = function(accessToken, callback) {
             console.log('member self data ', data);
             var profile = {
                 userId: data.id,
-                accessToken: accessToken,
+//                accessToken: accessToken,
                 thumb_link: data.photo.thumb_link
             };
             callback(profile);
