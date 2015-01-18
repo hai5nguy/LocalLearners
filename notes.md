@@ -1,11 +1,19 @@
 #Need to do:
 * Auto Scrolling to top when clicking on a new page. Can be done in Angular. Home FAQ link takes you to bottom of FAQ page. (HMN)
-* Teach Page: wrap IM in a box to look like an IM (TJW)
-* Request a class, takes you to request page instead of modal (AR)
 * Categories lists need to all be pulled from the same place (in database). (HMN)
-* Need to convert date of class to numeric number in order to sort by date in Angular. Create a custom filter? https://docs.angularjs.org/api/ng/filter/orderBy (look into Moment.js) (HMN/TJW/AR)
-* Submit button on Host page should do something eventually? (HMN/TJW/AR)
-* Feedback/contact page should be functional (HMN/TJW/AR)
+* Need to convert date of class to numeric number in order to sort by date in Angular. Create a custom filter? https://docs.angularjs.org/api/ng/filter/orderBy (look into Moment.js if angular doesn't do this natively) (HMN/TJW/AR)
+* Homepage: Request a class, takes you to request page instead of modal (AR)
+* Homepage>Upcoming Modal: Data should come from meetup site based on EventID. (HMN)
+* Homepage>Upcoming Modal: Display an icon in top corner (below X) of category, 100x100px ish. (TJW)
+* Homepage>Most Requested: Add a category filter. (TJW/AR)
+* Homepage>Most Requested: Clicking a requested class opens a modal with Class Title, Category, icons of users that have +1'd, and buttons for "Request This Class" & "Recommend Teacher". (TJW/AR)
+* Teach: Wrap IM in a box to look more like an IM (TJW)
+* Teach>Form: Only Title and Category dropdown's are available. Below is the upcoming and top requested classes. As you type a name the Upc/Req classes filter. Selecting a category also filters down the list to match that category. If you click on the requested course then the rest of the teach form appears, with the title prefilled out. You can change the title. There is a notice saying, X number of people have requested this class to show that you are fulfilling that request. A button below the requested classes says something like "The class I want to teach has not been requested yet". But... in fewer words.
+* Teach/Request: Research search algorithm (HMN)
+* Request: Have the URL be able to handle sorting and filtering. locallearners.net/#/requested?category=music&sort=popular (HMN)
+* Upcoming Classes: URL to hand sorting and filtering. locallearners.net/#/classes?category=history&sort=oldest (HMN)
+* Host: Submit button should do something eventually? (HMN/TJW/AR)
+* Feedback/Contact page should be functional. (HMN/TJW/AR)
 * Category Select Filter isn’t set up to read/show All Categories. Since Angular is filtering based on category, there is no class associated with 'All Categories'
 * Changed class category property values on backend (lowercase, hyphenated); corresponding values need to be added to front-end category filter (AR)
 * When there are no classes to display, default apology message should appear and offer a link to suggest a class (Awesome idea)
@@ -25,14 +33,6 @@
 * Modals should appear at ~33% from the top of page (currently too close to top) (AR)
 * Terms
 
-#Functionality
-
-Homepage: Click upcoming box of a class and modal with more details appears, you can join/attend/rsvp.
-Homepage: Under upcoming is a "Most requested" section with a filter and is 2 or 3 columns with a icon and thumbs up.
-Teach: Select a category first, then list of requested courses appears, if you click on the requested course then the rest of the teach form appears, with the title prefilled out. You can change the title. There is a notice saying, X number of people have requested this class to show that you are fulfilling that request.
-Request: This page should just be a modal that appears whenever "request a class" is clicked. Title, Category, and submit button are the only parts, then it should take them to the Requested page, sorted by "newest" so they see their post.
-Requested: Have the URL be able to handle sorting and filtering. locallearners.net/#/requested?category=music&sort=popular
-Upcoming Classes: URL to hand sorting and filtering. locallearners.net/#/classes?category=history&sort=oldest
 
 
 #Done
