@@ -22,6 +22,8 @@
 * Revise script for video (TJW)
 * Make AE anim for intro graphic and lower thirds (TJW)
 * Revamp "about" statement on Meetup (Leah)
+* Bug: console error GET http://localhost:5000/img/class/%7B%7BavailClass.image%7D%7D 404 (Not Found) (TJW)
+* Bug: css issue with image not centered on superior mac browser (AR)
 
 #Want to do:
 * Kick ass awesome Video thingy

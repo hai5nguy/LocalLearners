@@ -7,14 +7,9 @@ var cookieParser = require('cookie-parser');
 var MongoStore = require('connect-mongo')(session);
 var meetupProfile = require('./meetup-profile.js');
 
-
 var app = express();
+
 var client = new Client();
-
-var USER_SESSION = {};
-
-//var app = require('http').createServer(app);
-//var io = require('socket.io')(server);
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -31,8 +26,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
-
-
 
 app.use(session({
     secret: 'blah',
@@ -53,11 +46,6 @@ passport.use('provider', new OAuth2Strategy({
     callbackURL: 'http://localhost:5000/authenticate/callback'
     },
     function(accessToken, refreshToken, profile, done) {
-        console.log('accessToken ', accessToken);
-        //console.log('refreshToken ', refreshToken);
-        //console.log('profile ', profile.id);
-        //console.log('done ', done);
-        //ACCESS_TOKEN = accessToken;
         return done(null, { accessToken: accessToken }, {} );
     })
 );
@@ -77,98 +65,24 @@ app.get('/authenticate/callback',
     }
 );
 
-app.get('/logout', function(req, res) {
-    req.session.destroy();
-});
+app.get('/test', function (req, res) {
 
-app.get('/rest/v1/echo', function (req, res) {
+    var s = require('./session.js');
+    s.initialize(req);
+    s.test();
+
     var data = { session: req.session };
     res.json(data);
 });
 
-app.get('/rest/v1/echo/:id', function (req, res) {
-    var result = {
-        message: 'you\'ve successfully called the echo method with an id parameter',
-        id_you_sent_me: req.params.id
-    }
-    res.json(result);
-});
 
-app.get('/rest/v1/profile', function(req, res) {
-    res.json(req.session.profile);
-});
-
-
-//app.get('/rest/v1/login', function(req, res) {
-//    if (USER_SESSION.profile && USER_SESSION.profile.isAuthenticated) {
-//        //res.json({ name: 'namevalue', accessToken: USER_SESSION.accessToken });
-//
-//        var args = {
-//            headers: { Authorization: 'Bearer ' + USER_SESSION.profile.accessToken }
-//        };
-//        client.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
-//            function (data, response) {
-//                //console.log('data ', data);
-//                //console.log('response', response);
-//                res.json({
-//                    userId: data.id,
-//                    thumb_link: data.photo.thumb_link
-//                });
-//            }
-//        );
-//
-//    } else {
-//        res.json({ error: 'not authenticated' });
-//    }
-//});
-
-
-//console.log('testkey', process.env.testkey);
-//console.log('testvalue', process.env.testvalue);
-
-
-//app.get('/test', function(req, res) {
-//    res.send('key:' + process.env.testkey + ' value: ' + process.env.testvalue);
-//});
-
-//app.get('/authorize',
-//    passport.authenticate('meetup'),
-//    function (req, res) {
-//        //supposedly this is never called
-//    });
-//
-//app.get('/authorize/callback',
-//    passport.authenticate('meetup', { failureRedirect: '/fail' }),
-//    function(req, res) {
-//        res.redirect('/');
-//    });
-
-
-//app.use('/test', express.static(__dirname + '/public/test.html?' + process.env.testkey + '=' + process.env.testvalue));
-//app.use('/', express.static(__dirname + '/public/index.html'));
 app.use(express.static(__dirname + '/public'));
 
 
-
-
-
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
-
+require('./routes/routes.js')(app);
 
 app.listen(app.get('port'), function() {
     console.log("Web server running on http://localhost:" + app.get('port'));
 });
 
-
-//console.log("dirname: ", __dirname);
-//app.use('/bower_components', express.static(__dirname + '/bower_components'));
-
-
-//io.sockets.on('connection', function(socket) {
-//    console.log('user connected');
-//    socket.on('message', function(msg) {
-//        console.log('heres the fucken message: ', msg);
-//    });
-//});
 

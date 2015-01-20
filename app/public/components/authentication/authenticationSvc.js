@@ -1,7 +1,7 @@
 localLearnerApp.factory('AuthenticationSvc', function($http, $rootScope, UserProfile, AUTH_EVENTS) {
 
     function CheckToSeeIfUserIsLoggedIn() {
-        return $http.get('/rest/v1/profile').success(function(profile) {
+        return $http.get('/profile').success(function(profile) {
 
             UserProfile.create(profile);
             if (!!UserProfile.userId) {
