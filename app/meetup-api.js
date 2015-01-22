@@ -19,3 +19,19 @@ module.exports.getSelf = function (accessToken, callback) {
         }
     );
 }
+
+module.exports.getEvents = function (req, res, callback) {
+
+    var localLearnersGroupId = 18049722;
+
+    var args = {
+        headers: { Authorization: 'Bearer ' + req.session.accessToken }
+    };
+
+    restClient.get('https://api.meetup.com/2/events?&sign=true&photo-host=public&group_id=' + localLearnersGroupId + '&page=20',
+        args, function(data) {
+            callback(data);
+        });
+
+
+}

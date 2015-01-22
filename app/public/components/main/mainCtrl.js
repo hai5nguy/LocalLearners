@@ -11,7 +11,12 @@ localLearnerApp.controller('MainCtrl', function($scope, ClassesService) {
 //        ];
 
 
-    $scope.availClasses = ClassesService.getAvailableClasses();
+
+    ClassesService.getUpcomingClasses(function(classes) {
+        $scope.availClasses = classes;
+    })
+
+    console.log('availclasses', $scope.availClasses);
 
     $scope.getClassInfo = function(availClass) {
         $scope.availClass = availClass; // binds clicked class to scope

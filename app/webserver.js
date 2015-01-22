@@ -7,6 +7,8 @@ var cookieParser = require('cookie-parser');
 var MongoStore = require('connect-mongo')(session);
 var meetupProfile = require('./meetup-profile.js');
 
+var meetupApi = require('./meetup-api.js');
+
 var app = express();
 
 var client = new Client();
@@ -46,6 +48,7 @@ passport.use('provider', new OAuth2Strategy({
     callbackURL: 'http://localhost:5000/authenticate/callback'
     },
     function(accessToken, refreshToken, profile, done) {
+        console.log('accessToken ', accessToken);
         return done(null, { accessToken: accessToken }, {} );
     })
 );
@@ -57,7 +60,10 @@ app.get('/authenticate/callback',
         failureRedirect: '/fail'
     }),
     function (req, res) {
-        meetupProfile.getProfile(req.user.accessToken, function(profile) {
+
+        req.session.accessToken = req.user.accessToken;
+
+        meetupProfile.getProfile(req.session.accessToken, function(profile) {
             req.session.profile = profile;
             res.redirect('/');
         });
@@ -66,18 +72,12 @@ app.get('/authenticate/callback',
 );
 
 app.get('/test', function (req, res) {
-
-    var s = require('./session.js');
-    s.initialize(req);
-    s.test();
-
-    var data = { session: req.session };
-    res.json(data);
+//    var blah = { yo: 'yos', id: req.params.id };
+    meetupApi.getEvents(req, res, function() {});
+    //res.json(blah);
 });
 
-
 app.use(express.static(__dirname + '/public'));
-
 
 require('./routes/routes.js')(app);
 

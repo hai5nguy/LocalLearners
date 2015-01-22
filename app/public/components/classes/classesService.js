@@ -1,6 +1,12 @@
-localLearnerApp.factory('ClassesService', function (UserProfile) {
+localLearnerApp.factory('ClassesService', function ($http, UserProfile) {
     return {
-        getAvailableClasses: function(options) {
+        getUpcomingClasses: function(callback) {
+
+            $http.get('/upcomingclasses').success(function(classes) {
+                callback(classes);
+            });
+
+            /*
             var defaultOptions = {
                 category: ''
             };
@@ -29,6 +35,7 @@ localLearnerApp.factory('ClassesService', function (UserProfile) {
             var result = _.where(availableClasses, filter);
 
             return result;
+            */
 
         }
     }
