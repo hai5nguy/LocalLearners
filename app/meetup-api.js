@@ -1,3 +1,5 @@
+
+var Q = require('../node_modules/q');
 var NodeRestClient = require('node-rest-client').Client;
 var restClient = new NodeRestClient();
 
@@ -20,18 +22,33 @@ module.exports.getSelf = function (accessToken, callback) {
     );
 }
 
-module.exports.getEvents = function (req, res, callback) {
+module.exports.getEvents = function (req, res) {
+    var defer = Q.defer();
 
     var localLearnersGroupId = 18049722;
+    var localLearnersAdministratorAPIKey = '7d156b614b6d5c5e7d357e18151568';  //TODO: move to environment variable
 
-    var args = {
-        headers: { Authorization: 'Bearer ' + req.session.accessToken }
-    };
 
-    restClient.get('https://api.meetup.com/2/events?&sign=true&photo-host=public&group_id=' + localLearnersGroupId + '&page=20',
-        args, function(data) {
-            callback(data);
+    restClient.get('https://api.meetup.com/2/events?&sign=true&photo-host=public&group_id=' + localLearnersGroupId + '&page=20&key=' + localLearnersAdministratorAPIKey,
+        function(data) {
+//            console.log('getEvent data ', data);
+            var rawEvents = data.results;
+            var events = [];
+
+            for (var i = 0; i < rawEvents.length; i++) {
+                var e = {
+                    eventId: rawEvents[i].id,
+                    name: rawEvents[i].name
+                }
+                events.push(e);
+            }
+//            console.log('getEvents ', events);
+
+            defer.resolve(events);
+        }).on('error', function (err) {
+            console.log('getEvents error ', err);
+            defer.reject();
         });
 
-
+    return defer.promise;
 }
