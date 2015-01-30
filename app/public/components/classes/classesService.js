@@ -37,6 +37,9 @@ localLearnerApp.factory('ClassesService', function ($http, UserProfile) {
             return result;
             */
 
+        },
+        postUpcomingClasses: function(upcomingClass, callback) {
+            $http.post('/upcomingclasses', upcomingClass);
         }
     }
 })

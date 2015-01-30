@@ -4,7 +4,10 @@ var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 var session = require('express-session');
 var Client = require('node-rest-client').Client;
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var MongoStore = require('connect-mongo')(session);
+
+
 var meetupProfile = require('./meetup-profile.js');
 
 var meetupApi = require('./meetup-api.js');
@@ -16,6 +19,10 @@ var client = new Client();
 app.set('port', (process.env.PORT || 5000));
 
 app.use(cookieParser());
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
 
 var MEETUP_KEY = process.env.MEETUP_KEY || 'h0dl8qkd82gbjan5cpr8plb4jq';
 var MEETUP_SECRET = process.env.MEETUP_SECRET || 'seagvb265dc9j1vm53q9pvu9r8';

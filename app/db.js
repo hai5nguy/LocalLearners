@@ -108,7 +108,7 @@ module.exports.addCategoriesToEvents = function (events) {
             return e;
         });
 
-        console.log('events with category ', eventsWithCategory);
+//        console.log('events with category ', eventsWithCategory);
 
         defer.resolve(eventsWithCategory);
 

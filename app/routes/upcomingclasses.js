@@ -30,5 +30,24 @@ module.exports = function (app) {
 
     app.post('/upcomingclasses', function(req, res) {
 
+
+        //post to meetup
+
+
+
+        //get eventid
+
+        //store eventid and category
+
+        var evensdft = {
+            name: 'hai test 4',
+            time: new Date(2014, 03, 01).getTime()
+        }
+
+        meetupApi.postEvent(req, res, event).then(function (result) {
+            console.log('post upcomingclass ', result);
+        });
+
+        console.log('post upcomingclass ', req.body);
     });
 }
