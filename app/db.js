@@ -1,6 +1,5 @@
 //mongoose nhập khẩu
 
-require('./core.js');
 var _ = require('underscore');
 var Q = require('q');
 var mongoose = require('mongoose');
@@ -8,29 +7,11 @@ var models = require('./models.js')(mongoose);
 
 mongoose.connect('mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa');
 
-//var Category = models.Category;
-
-
 var db = mongoose.connection;
 
 db.once('open', function() {
-
-
-    console.log('connected');
-
-//
-//    console.log('cat ', models.Category.find({}, function(err, data) {
-//        console.log('data ', data);
-//    }));
-
-//    var blah = Category.find(function(err, data){
-//        console.log('data ', data);
-//    });
+    console.log('Connected to mongolab, database ready.');
 });
-
-//models.Category.find({}, function(err, data) {
-//    console.log('data ', data);
-//});
 
 
 
@@ -40,10 +21,6 @@ module.exports.getCategories = function (filter, callback) {
             callback(data);
         });
     }
-//    else if (filter.id) {
-//
-//    }
-    //return { id: '123', name: 'Technology' }
 }
 
 module.exports.getUpcomingClasses = getUpcomingClasses;
@@ -62,16 +39,11 @@ function getUpcomingClasses(filter, callback) {
 
 module.exports.setUpcomingClasses = function(upcomingClass) {
     getUpcomingClasses({ eventId: upcomingClass.eventId }, function(oldClass) {
-
-        console.log('oldclass', oldClass);
         if (IsEmptyNullUndefined(oldClass)) {
-
-            console.log('yo');
             createUpcomingClass(upcomingClass);
         }
         else {
             upcomingClass._id = oldClass[0]._id;
-            console.log('updating ', upcomingClass);
             updateUpcomingClass(upcomingClass);
         }
     });

@@ -1,3 +1,5 @@
+require('./core.js');
+
 var express = require('express');
 var passport = require('passport');
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
@@ -11,6 +13,7 @@ var MongoStore = require('connect-mongo')(session);
 var meetupProfile = require('./meetup-profile.js');
 
 var meetupApi = require('./meetup-api.js');
+
 
 var app = express();
 

@@ -6,48 +6,81 @@ module.exports = function (app) {
 
     app.get('/upcomingclasses', function (req, res) {
 
-        meetupApi.getEvents(req, res)
-            .then(function(events) {
-                return db.addCategoriesToEvents(events);
-            })
-            .then(function (eventsWithCategories) {
+
+
+        res.json(generateFakeUpcomingClasses());
+
+//        meetupApi.getEvents(req, res)
+//            .then(function(events) {
+//                return db.addCategoriesToEvents(events);
+//            })
+//            .then(function (eventsWithCategories) {
 //                console.log('eventsWithCategories ', eventsWithCategories);
-                res.json(eventsWithCategories);
-            },
-            function() {
-//                console.log('error getting upcoming classes');
-                res.json({
-                    error: 'Can not retrieve classes'
-                })
-            });
+//                res.json(eventsWithCategories);
+//            },
+//            function() {
+////                console.log('error getting upcoming classes');
+//                res.json({
+//                    error: 'Can not retrieve classes'
+//                })
+//            });
+
     });
 
     app.get('/upcomingclasses/:id', function (req, res) {
-
+        //TODO: implement this
         res.json({ upcomingclass: 'upcoming class with id ' + req.params.id });
 
     });
 
     app.post('/upcomingclasses', function(req, res) {
 
+        var upcomingClass = {
+            name: req.body.name,
+            category: req.body.category,
+            time: new Date(2015, 03, 01).getTime()
+        };
 
-        //post to meetup
-
-
-
-        //get eventid
-
-        //store eventid and category
-
-        var evensdft = {
-            name: 'hai test 4',
-            time: new Date(2014, 03, 01).getTime()
+        if (!isUpcomingClassValid(upcomingClass)) {
+            return req.json({ error: 'Upcoming Class invalid' });
         }
 
-        meetupApi.postEvent(req, res, event).then(function (result) {
-            console.log('post upcomingclass ', result);
+        var eventToPost = {
+            name: upcomingClass.name,
+            time: upcomingClass.time
+        }
+
+        meetupApi.postEvent(req, res, eventToPost).then(function (eventReturned) {
+
+            var eventToSave = {
+                eventId: eventReturned.id,
+                category: upcomingClass.category
+            };
+
+            db.setUpcomingClasses(eventToSave);
         });
 
-        console.log('post upcomingclass ', req.body);
     });
+}
+
+function isUpcomingClassValid(upcomingClass) {
+    if ( !upcomingClass.name || upcomingClass.name === '' ) return false;
+    if ( !upcomingClass.category || upcomingClass.category === '' ) return false;
+    if ( !upcomingClass.time ) return false;
+    return true;
+}
+
+function generateFakeUpcomingClasses() {
+    var classes = [];
+    for (var i = 0; i < 50; i++) {
+
+        var id = getRandomInt(1e8, 1e9).toString();
+
+        classes.push({
+            eventId: id,
+            name: 'class name with id ' + id,
+            category: 'category ' + id
+        });
+    }
+    return classes;
 }

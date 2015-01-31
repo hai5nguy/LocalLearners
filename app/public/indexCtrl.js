@@ -7,7 +7,7 @@ localLearnerApp
                 footer: 'components/footer/footer.html'
             }
         }
-        $scope.userAuthenticated =  MeetupProfileSvc.authenticated
+        $scope.userAuthenticated =  MeetupProfileSvc.authenticated;
 
 //        $scope.test = function() { return MeetupProfile.accessToken; }
 

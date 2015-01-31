@@ -10,7 +10,7 @@ localLearnerApp.controller('MainCtrl', function($scope, ClassesService) {
 //        {name:'Taking Care of Cats',date:'June 28, 2015',location:'Avon',category:'other',image:'other.png'}
 //        ];
 
-    ClassesService.postUpcomingClasses({ name: 'test class name 1', category: 'Technology' });
+    ClassesService.postUpcomingClasses({ name: 'test class name 2', category: 'category2' });
 
 
 
