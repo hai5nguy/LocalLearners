@@ -1,4 +1,4 @@
-localLearnerApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationSvc, AUTH_EVENTS, UserProfile) {
+localLearnersApp.directive('LLUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationSvc, AUTH_EVENTS, UserProfile) {
 
     var useTemplate = 'components/header/profile/profile.html';
 

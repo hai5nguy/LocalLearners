@@ -1,4 +1,4 @@
-localLearnerApp.factory('AuthenticationSvc', function($http, $rootScope, UserProfile, AUTH_EVENTS) {
+localLearnersApp.factory('AuthenticationSvc', function($http, $rootScope, UserProfile, AUTH_EVENTS) {
 
     function CheckToSeeIfUserIsLoggedIn() {
         return $http.get('/profile').success(function(profile) {

@@ -1,4 +1,4 @@
-localLearnerApp.factory('UserProfile', function() {
+localLearnersApp.factory('UserProfile', function() {
     return {
         create: function (profile) {
             this.userId = profile.userId;

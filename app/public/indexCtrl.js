@@ -1,4 +1,4 @@
-localLearnerApp
+localLearnersApp
     .controller('IndexCtrl', function($scope, MeetupProfileSvc) {
         //console.log('accesstoken', MeetupProfile.accessToken);
         $scope.appSettings = {

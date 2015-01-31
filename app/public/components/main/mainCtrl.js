@@ -1,4 +1,4 @@
-localLearnerApp.controller('MainCtrl', function($scope, ClassesService) {
+localLearnersApp.controller('MainCtrl', function($scope, ClassesService) {
 
 //	$scope.availClasses = [
 //        {name:'Intro to Guitar',date:'December 18, 2015',location:'Downtown',category:'music',image:'music.png'},

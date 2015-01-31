@@ -1,4 +1,4 @@
-localLearnerApp.factory('ClassesService', function ($http, UserProfile) {
+localLearnersApp.factory('ClassesService', function ($http, UserProfile) {
     return {
         getUpcomingClasses: function(callback) {
 

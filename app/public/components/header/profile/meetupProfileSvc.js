@@ -1,4 +1,4 @@
-localLearnerApp.factory('MeetupProfileSvc', function($resource, $rootScope, $http) {
+localLearnersApp.factory('MeetupProfileSvc', function($resource, $rootScope, $http) {
     var _accessToken;
     var _authenticated = false;
 

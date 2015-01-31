@@ -1,4 +1,4 @@
-//localLearnerApp.controller('LoggedOutCtrl', function($scope) {
+//localLearnersApp.controller('LoggedOutCtrl', function($scope) {
 //
 ////    $('#meetupSignInModal').on('show.bs.modal', function () {
 ////        console.log('modal loaded');
