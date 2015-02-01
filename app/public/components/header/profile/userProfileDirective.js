@@ -1,4 +1,4 @@
-localLearnersApp.directive('LLUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationSvc, AUTH_EVENTS, UserProfile) {
+localLearnersApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationSvc, AUTH_EVENTS, UserProfile) {
 
     var useTemplate = 'components/header/profile/profile.html';
 
@@ -23,7 +23,7 @@ localLearnersApp.directive('LLUserProfile', function(MeetupProfileSvc, $rootScop
         replace: true,
         templateUrl: 'components/header/profile/userProfileDirective.html',
         controller: function($scope) {
-//            console.log("yoooo");
+
 //            $scope.Profile = MeetupProfile;
 //
 //            $scope.$on('userAuthenticated', function() {

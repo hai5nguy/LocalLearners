@@ -10,7 +10,7 @@ localLearnersApp.controller('MainCtrl', function($scope, ClassesService) {
 //        {name:'Taking Care of Cats',date:'June 28, 2015',location:'Avon',category:'other',image:'other.png'}
 //        ];
 
-    ClassesService.postUpcomingClasses({ name: 'test class name 2', category: 'category2' });
+//    ClassesService.postUpcomingClasses({ name: 'test class name 2', category: 'category2' });
 
 
 
@@ -18,7 +18,6 @@ localLearnersApp.controller('MainCtrl', function($scope, ClassesService) {
         $scope.availClasses = classes;
     })
 
-    console.log('availclasses', $scope.availClasses);
 
     $scope.getClassInfo = function(availClass) {
         $scope.availClass = availClass; // binds clicked class to scope

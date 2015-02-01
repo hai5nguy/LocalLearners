@@ -11,7 +11,7 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ngRoute
             })
             .when('/account', {
                 templateUrl: 'components/account/account.html',
-                controller: 'AccountCtrl'
+//                controller: 'AccountCtrl'
             })
 //            .when('/authenticate', {
 //                templateUrl: 'components/authenticate/authenticate.html',
@@ -23,7 +23,7 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ngRoute
             })
             .when('/classes', {
                 templateUrl: 'components/classes/classes.html',
-                controller: 'ClassesCtrl'
+//                controller: 'ClassesCtrl'
             })
             .when('/contact', {
                 templateUrl: 'components/contact/contact.html'
@@ -35,55 +35,39 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ngRoute
             })
             .when('/faq', {
                 templateUrl: 'components/help/help.html',
-                controller: 'HelpCtrl'
+//                controller: 'HelpCtrl'
             })
             .when('/feedback', {
                 templateUrl: 'components/contact/contact.html',
-                controller: 'ContactCtrl'
+//                controller: 'ContactCtrl'
             })
             .when('/help', {
                 templateUrl: 'components/help/help.html',
-                controller: 'HelpCtrl'
+//                controller: 'HelpCtrl'
             })
             .when('/host', {
-                templateUrl: 'components/host/host.html',
-                controller: 'HostCtrl'
+                templateUrl: 'components/host/host.html'
+                //controller: 'HostCtrl'
             })
             .when('/locations', {
                 templateUrl: 'components/contact/contact.html',
-                controller: 'ContactCtrl'
-            })
-            .when('/login', {
-                templateUrl: 'components/login/login.html',
-                controller: 'LoginCtrl'
-            })
-            .when('/logout', {
-                templateUrl: 'components/logout/logout.html',
-                controller: 'LogoutCtrl'
+                //controller: 'ContactCtrl'
             })
             .when('/privacy', {
                 templateUrl: 'components/privacy/privacy.html',
-                controller: 'PrivacyCtrl'
+                //controller: 'PrivacyCtrl'
             })
             .when('/profile', {
                 templateUrl: 'components/profile/profile.html',
-                controller: 'ProfileCtrl'
+                //controller: 'ProfileCtrl'
             })
             .when('/request', {
                 templateUrl: 'components/request/request.html',
-                controller: 'RequestCtrl'
+//                controller: 'RequestCtrl'
             })
             .when('/requested', {
                 templateUrl: 'components/requested/requested.html',
-                controller: 'RequestedCtrl'
-            })
-            .when('/signin', {
-                templateUrl: 'components/login/login.html',
-                controller: 'LoginCtrl'
-            })
-            .when('/signout', {
-                templateUrl: 'components/logout/logout.html',
-                controller: 'LogoutCtrl'
+//                controller: 'RequestedCtrl'
             })
             .when('/teach', {
                 templateUrl: 'components/teach/teach.html'
@@ -91,7 +75,10 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ngRoute
             })
             .when('/terms', {
                 templateUrl: 'components/terms/terms.html',
-                controller: 'TermsCtrl'
+//                controller: 'TermsCtrl'
+            })
+            .when('/haitest', {
+                templateUrl: 'haitest.html'
             });
 
         $locationProvider.html5Mode(true);
