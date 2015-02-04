@@ -40,6 +40,12 @@ localLearnersApp.factory('ClassesService', function ($http, UserProfile) {
         },
         postUpcomingClasses: function(upcomingClass, callback) {
             $http.post('/upcomingclasses', upcomingClass);
+        },
+        getCategories: function(callback) {
+            $http.get('/categories')
+                .success(function(categories) {
+                    callback(categories);
+                });
         }
     }
 })

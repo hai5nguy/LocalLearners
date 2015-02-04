@@ -5,6 +5,7 @@ var restClient = new NodeRestClient();
 var LOCAL_LEARNERS_GROUP_ID = 18049722;
 var LOCAL_LEARNERS_GROUP_URLNAME = 'locallearners';
 
+
 module.exports.getSelf = function (accessToken, callback) {
 
     var args = {

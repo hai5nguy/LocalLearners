@@ -87,10 +87,11 @@ app.get('/test', function (req, res) {
     //res.json(blah);
 });
 
+require('./routes/routes.js')(app);
+
 app.use(express.static(__dirname + '/public'));
 app.use('/*', express.static(__dirname + '/public/index.html'));  //this is needed to remove hash from url
 
-require('./routes/routes.js')(app);
 
 app.listen(app.get('port'), function() {
     console.log("Web server running on http://localhost:" + app.get('port'));

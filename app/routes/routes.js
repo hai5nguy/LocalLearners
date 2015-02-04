@@ -4,4 +4,6 @@ module.exports = function (app) {
     require('./logout.js')(app);
     require('./profile.js')(app);
     require('./upcomingclasses.js')(app);
+    require('./categories.js')(app);
+
 }

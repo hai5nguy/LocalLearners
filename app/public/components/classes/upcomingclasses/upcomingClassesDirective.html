@@ -1,152 +1,34 @@
-<section>
-    <div class="container">
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <h4><a href="/classes">Upcoming Classes</a></h4>
+        </div>
+        <div class="col-md-2 pull-right">
+            <select class="form-control input-sm" ng-options="c as c for c in categories" ng-model="selectedCategory"></select>
+        </div>
+    </div>
 
-        <div class="row">
-            <div class="container">
-                <h3 class="page-header">Upcoming Classes</h3>
-                <hr />
-                <div class="pull-right">
-                    <select class="form-control input-sm">
-                        <option selected>All Categories</option>
-                        <option>Automotive</option>
-                        <option>Business</option>
-                        <option>Culinary</option>
-                        <option>DIY</option>
-                        <option>Fitness</option>
-                        <option>Games</option>
-                        <option>History</option>
-                        <option>Language</option>
-                        <option>Literature</option>
-                        <option>Music</option>
-                        <option>Other</option>
-                        <option>Performing Arts</option>
-                        <option>Science</option>
-                        <option>Sports</option>
-                        <option>Technology</option>
-                        <option>Visual Arts</option>
-                    </select>
+    <div class="row">
+        <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="availClass in availClasses | limitTo:6" ng-click="getClassInfo(availClass)">
+            <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
+                <span class="upcomingCategory"><a href="{{ availClass.catlink }}">{{ availClass.category }}</a></span>
+                <img src="img/class/{{availClass.image}}" class="img-responsive upcomingImage" alt="Class Title - Category" />
+                <span class="upcomingTitle truncate col-md-12 col-sm-12 col-xs-12">{{ availClass.name }}</span>
+                <div class="panel-body text-right">
+                    <div class="row">
+                        <div class="text-left col-md-4 col-sm-6 hidden-xs">
+                            <h2><span class="glyphicon glyphicon-ok"></span></h2>
+                            <p>RSVP</p>
+                        </div>
+                        <div class="col-md-8 col-sm-6">
+                            <h5>{{ availClass.date }}</h5>
+                            <p class="small">{{ availClass.location }}</p>
+                            <span class="small badge glyphicon glyphicon-user">14</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- classes -->
-        <div class="row">
-
-            <div class="col-md-4 col-sm-6 col-xs-6">
-                <div class="panel panel-default">
-                    <img src="img/class/history.png" class="img-responsive" alt="Class Title - Category" />
-                    <div class="panel-body text-right">
-                        <div class="row">
-                            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-                                <h2><span class="glyphicon glyphicon-ok"></span></h2>
-                                <p>RSVP</p>
-                            </div>
-                            <div class="col-md-8 col-sm-6">
-                                <h4>January 1, 1997</h4>
-                                <p class="small">Downtown</p>
-                                <span class="small badge glyphicon glyphicon-user">14</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-6 col-xs-6">
-                <div class="panel panel-default">
-                    <img src="img/class/technology.png" class="img-responsive" alt="Class Title - Category" />
-                    <div class="panel-body text-right">
-                        <div class="row">
-                            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-                                <h2><span class="glyphicon glyphicon-ok"></span></h2>
-                                <p>RSVP</p>
-                            </div>
-                            <div class="col-md-8 col-sm-6">
-                                <h4>January 1, 1997</h4>
-                                <p class="small">Downtown</p>
-                                <span class="small badge glyphicon glyphicon-user">14</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-6 col-xs-6">
-                <div class="panel panel-default">
-                    <img src="img/class/games.png" class="img-responsive" alt="Class Title - Category" />
-                    <div class="panel-body text-right">
-                        <div class="row">
-                            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-                                <h2><span class="glyphicon glyphicon-ok"></span></h2>
-                                <p>RSVP</p>
-                            </div>
-                            <div class="col-md-8 col-sm-6">
-                                <h4>January 1, 1997</h4>
-                                <p class="small">Downtown</p>
-                                <span class="small badge glyphicon glyphicon-user">14</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-6 col-xs-6">
-                <div class="panel panel-default">
-                    <img src="img/class/diy.png" class="img-responsive" alt="Class Title - Category" />
-                    <div class="panel-body text-right">
-                        <div class="row">
-                            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-                                <h2><span class="glyphicon glyphicon-ok"></span></h2>
-                                <p>RSVP</p>
-                            </div>
-                            <div class="col-md-8 col-sm-6">
-                                <h4>January 1, 1997</h4>
-                                <p class="small">Downtown</p>
-                                <span class="small badge glyphicon glyphicon-user">14</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-6 col-xs-6">
-                <div class="panel panel-default">
-                    <img src="img/class/culinary.png" class="img-responsive" alt="Class Title - Category" />
-                    <div class="panel-body text-right">
-                        <div class="row">
-                            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-                                <h2><span class="glyphicon glyphicon-ok"></span></h2>
-                                <p>RSVP</p>
-                            </div>
-                            <div class="col-md-8 col-sm-6">
-                                <h4>January 1, 1997</h4>
-                                <p class="small">Downtown</p>
-                                <span class="small badge glyphicon glyphicon-user">14</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-6 col-xs-6">
-                <div class="panel panel-default">
-                    <img src="img/class/other.png" class="img-responsive" alt="Class Title - Category" />
-                    <div class="panel-body text-right">
-                        <div class="row">
-                            <div class="text-left col-md-4 col-sm-6 hidden-xs">
-                                <h2><span class="glyphicon glyphicon-ok"></span></h2>
-                                <p>RSVP</p>
-                            </div>
-                            <div class="col-md-8 col-sm-6">
-                                <h4>January 1, 1997</h4>
-                                <p class="small">Downtown</p>
-                                <span class="small badge glyphicon glyphicon-user">14</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div> <!-- /classes -->
-
     </div>
-</section>
+    <a href="/classes" class="btn btn-default pull-right">See More</a>
+</div>
