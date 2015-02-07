@@ -16,3 +16,4 @@ logs
 .idea/
 devnotes
 .DS_Store
+node_modules/
