@@ -2,8 +2,6 @@
 * Auto Scrolling to top when clicking on a new page. Can be done in Angular. Home FAQ link takes you to bottom of FAQ page. (HMN)
 * WIP - Categories lists need to all be pulled from the same place (in database). (HMN)
 * Category Select Filter isn’t set up to read/show All Categories. Since Angular is filtering based on category, there is no class associated with 'All Categories'
-* Need to convert date of class to numeric number in order to sort by date in Angular. Create a custom filter? https://docs.angularjs.org/api/ng/filter/orderBy (look into Moment.js if angular doesn't do this natively) (HMN/TJW/AR)
-* Homepage: Request a class, takes you to request page instead of modal (AR)
 * Homepage>Upcoming Modal: Display an icon in top corner (below X) of category, 100x100px ish. (TJW)
 * Homepage>Most Requested: Add a category filter. (TJW/AR)
 * Homepage>Most Requested: Clicking a requested class opens a modal with Class Title, Category, icons of users that have +1'd, and buttons for "Request This Class" & "Recommend Teacher". (TJW/AR)
@@ -59,6 +57,7 @@
 * ~~Implement logout (HMN)~~
 * ~~When modals pop up, click-off should escape out of window. (TJW)~~
 * ~~Homepage>Upcoming Modal: Data should come from meetup site based on EventID. (HMN)~~
+* ~~Homepage: Request a class, takes you to request page instead of modal (TJW)~~
 * Page markup and content assignments
  * ~~About (AR)~~
  * ~~Account (TJW)~~
