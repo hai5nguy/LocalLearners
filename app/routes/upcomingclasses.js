@@ -8,7 +8,9 @@ module.exports = function (app) {
 
 
 
-        res.json(getFakeUpcomingClasses());
+        getFakeUpcomingClasses(function(fakeUpcomingClasses) {
+            res.json(fakeUpcomingClasses);
+        });
 
 
 
@@ -72,17 +74,19 @@ function isUpcomingClassValid(upcomingClass) {
     return true;
 }
 
-function getFakeUpcomingClasses() {
-    var classes = [];
-    for (var i = 0; i < 50; i++) {
+function getFakeUpcomingClasses(callback) {
+    db.getCategories(function (categories) {
+        var classes = [];
+        for (var i = 0; i < 50; i++) {
+            classes.push({
+                eventId: 'xxx' + i,
+                name: 'class name with id xxx' + i,
+                category: categories[ i % 15 ]
+            });
+        }
+        callback(classes);
+    });
 
-        var id = getRandomInt(1e8, 1e9).toString();
 
-        classes.push({
-            eventId: id,
-            name: 'class name with id ' + id,
-            category: 'category ' + id
-        });
-    }
-    return classes;
+
 }

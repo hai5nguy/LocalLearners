@@ -4,15 +4,15 @@
             <h4><a href="/classes">Upcoming Classes</a></h4>
         </div>
         <div class="col-md-2 pull-right">
-            <select class="form-control input-sm" ng-options="c as c for c in categories" ng-model="selectedCategory"></select>
+            <select class="form-control input-sm" ng-options="c.name for c in categories" ng-model="selectedCategory"></select>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="availClass in availClasses | limitTo:6" ng-click="getClassInfo(availClass)">
+        <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="availClass in availClasses | filter: selectedCategory.value | limitTo:6" ng-click="getClassInfo(availClass)">
             <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-                <span class="upcomingCategory"><a href="{{ availClass.catlink }}">{{ availClass.category }}</a></span>
-                <img src="img/class/{{availClass.image}}" class="img-responsive upcomingImage" alt="Class Title - Category" />
+                <span class="upcomingCategory"><a href="{{ availClass.catlink }}">{{ availClass.category.name }}</a></span>
+                <img src="{{ availClass.category.imageUrl }}" class="img-responsive upcomingImage" alt="Class Title - Category" />
                 <span class="upcomingTitle truncate col-md-12 col-sm-12 col-xs-12">{{ availClass.name }}</span>
                 <div class="panel-body text-right">
                     <div class="row">

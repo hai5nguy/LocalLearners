@@ -14,9 +14,9 @@ localLearnersApp.controller('MainCtrl', function($scope, ClassesService) {
 
 
 
-    ClassesService.getUpcomingClasses(function(classes) {
-        $scope.availClasses = classes;
-    })
+//    ClassesService.getUpcomingClasses(function(classes) {
+//        $scope.availClasses = classes;
+//    })
 
 
     $scope.getClassInfo = function(availClass) {

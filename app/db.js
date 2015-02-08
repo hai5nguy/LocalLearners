@@ -14,9 +14,31 @@ db.once('open', function() {
 });
 
 module.exports.getCategories = function (callback) {
-    models.Category.find({}, function(err, data) {
-        callback(_.pluck(data, 'name'));
-    });
+
+    var imgUrlRoot = 'img/class/';
+    var fakeCategories = [
+        { name: 'Technology', value: 'technology', imageUrl: imgUrlRoot + 'technology.png' },
+        { name: 'Automotive', value: 'automotive', imageUrl: imgUrlRoot + 'automotive.png' },
+        { name: 'Culinary', value: 'culinary', imageUrl: imgUrlRoot + 'culinary.png' },
+        { name: 'DIY', value: 'diy', imageUrl: imgUrlRoot + 'diy.png' },
+        { name: 'Fitness', value: 'fitness', imageUrl: imgUrlRoot + 'fitness.png' },
+        { name: 'Games', value: 'games', imageUrl: imgUrlRoot + 'games.png' },
+        { name: 'History', value: 'history', imageUrl: imgUrlRoot + 'history.png' },
+        { name: 'Language', value: 'language', imageUrl: imgUrlRoot + 'language.png' },
+        { name: 'Literature', value: 'literature', imageUrl: imgUrlRoot + 'literature.png' },
+        { name: 'Music', value: 'music', imageUrl: imgUrlRoot + 'music.png' },
+        { name: 'Other', value: 'other', imageUrl: imgUrlRoot + 'other.png' },
+        { name: 'Performing Arts', value: 'performing-arts', imageUrl: imgUrlRoot + 'performing-arts.png' },
+        { name: 'Science', value: 'science', imageUrl: imgUrlRoot + 'science.png' },
+        { name: 'Sports', value: 'sports', imageUrl: imgUrlRoot + 'sports.png' },
+        { name: 'Visual Arts', value: 'visual-arts', imageUrl: imgUrlRoot + 'visual-arts.png' }
+    ]
+    callback(fakeCategories);
+
+
+//    models.Category.find({}, function(err, data) {
+//        callback(data);
+//    });
 }
 
 module.exports.insertCategories = function (categories) {
