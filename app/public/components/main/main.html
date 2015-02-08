@@ -75,41 +75,7 @@
 
 <ll-upcoming-classes></ll-upcoming-classes>
 
-<!-- Most Requested Classes -->
-<div class="container">
-  <hr>
-  <h3 class="lead">Most Requested Classes</h3>
-  <div class="row">
-    <div class="col-md-4">
-      <ul class="list-group">
-        <li class="list-group-item" ng-repeat="reqClass in reqClasses | orderBy:'-requests' | limitTo:4">
-          <span class="badge">{{reqClass.requests}}</span>
-          <span class="badge pull-left"><span class="glyphicon icon-{{reqClass.category}}"></span></span>
-          {{ reqClass.name }}
-        </li>
-      </ul>
-    </div>
-    <div class="col-md-4">
-      <ul class="list-group">
-        <li class="list-group-item" ng-repeat="reqClass in reqClasses | orderBy:'-requests' | limitTo:8 | limitTo:-4">
-          <span class="badge">{{reqClass.requests}}</span>
-          <span class="badge pull-left"><span class="glyphicon icon-{{reqClass.category}}"></span></span>
-          {{ reqClass.name }}
-        </li>
-      </ul>
-    </div>
-    <div class="col-md-4">
-      <ul class="list-group">
-        <li class="list-group-item" ng-repeat="reqClass in reqClasses | orderBy:'-requests' | limitTo:12 | limitTo:-4">
-          <span class="badge">{{reqClass.requests}}</span>
-          <span class="badge pull-left"><span class="glyphicon icon-{{reqClass.category}}"></span></span>
-          {{ reqClass.name }}
-        </li>
-      </ul>
-    </div>
-  </div>
-  <a href="/requested" class="btn btn-default pull-right">See More</a>
-</div>
+<ll-most-requested></ll-most-requested>
 
 <div class="container margin-top-large">
   <hr />
