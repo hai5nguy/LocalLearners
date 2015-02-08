@@ -13,12 +13,20 @@ db.once('open', function() {
     console.log('Connected to mongolab, database ready.');
 });
 
+module.exports.getCategories = function (callback) {
+    models.Category.find({}, function(err, data) {
+        callback(_.pluck(data, 'name'));
+    });
+}
 
-
-module.exports.getCategories = function (filter, callback) {
-    if (!filter) {
-        models.Category.find({}, function(err, data) {
-            callback(data);
+module.exports.insertCategories = function (categories) {
+    for (var i = 0; i < categories.length; i++) {
+        var newCategory = new models.Category({ name: categories[i] });
+        newCategory.save(function (err, category, numberAffected) {
+            if (err) {
+                //TODO: handle errors
+                return;
+            }
         });
     }
 }
@@ -65,7 +73,7 @@ module.exports.addCategoriesToEvents = function (events) {
 //
 //    }
 //
-//    models.UpcomingClass.find( { } , function (err, upcomingClasses) {
+//    models.UpcomingClass.find( { } , function (err, upcomingClasses) {ru
 //        for (var i = 0; i < upcomingClasses.length; i++ ) {
 //            upcomingClasses[i].category = 'Unknown2';
 //            updateUpcomingClass(upcomingClasses[i]);

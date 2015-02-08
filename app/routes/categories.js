@@ -6,7 +6,10 @@ module.exports = function (app) {
 
     app.get('/categories', function (req, res) {
 
-        res.json(['Technology', 'Music', 'Whatever']);
+
+        db.getCategories(function(categories) {
+            res.json(categories);
+        });
 
     });
 

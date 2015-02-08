@@ -44,6 +44,12 @@ localLearnersApp.factory('ClassesService', function ($http, UserProfile) {
         getCategories: function(callback) {
             $http.get('/categories')
                 .success(function(categories) {
+                    categories.sort(function (a, b) {
+                        if (a.toLowerCase() < b.toLowerCase()) return -1;
+                        if (a.toLowerCase() > b.toLowerCase()) return 1;
+                        return 0;
+                    });
+                    categories.unshift('All Categories');
                     callback(categories);
                 });
         }

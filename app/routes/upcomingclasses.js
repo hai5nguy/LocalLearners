@@ -8,22 +8,24 @@ module.exports = function (app) {
 
 
 
-//        res.json(generateFakeUpcomingClasses());
+        res.json(getFakeUpcomingClasses());
 
-        meetupApi.getEvents(req, res)
-            .then(function(events) {
-                return db.addCategoriesToEvents(events);
-            })
-            .then(function (eventsWithCategories) {
-                console.log('eventsWithCategories ', eventsWithCategories);
-                res.json(eventsWithCategories);
-            },
-            function() {
-//                console.log('error getting upcoming classes');
-                res.json({
-                    error: 'Can not retrieve classes'
-                })
-            });
+
+
+//        meetupApi.getEvents(req, res)
+//            .then(function(events) {
+//                return db.addCategoriesToEvents(events);
+//            })
+//            .then(function (eventsWithCategories) {
+//                console.log('eventsWithCategories ', eventsWithCategories);
+//                res.json(eventsWithCategories);
+//            },
+//            function() {
+////                console.log('error getting upcoming classes');
+//                res.json({
+//                    error: 'Can not retrieve classes'
+//                })
+//            });
 
     });
 
@@ -70,7 +72,7 @@ function isUpcomingClassValid(upcomingClass) {
     return true;
 }
 
-function generateFakeUpcomingClasses() {
+function getFakeUpcomingClasses() {
     var classes = [];
     for (var i = 0; i < 50; i++) {
 

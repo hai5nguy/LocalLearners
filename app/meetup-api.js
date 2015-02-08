@@ -30,10 +30,11 @@ module.exports.getEvents = function (req, res) {
 
     var localLearnersAdministratorAPIKey = '7d156b614b6d5c5e7d357e18151568';  //TODO: move to environment variable
 
+    var url = process.env.MEETUP_API_EVENTS_URL;
 
-    restClient.get('https://api.meetup.com/2/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + localLearnersAdministratorAPIKey,
+    restClient.get(url + '?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + localLearnersAdministratorAPIKey,
         function(data) {
-//            console.log('getEvent data ', data);
+            console.log('getEvent data ', data);
             var rawEvents = data.results;
             var events = [];
 

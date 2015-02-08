@@ -5,5 +5,6 @@ module.exports = function (app) {
     require('./profile.js')(app);
     require('./upcomingclasses.js')(app);
     require('./categories.js')(app);
+    require('./testing.js')(app);
 
 }

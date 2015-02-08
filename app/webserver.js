@@ -19,6 +19,11 @@ var app = express();
 
 var client = new Client();
 
+process.env.MEETUP_API_EVENTS_URL = '';
+
+//restClient.get('https://api.meetup.com/2/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + localLearnersAdministratorAPIKey,
+
+app.set('LOCALLEARNERSENVIRONMENT', (process.env.LOCALLEARNERSENVIRONMENT || 'development'));
 app.set('port', (process.env.PORT || 5000));
 
 app.use(cookieParser());
