@@ -5,7 +5,10 @@ var Q = require('q');
 var mongoose = require('mongoose');
 var models = require('./models.js')(mongoose);
 
+//mongoose.set('debug', true);
+
 mongoose.connect('mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa');
+//mongoose.connect('mongodb://localhost:4000/test');
 
 var db = mongoose.connection;
 
@@ -14,36 +17,14 @@ db.once('open', function() {
 });
 
 module.exports.getCategories = function (callback) {
-
-    var imgUrlRoot = 'img/class/';
-    var fakeCategories = [
-        { name: 'Technology', value: 'technology', imageUrl: imgUrlRoot + 'technology.png' },
-        { name: 'Automotive', value: 'automotive', imageUrl: imgUrlRoot + 'automotive.png' },
-        { name: 'Culinary', value: 'culinary', imageUrl: imgUrlRoot + 'culinary.png' },
-        { name: 'DIY', value: 'diy', imageUrl: imgUrlRoot + 'diy.png' },
-        { name: 'Fitness', value: 'fitness', imageUrl: imgUrlRoot + 'fitness.png' },
-        { name: 'Games', value: 'games', imageUrl: imgUrlRoot + 'games.png' },
-        { name: 'History', value: 'history', imageUrl: imgUrlRoot + 'history.png' },
-        { name: 'Language', value: 'language', imageUrl: imgUrlRoot + 'language.png' },
-        { name: 'Literature', value: 'literature', imageUrl: imgUrlRoot + 'literature.png' },
-        { name: 'Music', value: 'music', imageUrl: imgUrlRoot + 'music.png' },
-        { name: 'Other', value: 'other', imageUrl: imgUrlRoot + 'other.png' },
-        { name: 'Performing Arts', value: 'performing-arts', imageUrl: imgUrlRoot + 'performing-arts.png' },
-        { name: 'Science', value: 'science', imageUrl: imgUrlRoot + 'science.png' },
-        { name: 'Sports', value: 'sports', imageUrl: imgUrlRoot + 'sports.png' },
-        { name: 'Visual Arts', value: 'visual-arts', imageUrl: imgUrlRoot + 'visual-arts.png' }
-    ]
-    callback(fakeCategories);
-
-
-//    models.Category.find({}, function(err, data) {
-//        callback(data);
-//    });
+    models.Category.find({}, function(err, data) {
+        callback(data);
+    });
 }
 
 module.exports.insertCategories = function (categories) {
     for (var i = 0; i < categories.length; i++) {
-        var newCategory = new models.Category({ name: categories[i] });
+        var newCategory = new models.Category(categories[i]);
         newCategory.save(function (err, category, numberAffected) {
             if (err) {
                 //TODO: handle errors
@@ -51,6 +32,24 @@ module.exports.insertCategories = function (categories) {
             }
         });
     }
+}
+
+//for local development
+module.exports.insertFakeEvents = function (fakeEvents) {
+    for (var i = 0; i < fakeEvents.length; i++) {
+        var newEvent = new models.FakeEvent(fakeEvents[i]);
+        newEvent.save(function (err, fakeEvent, numberAffected) {
+            if (err) {
+                //TODO: handle errors
+                return;
+            }
+        });
+    }
+}
+module.exports.getFakeEvents = function (callback) {
+    models.FakeEvent.find({}, function(err, events) {
+        callback(events);
+    });
 }
 
 module.exports.getUpcomingClasses = getUpcomingClasses;
@@ -115,7 +114,7 @@ module.exports.addCategoriesToEvents = function (events) {
         defer.resolve(eventsWithCategory);
 
     });
-//
+
 //    var eventIds = [];
 //    for (var i = 0; i < events.length; i++) {
 //        eventIds.push(events[i].id)
@@ -162,15 +161,20 @@ module.exports.addCategoriesToEvents = function (events) {
     return defer.promise;
 }
 
+
+
 function createUpcomingClass(upcomingClass) {
     var u = new models.UpcomingClass(upcomingClass);
     u.save(function(err, u, numberAffected) {
+//        console.log('db createUpcomingClass ', JSON.stringify(u), ' 4444 ', JSON.stringify(upcomingClass));
         //TODO: handle errors
     });
 }
 
 function updateUpcomingClass(upcomingClass) {
     models.UpcomingClass.update({ _id: upcomingClass._id }, upcomingClass, {}, function(err, numberAffected) {
-        console.log('udapte', err, 'number ', numberAffected);
+//        console.log('udapte', err, 'number ', numberAffected);
     });
 }
+
+

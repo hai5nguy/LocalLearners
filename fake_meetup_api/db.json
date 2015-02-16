@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "id": 1,
+      "name": "name1e"
+    },
+    {
+      "id": 2,
+      "name": "name2b"
+    },
+    {
+      "id": 3,
+      "name": "name3c"
+    }
+  ],
+  "events": [
+    {
+      "visibility": "public",
+      "status": "upcoming",
+      "maybe_rsvp_count": 0,
+      "utc_offset": -14400000,
+      "id": "1001",
+      "time": 1427860800000,
+      "announced": false,
+      "waitlist_count": 0,
+      "created": 1422652477016,
+      "yes_rsvp_count": 1,
+      "updated": 1422652477016,
+      "event_url": "http://www.meetup.com/LocalLearners/events/220195023/",
+      "headcount": 0,
+      "name": "class 1001",
+      "group": {
+        "id": 18049722,
+        "created": 1415053890000,
+        "group_lat": 39.77000045776367,
+        "name": "Local Learners",
+        "group_lon": -86.16000366210938,
+        "join_mode": "open",
+        "urlname": "LocalLearners",
+        "who": "Learners"
+      }
+    }
+  ]
+}

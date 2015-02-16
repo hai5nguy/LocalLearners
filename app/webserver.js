@@ -19,7 +19,10 @@ var app = express();
 
 var client = new Client();
 
-process.env.MEETUP_API_EVENTS_URL = '';
+global.MEETUP_API_ENDPOINT = 'http://localhost:5000/fakemeetupapi';
+//global.MEETUP_API_ENDPOINT = 'https://api.meetup.com/2';
+
+//process.env.MeetupApiEventsUrl = 'http://localhost:3000/events';
 
 //restClient.get('https://api.meetup.com/2/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + localLearnersAdministratorAPIKey,
 

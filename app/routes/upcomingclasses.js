@@ -4,30 +4,22 @@ var db = require('../db.js');
 
 module.exports = function (app) {
 
+
     app.get('/upcomingclasses', function (req, res) {
-
-
-
-        getFakeUpcomingClasses(function(fakeUpcomingClasses) {
-            res.json(fakeUpcomingClasses);
-        });
-
-
-
-//        meetupApi.getEvents(req, res)
-//            .then(function(events) {
-//                return db.addCategoriesToEvents(events);
-//            })
-//            .then(function (eventsWithCategories) {
-//                console.log('eventsWithCategories ', eventsWithCategories);
-//                res.json(eventsWithCategories);
-//            },
-//            function() {
-////                console.log('error getting upcoming classes');
-//                res.json({
-//                    error: 'Can not retrieve classes'
-//                })
-//            });
+        meetupApi.getEvents(req, res)
+            .then(function(events) {
+                console.log('2222 ', events);
+                return db.addCategoriesToEvents(events);
+            })
+            .then(function (eventsWithCategories) {
+//               console.log('eventsWithCategories ', eventsWithCategories.length);
+                res.json(eventsWithCategories);
+            },
+            function() {
+                res.json({
+                    error: 'Can not retrieve classes'
+                })
+            });
 
     });
 

@@ -6,5 +6,6 @@ module.exports = function (app) {
     require('./upcomingclasses.js')(app);
     require('./categories.js')(app);
     require('./testing.js')(app);
+    require('./fakemeetupapi.js')(app);
 
 }
