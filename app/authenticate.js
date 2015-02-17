@@ -1,4 +1,3 @@
-var express = require('express');
 var passport = require('passport');
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 var session = require('express-session');

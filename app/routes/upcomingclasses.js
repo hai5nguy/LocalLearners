@@ -7,7 +7,6 @@ module.exports = function (app) {
     app.get('/upcomingclasses', function (req, res) {
         meetupApi.getEvents(req, res)
             .then(function(events) {
-                console.log('2222 ', events);
                 return db.addCategoriesToEvents(events);
             })
             .then(function (eventsWithCategories) {
