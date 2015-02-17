@@ -4,7 +4,6 @@ var db = require('../db.js');
 
 module.exports = function (app) {
 
-
     app.get('/upcomingclasses', function (req, res) {
         meetupApi.getEvents(req, res)
             .then(function(events) {
@@ -64,21 +63,4 @@ function isUpcomingClassValid(upcomingClass) {
     if ( !upcomingClass.category || upcomingClass.category === '' ) return false;
     if ( !upcomingClass.time ) return false;
     return true;
-}
-
-function getFakeUpcomingClasses(callback) {
-    db.getCategories(function (categories) {
-        var classes = [];
-        for (var i = 0; i < 50; i++) {
-            classes.push({
-                eventId: 'xxx' + i,
-                name: 'class name with id xxx' + i,
-                category: categories[ i % 15 ]
-            });
-        }
-        callback(classes);
-    });
-
-
-
 }

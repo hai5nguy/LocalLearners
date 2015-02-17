@@ -13,7 +13,6 @@ module.exports.getSelf = function (accessToken, callback) {
 
     restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
         function (data) {
-
             var profile = {
                 userId: data.id,
 //                accessToken: accessToken,  !!!accessToken should never be sent to client side
@@ -29,7 +28,6 @@ module.exports.getEvents = function (req, res) {
 
     var localLearnersAdministratorAPIKey = '7d156b614b6d5c5e7d357e18151568';  //TODO: move to environment variable
 
-    console.log(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + localLearnersAdministratorAPIKey);
     restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + localLearnersAdministratorAPIKey,
         function(data) {
             var rawEvents = data.results;
@@ -86,7 +84,7 @@ module.exports.postEvent = function (req, res, event) {
 //            defer.reject(err);
 //        });
 
-    defer.resolve(createFakeEvent());
+//    defer.resolve(createFakeEvent());
 
 
     return defer.promise;
@@ -97,35 +95,4 @@ function isEventValid(event) {
     if (!event.name || event.name === '') return false;
     //TODO: need to check event.time
     return true;
-}
-
-function createFakeEvent() {
-    var generatedId = getRandomInt(100000000, 1000000000).toString();
-    return {
-        visibility: 'public',
-        status: 'upcoming',
-        maybe_rsvp_count: 0,
-        utc_offset: -14400000,
-        id: generatedId,
-        time: 1427860800000,
-        announced: false,
-        waitlist_count: 0,
-        created: 1422652477016,
-        yes_rsvp_count: 1,
-        updated: 1422652477016,
-        event_url: 'http://www.meetup.com/LocalLearners/events/220195023/',
-        headcount: 0,
-        name: 'class name id ' + generatedId,
-        group: {
-            id: 18049722,
-            created: 1415053890000,
-            group_lat: 39.77000045776367,
-            name: 'Local Learners',
-            group_lon: -86.16000366210938,
-            join_mode: 'open',
-            urlname: 'LocalLearners',
-            who: 'Learners'
-        }
-    };
-
 }

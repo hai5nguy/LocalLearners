@@ -22,10 +22,6 @@ var client = new Client();
 global.MEETUP_API_ENDPOINT = 'http://localhost:5000/fakemeetupapi';
 //global.MEETUP_API_ENDPOINT = 'https://api.meetup.com/2';
 
-//process.env.MeetupApiEventsUrl = 'http://localhost:3000/events';
-
-//restClient.get('https://api.meetup.com/2/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + localLearnersAdministratorAPIKey,
-
 app.set('LOCALLEARNERSENVIRONMENT', (process.env.LOCALLEARNERSENVIRONMENT || 'development'));
 app.set('port', (process.env.PORT || 5000));
 
@@ -95,6 +91,7 @@ app.get('/test', function (req, res) {
     //res.json(blah);
 });
 
+//require('authenticate.js')(app);
 require('./routes/routes.js')(app);
 
 app.use(express.static(__dirname + '/public'));
