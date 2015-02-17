@@ -44,9 +44,14 @@ module.exports = function (mongoose) {
         }
     });
 
+    var MemberSchema = new Schema({
+        memberId: Number
+    });
+
     return {
         Category: mongoose.model('Category', CategorySchema),
         UpcomingClass: mongoose.model('UpcomingClass', UpcomingClassSchema),
-        FakeEvent: mongoose.model('FakeEvent', FakeEventSchema)
+        FakeEvent: mongoose.model('FakeEvent', FakeEventSchema),
+        Member: mongoose.model('Member', MemberSchema)
     }
 }

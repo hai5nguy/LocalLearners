@@ -3,7 +3,7 @@
 var _ = require('underscore');
 var Q = require('q');
 var mongoose = require('mongoose');
-var models = require('./models.js')(mongoose);
+var models = require('./db-models.js')(mongoose);
 
 //mongoose.set('debug', true);
 
