@@ -2,11 +2,10 @@ global.MEETUP_API_ENDPOINT = 'http://localhost:5000/fakemeetupapi';
 //global.MEETUP_API_ENDPOINT = 'https://api.meetup.com/2';
 
 require('./core.js');
+require('./environmentals.js');
 
 var express = require('express');
 global.THE_APP = express();
-
-THE_APP.set('LOCALLEARNERSENVIRONMENT', (process.env.LOCALLEARNERSENVIRONMENT || 'development'));
 
 require('./meetup-api.js')(THE_APP);
 require('./authenticate.js')(THE_APP);

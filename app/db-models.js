@@ -1,6 +1,6 @@
 module.exports = function (mongoose) {
     var Schema = mongoose.Schema;
-    var ObjectId = Schema.ObjectId;
+//    var ObjectId = Schema.ObjectId;
 
     var CategorySchema = new Schema({
         name: String,

@@ -8,10 +8,10 @@ var LOCAL_LEARNERS_GROUP_ID = 18049722;
 var LOCAL_LEARNERS_GROUP_URLNAME = 'locallearners';
 var LOCAL_LEARNERS_ADMINISTRATOR_API_KEY = '7d156b614b6d5c5e7d357e18151568';
 
-module.exports = function (THE_APP) {
+module.exports = function (app) {
 
     return {
-        getSelf: getSelf,
+        getProfile: getProfile,
         getEvents: getEvents,
         postEvent: postEvent,
         changeUserRole: changeUserRole
@@ -22,7 +22,7 @@ module.exports = function (THE_APP) {
 // Public Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getSelf(accessToken, callback) {
+function getProfile(accessToken, callback) {
 
     var args = {
         headers: { Authorization: 'Bearer ' + accessToken }

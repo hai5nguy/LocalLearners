@@ -4,7 +4,7 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var MongoStore = require('connect-mongo')(session);
-var meetupProfile = require('./meetup-profile.js');
+var meetupApi = require('./meetup-api.js')(THE_APP);
 
 var MEETUP_KEY = process.env.MEETUP_KEY || 'h0dl8qkd82gbjan5cpr8plb4jq';
 var MEETUP_SECRET = process.env.MEETUP_SECRET || 'seagvb265dc9j1vm53q9pvu9r8';
@@ -60,7 +60,7 @@ module.exports = function (app) {
 
             req.session.accessToken = req.user.accessToken;
 
-            meetupProfile.getProfile(req.session.accessToken, function(profile) {
+            meetupApi.getProfile(req.session.accessToken, function(profile) {
                 req.session.profile = profile;
                 res.redirect('/');
             });

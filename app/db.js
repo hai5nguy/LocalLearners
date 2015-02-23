@@ -1,5 +1,3 @@
-//mongoose nhập khẩu
-
 var _ = require('underscore');
 var Q = require('q');
 var mongoose = require('mongoose');

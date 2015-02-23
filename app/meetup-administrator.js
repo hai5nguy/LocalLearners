@@ -4,11 +4,6 @@ const Browser = require('zombie');
 var NodeRestClient = require('node-rest-client').Client;
 var restClient = new NodeRestClient();
 
-
-var _localLearnersAdministratorConsumerKey = 'q4kmd7td3041urie6bodfc1ljm';
-var _localLearnersAdministratorConsumerSecret = '4l2hdci02qgc4svjpu97h5tl04';
-var _localLearnersAdministratorRedirectUrl = 'http://localhost:5000/meetupServerLinkCallback';
-
 var _localLeanersAdministratorAccessCode;
 var _localLeanersAdministratorAccessToken;
 
@@ -32,7 +27,7 @@ function getAdministratorAccessToken() {
         defer.resolve(_localLeanersAdministratorAccessToken);
     } else {
         authorizeLocalLearnersAdministratorWithMeetup();
-        globalEventEmitter.on('AdministratorAccessTokenAcquired', function (accessToken) {
+        globalEventEmitter.on(EMITTEREVENTS.AdministratorAccessTokenAcquired, function (accessToken) {
             console.log('administrator accesss token ', accessToken);
             defer.resolve(accessToken);
         });
@@ -49,17 +44,15 @@ function authorizeLocalLearnersAdministratorWithMeetup() {
     const browser = new Browser();
 
     var url = 'https://secure.meetup.com/oauth2/authorize' +
-        '?client_id=' + _localLearnersAdministratorConsumerKey +
+        '?client_id=' + LL_ADMINISTRATOR_CONSUMER_KEY +
         '&response_type=code' +
-        '&redirect_uri=' + _localLearnersAdministratorRedirectUrl;
-
-//    console.log(url);
+        '&redirect_uri=' + LL_ADMINISTRATOR_REDIRECT_URL;
 
     browser.visit(url)
         .then(function() {
             console.log('title of first meetup login form: ', browser.text('title'));
-            browser.fill('email', 'locallearnersmeetup@gmail.com');
-            browser.fill('password', 'thirstyscholar1');
+            browser.fill('email', LL_ADMINISTRATOR_EMAIL);
+            browser.fill('password', LL_ADMINISTRATOR_PASSWORD);
             return browser.pressButton('input[name=submitButton]');
         })
         .then(function() {
@@ -76,10 +69,10 @@ function registerAdministratorServerCallback(app) {
 
         var args = {
             parameters: {
-                client_id: _localLearnersAdministratorConsumerKey,
-                client_secret: _localLearnersAdministratorConsumerSecret,
+                client_id: LL_ADMINISTRATOR_CONSUMER_KEY,
+                client_secret: LL_ADMINISTRATOR_CONSUMER_SECRET,
                 grant_type: 'authorization_code',
-                redirect_uri: _localLearnersAdministratorRedirectUrl,
+                redirect_uri: LL_ADMINISTRATOR_REDIRECT_URL,
                 code: _localLeanersAdministratorAccessCode
             },
             headers: {
@@ -90,7 +83,7 @@ function registerAdministratorServerCallback(app) {
         restClient.post(url, args, function (response) {
             //TODO: handle errors
             _localLeanersAdministratorAccessToken = response.access_token
-            globalEventEmitter.emit('AdministratorAccessTokenAcquired', _localLeanersAdministratorAccessToken);
+            globalEventEmitter.emit(EMITTEREVENTS.AdministratorAccessTokenAcquired, _localLeanersAdministratorAccessToken);
             res.send('');
         });
 

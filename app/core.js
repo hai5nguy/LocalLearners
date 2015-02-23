@@ -1,5 +1,9 @@
 var EventEmitter = require('events').EventEmitter;
 global.globalEventEmitter = new EventEmitter();
+global.EMITTEREVENTS = {
+    AdministratorAccessTokenAcquired: 'AdministratorAccessTokenAcquired',
+    AdministratorAccessTokenFailed: 'AdministratorAccessTokenFailed'
+}
 
 global.IsEmptyNullUndefined = function(obj) {
     if (obj == undefined || obj == null) return true;
@@ -10,11 +14,3 @@ global.IsEmptyNullUndefined = function(obj) {
 global.getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
-//
-//var _app = {};
-//global.THE_APP = _app;
-//
-//global.setApp = function (a) {
-//    _app = a;
-//    console.log('thedamn THE_APP', a);
-//}
