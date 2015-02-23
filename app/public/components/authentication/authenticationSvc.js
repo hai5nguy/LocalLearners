@@ -4,7 +4,7 @@ localLearnersApp.factory('AuthenticationSvc', function($http, $rootScope, UserPr
         return $http.get('/profile').success(function(profile) {
 
             UserProfile.create(profile);
-            if (!!UserProfile.userId) {
+            if (!!UserProfile.mid) {
                 $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
             }
         });
@@ -20,7 +20,7 @@ localLearnersApp.factory('AuthenticationSvc', function($http, $rootScope, UserPr
         },
         isAuthenticated: function() {
             //return false;
-            var authenticated = !!UserProfile.userId;
+            var authenticated = !!UserProfile.mid;
 
             //console.log('authenticationsvc isauthenticated ', UserProfile, authenticated);
 

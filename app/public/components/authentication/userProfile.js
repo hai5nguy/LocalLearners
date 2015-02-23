@@ -1,11 +1,11 @@
 localLearnersApp.factory('UserProfile', function() {
     return {
         create: function (profile) {
-            this.userId = profile.userId;
+            this.mid = profile.mid;
             this.thumb_link = profile.thumb_link;
         },
         destroy: function () {
-            this.userId = null;
+            this.mid = null;
             this.thumb_link = null;
         }
     }

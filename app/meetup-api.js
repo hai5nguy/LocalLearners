@@ -32,8 +32,7 @@ function getSelf(accessToken, callback) {
         function (data) {
             var profile = {
                 mid: data.id,
-//                accessToken: accessToken,  !!!accessToken should never be sent to client side
-                thumb_link: data.photo ? data.photo.thumb_link : 'na'
+                thumb_link: data.photo ? data.photo.thumb_link : 'http://photos4.meetupstatic.com/img/noPhoto_50.png'
             };
             callback(profile);
         }
