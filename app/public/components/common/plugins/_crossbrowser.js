@@ -137,7 +137,7 @@ function css_browser_selector(u)
             // user agent language
             ,(/[; |\[](([a-z]{2})(\-[a-z]{2})?)[)|;|\]]/i.test(ua))?(lang+RegExp.$2).replace("-","_")+(RegExp.$3!=''?(' '+lang+RegExp.$1).replace("-","_"):''):''
 
-            // beta: test if running iPad APP
+            // beta: test if running iPad THE_APP
             ,( is('ipad|iphone|ipod') && !is('safari') )  ?  'ipad_app'  : ''
 
 

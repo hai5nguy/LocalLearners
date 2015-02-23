@@ -12,9 +12,9 @@ global.getRandomInt = function(min, max) {
 }
 //
 //var _app = {};
-//global.APP = _app;
+//global.THE_APP = _app;
 //
 //global.setApp = function (a) {
 //    _app = a;
-//    console.log('thedamn APP', a);
+//    console.log('thedamn THE_APP', a);
 //}

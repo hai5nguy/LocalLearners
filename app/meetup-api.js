@@ -2,13 +2,13 @@ var q = require('../node_modules/q');
 var NodeRestClient = require('node-rest-client').Client;
 var restClient = new NodeRestClient();
 
-var meetupAdministrator = require('./meetup-administrator.js')(APP);
+var meetupAdministrator = require('./meetup-administrator.js')(THE_APP);
 
 var LOCAL_LEARNERS_GROUP_ID = 18049722;
 var LOCAL_LEARNERS_GROUP_URLNAME = 'locallearners';
 var LOCAL_LEARNERS_ADMINISTRATOR_API_KEY = '7d156b614b6d5c5e7d357e18151568';
 
-module.exports = function (APP) {
+module.exports = function (THE_APP) {
 
     return {
         getSelf: getSelf,
