@@ -2,10 +2,27 @@ var q = require('../node_modules/q');
 var NodeRestClient = require('node-rest-client').Client;
 var restClient = new NodeRestClient();
 
+var meetupAdministrator = require('./meetup-administrator.js')(APP);
+
 var LOCAL_LEARNERS_GROUP_ID = 18049722;
 var LOCAL_LEARNERS_GROUP_URLNAME = 'locallearners';
+var LOCAL_LEARNERS_ADMINISTRATOR_API_KEY = '7d156b614b6d5c5e7d357e18151568';
 
-module.exports.getSelf = function (accessToken, callback) {
+module.exports = function (APP) {
+
+    return {
+        getSelf: getSelf,
+        getEvents: getEvents,
+        postEvent: postEvent,
+        changeUserRole: changeUserRole
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Public Functions
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function getSelf(accessToken, callback) {
 
     var args = {
         headers: { Authorization: 'Bearer ' + accessToken }
@@ -14,21 +31,19 @@ module.exports.getSelf = function (accessToken, callback) {
     restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
         function (data) {
             var profile = {
-                userId: data.id,
+                mid: data.id,
 //                accessToken: accessToken,  !!!accessToken should never be sent to client side
-                thumb_link: data.photo.thumb_link
+                thumb_link: data.photo ? data.photo.thumb_link : 'na'
             };
             callback(profile);
         }
     );
 }
 
-module.exports.getEvents = function (req, res) {
+function getEvents(req, res) {
     var defer = q.defer();
 
-    var localLearnersAdministratorAPIKey = '7d156b614b6d5c5e7d357e18151568';  //TODO: move to environment variable
-
-    restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + localLearnersAdministratorAPIKey,
+    restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + LOCAL_LEARNERS_ADMINISTRATOR_API_KEY,
         function(data) {
             var rawEvents = data.results;
             var events = [];
@@ -48,7 +63,7 @@ module.exports.getEvents = function (req, res) {
     return defer.promise;
 }
 
-module.exports.postEvent = function (req, res, event) {
+function postEvent(req, res, event) {
 
     var defer = Q.defer();
 
@@ -65,7 +80,7 @@ module.exports.postEvent = function (req, res, event) {
         },
         headers: {
             Authorization: 'Bearer ' + req.session.accessToken
-            //'Content-Type': 'application/x-www-form-urlencoded'
+            //'Content-Type': 'APPlication/x-www-form-urlencoded'
         }
     }
 
@@ -89,6 +104,44 @@ module.exports.postEvent = function (req, res, event) {
 
     return defer.promise;
 }
+
+function changeUserRole(req, res, role) {
+    var defer = q.defer();
+
+
+    meetupAdministrator.getAdministratorAccessToken()
+        .then(function (token) {
+            var args = {
+                parameters: {
+                    add_role: role
+                },
+                headers: {
+                    Authorization: 'Bearer ' + token
+                    //'Content-Type': 'APPlication/x-www-form-urlencoded'
+                }
+            };
+
+            console.log('111 ', 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.session.profile.mid + '?&sign=true');
+
+            restClient.post('https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.session.profile.mid,
+                args, function (a, b, c) {
+                    console.log('a ', a);
+                    console.log('c ', c);
+
+                    defer.resolve();
+                }).on('error', function(err) {
+                    defer.reject(err);
+                });
+
+        })
+
+    return defer.promise;
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Private Functions
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function isEventValid(event) {
     if (!event) return false;

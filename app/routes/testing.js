@@ -1,10 +1,13 @@
 var Q = require('../../node_modules/q');
-var meetupApi = require('../meetup-api.js');
 var db = require('../db.js');
+var meetupApi = require('../meetup-api.js')(APP);
+var meetupAdministrator;
 
 module.exports = function (app) {
 
-    app.get('/seedfakeupcomingclasses', function(req, res) {
+    meetupAdministrator = require('../meetup-administrator.js')(app);
+
+    app.get('/seedfakeupcomingclasses', function (req, res) {
         db.getCategories(function (categories) {
 
 
@@ -26,7 +29,7 @@ module.exports = function (app) {
     });
 
 
-    app.get('/seedcategories', function(req, res) {
+    app.get('/seedcategories', function (req, res) {
         var imgUrlRoot = 'img/class/';
         var defaultCategories = [
             { name: 'Technology', value: 'technology', imageUrl: imgUrlRoot + 'technology.png' },
@@ -86,13 +89,28 @@ module.exports = function (app) {
         res.send('fake meetup events seeded');
     });
 
-    app.get('/dbtest', function(req, res) {
+    app.get('/dbtest', function (req, res) {
         db.getFakeEvents(function(events) {
             res.json(events);
         });
     });
 
+    app.get('/changeuserrole', function (req, res) {
 
+        meetupApi.changeUserRole(req, res, 'event_organizer');
+
+
+        res.send('user role changed')
+    });
+
+    app.get('/testadmin', function (req, res) {
+        meetupAdministrator.getAdministratorAccessToken()
+            .then(function(t) {
+                console.log('token ', t)
+            });
+
+        res.send('done');
+    });
 
 
 }

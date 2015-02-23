@@ -4,17 +4,22 @@ global.MEETUP_API_ENDPOINT = 'http://localhost:5000/fakemeetupapi';
 require('./core.js');
 
 var express = require('express');
-var app = express();
+global.APP = express();
 
-app.set('LOCALLEARNERSENVIRONMENT', (process.env.LOCALLEARNERSENVIRONMENT || 'development'));
-app.set('port', (process.env.PORT || 5000));
+APP.set('LOCALLEARNERSENVIRONMENT', (process.env.LOCALLEARNERSENVIRONMENT || 'development'));
+APP.set('port', (process.env.PORT || 5000));
 
-require('./authenticate.js')(app);
-require('./routes/routes.js')(app);
+require('./meetup-api.js')(APP);
+require('./authenticate.js')(APP);
+require('./routes/routes.js')(APP);
 
-app.use(express.static(__dirname + '/public'));
-app.use('/*', express.static(__dirname + '/public/index.html'));  //this is needed to remove hash from url
+APP.use(express.static(__dirname + '/public'));
+APP.use('/*', express.static(__dirname + '/public/index.html'));  //this is needed to remove hash from url
 
-app.listen(app.get('port'), function() {
-    console.log("Web server running on http://localhost:" + app.get('port'));
+globalEventEmitter.on('test', function() {
+    console.log('test event called');
+});
+
+APP.listen(APP.get('port'), function() {
+    console.log("Web server running on http://localhost:" + APP.get('port'));
 });

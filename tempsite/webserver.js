@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 
-//var app = require('http').createServer(app);
+//var APP = require('http').createServer(APP);
 //var io = require('socket.io')(server);
 
 
@@ -18,13 +18,13 @@ app.get('/test', function(req, res) {
    res.send('key:' + process.env.testkey + ' value: ' + process.env.testvalue);
 });
 
-//app.use('/test', express.static(__dirname + '/public/test.html?' + process.env.testkey + '=' + process.env.testvalue));
+//APP.use('/test', express.static(__dirname + '/public/test.html?' + process.env.testkey + '=' + process.env.testvalue));
 app.use('/', express.static(__dirname + '/public/index.html'));
 app.use(express.static(__dirname + '/public'));
 
 
 //console.log("dirname: ", __dirname);
-//app.use('/bower_components', express.static(__dirname + '/bower_components'));
+//APP.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 
 //io.sockets.on('connection', function(socket) {

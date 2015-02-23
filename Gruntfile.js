@@ -6,11 +6,11 @@ module.exports = function(grunt) {
                 livereload: true
             },
             sass: {
-                files: ['app/_sass/**/*.{scss,sass}'],
+                files: ['APP/_sass/**/*.{scss,sass}'],
                 tasks: ['sass']
             },
             publicfolder: {
-                files: ['app/**'],
+                files: ['APP/**'],
                 tasks:  [ 'restart-web-server' ],
                 options: {
                     nospawn: true
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'app/public/css/style.css': 'app/_sass/style.scss'
+                    'app/public/css/style.css': 'APP/_sass/style.scss'
                 }
             }
         },
@@ -32,20 +32,19 @@ module.exports = function(grunt) {
             webserver: {
                 options: {
                     port: 5000,
-                    script: 'app/webserver.js'
+                    script: 'APP/webserver.js'
                 }
             }
-            // apiserver: {
-            //     options: {
-            //         script: 'app/apiserver.js'
-            //     }
-            // }
+        },
+        'node-inspector': {
+            dev: {}
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-express-server');
+    grunt.loadNpmTasks('grunt-node-inspector');
 
 //    grunt.registerTask('default', ['sass:dist', 'watch']);
 //
@@ -65,7 +64,7 @@ module.exports = function(grunt) {
 //        ]);
 //    });
 
-    grunt.registerTask('local', 'start up a local web server', function(target) {
+    grunt.registerTask('default', 'start up a local web server', function(target) {
         grunt.task.run([
             'express',
             'watch'
