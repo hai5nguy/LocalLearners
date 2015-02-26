@@ -78,7 +78,8 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ngRoute
 //                controller: 'TermsCtrl'
             })
             .when('/haitest', {
-                templateUrl: 'haitest.html'
+                templateUrl: 'haitest.html',
+                controller: 'HaiTestController'
             });
 
         $locationProvider.html5Mode(true);
