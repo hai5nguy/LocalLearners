@@ -1,4 +1,4 @@
-localLearnersApp.factory('AuthenticationSvc', function($http, $rootScope, UserProfile, AUTH_EVENTS) {
+localLearnersApp.factory('AuthenticationService', function($http, $rootScope, UserProfile, AUTH_EVENTS) {
 
     function CheckToSeeIfUserIsLoggedIn() {
         return $http.get('/profile').success(function(profile) {
@@ -19,12 +19,7 @@ localLearnersApp.factory('AuthenticationSvc', function($http, $rootScope, UserPr
             UserProfile.destroy();
         },
         isAuthenticated: function() {
-            //return false;
-            var authenticated = !!UserProfile.mid;
-
-            //console.log('authenticationsvc isauthenticated ', UserProfile, authenticated);
-
-            return authenticated;
+            return !!UserProfile.mid;
         },
         initialize: function() {
             CheckToSeeIfUserIsLoggedIn();

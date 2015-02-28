@@ -84,19 +84,22 @@ function postEvent(req, res, event) {
     }
 
 
-//    restClient.post('https://api.meetup.com/2/event', args,
-//        function(createdEvent) {
-//            console.log('createdEVent ', createdEvent);
-//
-//            if (createdEvent.problem) {
-//                defer.reject(createdEvent);
-//            } else {
-//                defer.resolve(createdEvent);
-//            }
-//        })
-//        .on('error', function(err) {
-//            defer.reject(err);
-//        });
+
+    var url = MEETUP_API_ENDPOINT + '/event';
+
+    restClient.post(url, args,
+        function(createdEvent) {
+            console.log('createdEVent ', createdEvent);
+
+            if (createdEvent.problem) {
+                defer.reject(createdEvent);
+            } else {
+                defer.resolve(createdEvent);
+            }
+        })
+        .on('error', function(err) {
+            defer.reject(err);
+        });
 
 //    defer.resolve(createFakeEvent());
 

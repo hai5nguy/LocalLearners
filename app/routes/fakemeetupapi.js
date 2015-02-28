@@ -9,4 +9,18 @@ module.exports = function (app) {
             res.end(JSON.stringify({ results: events }));
         });
     });
+
+    app.post('/fakemeetupapi/event', function (req, res) {
+        var fakeEvent = {
+            name: req.body.name
+        };
+        db.addFakeEvent(fakeEvent).then(function(createdEvent) {
+            res.json({
+                status: 'success',
+                createdEvent: createdEvent
+            });
+        }, function (err) {
+            //TODO: error handling
+        });
+    });
 }

@@ -111,5 +111,72 @@ module.exports.getFakeEvents = function (callback) {
         callback(events);
     });
 }
+module.exports.addFakeEvent = function (fakeEvent) {
+    var defer = Q.defer();
+
+    if (!isValidFakeEvent(fakeEvent)) {
+        defer.reject('Invalid fakeEvent');
+    }
+
+    var fe = new models.FakeEvent(fakeEvent);
+    fe.save(function (err, savedEvent, numberAffected) {
+        if (err) {
+            defer.reject('Can not save fakeEvent');
+        }
+    })
+}
+
+function isValidFakeEvent(fakeEvent) {
+//    if (typeof fakeEvent.visibility !== 'string') return false;
+//    if (typeof fakeEvent.status !== 'string') return false;
+//    if (typeof fakeEvent.maybe_rsvp_count !== 'number') return false;
+//    if (typeof fakeEvent.utc_offset !== 'number') return false;
+//    if (typeof fakeEvent.id !== 'string') return false;
+//    console.log('typeof fakeevent.time ', fakeEvent.time );
+//    if (typeof fakeEvent.time !== 'number') return false;
+//    if (typeof fakeEvent.announced !== 'boolean') return false;
+//    if (typeof fakeEvent.waitlist_count !== 'number') return false;
+//    if (typeof fakeEvent.created !== 'object') return false;
+//    if (typeof fakeEvent.yes_rsvp_count !== 'number') return false;
+//    if (typeof fakeEvent.updated !== 'object') return false;
+//    if (typeof fakeEvent.event_url !== 'string') return false;
+//    if (typeof fakeEvent.headcount !== 'number') return false;
+    if (typeof fakeEvent.name !== 'string') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    if (typeof fakeEvent.group.id !== 'number') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    if (typeof fakeEvent.group !== 'object') return false;
+//    visibility: String,
+//        status: String,
+//        maybe_rsvp_count: Number,
+//        utc_offset: Number,
+//        id: String,
+//        time: Date,
+//        announced: Boolean,
+//        waitlist_count: Number,
+//        created: Date,
+//        yes_rsvp_count: Number,
+//        updated: Date,
+//        event_url: String,
+//        headcount: Number,
+//        name: String,
+//        group: {
+//        id: Number,
+//            created: Date,
+//            group_lat: Number,
+//            name: String,
+//            group_lon: Number,
+//            join_mode: String,
+//            urlname: String,
+//            who: String
+//    }
+    return true;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
