@@ -1,4 +1,4 @@
-var q = require('../node_modules/q');
+var Q = require('../node_modules/q');
 var NodeRestClient = require('node-rest-client').Client;
 var restClient = new NodeRestClient();
 
@@ -9,12 +9,10 @@ var LOCAL_LEARNERS_GROUP_URLNAME = 'locallearners';
 var LOCAL_LEARNERS_ADMINISTRATOR_API_KEY = '7d156b614b6d5c5e7d357e18151568';
 
 module.exports = function (app) {
-
     return {
         getProfile: getProfile,
         getEvents: getEvents,
-        postEvent: postEvent,
-        changeUserRole: changeUserRole
+        postEvent: postEvent
     }
 }
 
@@ -40,7 +38,7 @@ function getProfile(accessToken, callback) {
 }
 
 function getEvents(req, res) {
-    var defer = q.defer();
+    var defer = Q.defer();
 
     restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + LOCAL_LEARNERS_ADMINISTRATOR_API_KEY,
         function(data) {
@@ -63,82 +61,89 @@ function getEvents(req, res) {
 }
 
 function postEvent(req, res, event) {
-
     var defer = Q.defer();
 
-    if (!isEventValid(event)) {
-        defer.reject('Invalid event: ' + JSON.stringify(event))
-    }
+    if (!isEventValid(event)) defer.reject('Invalid event: ' + JSON.stringify(event))
 
-    var args = {
-        parameters: {
-            group_id: LOCAL_LEARNERS_GROUP_ID,
-            group_urlname: LOCAL_LEARNERS_GROUP_URLNAME,
-            name: event.name,
-            time: event.time
-        },
-        headers: {
-            Authorization: 'Bearer ' + req.session.accessToken
-            //'Content-Type': 'APPlication/x-www-form-urlencoded'
-        }
-    }
-
-
-
-    var url = MEETUP_API_ENDPOINT + '/event';
-
-    restClient.post(url, args,
-        function(createdEvent) {
-            console.log('createdEVent ', createdEvent);
-
-            if (createdEvent.problem) {
-                defer.reject(createdEvent);
-            } else {
-                defer.resolve(createdEvent);
+    ensureUserIsEventOrganizer(req, res).then(
+        function() {
+            var args = {
+                parameters: {
+                    group_id: LOCAL_LEARNERS_GROUP_ID,
+                    group_urlname: LOCAL_LEARNERS_GROUP_URLNAME,
+                    name: event.name,
+                    time: event.time
+                },
+                headers: {
+                    Authorization: 'Bearer ' + req.session.accessToken
+                }
             }
-        })
-        .on('error', function(err) {
-            defer.reject(err);
-        });
 
-//    defer.resolve(createFakeEvent());
+//            var url = MEETUP_API_ENDPOINT + '/event';
 
+            var url = 'https://api.meetup.com/2/event';
+
+
+                restClient.post(url, args,
+                function(createdEvent) {
+                    console.log('createdEVent ', createdEvent);
+
+                    if (createdEvent.problem) {
+                        defer.reject(createdEvent);
+                    } else {
+                        defer.resolve(createdEvent);
+                    }
+                })
+                .on('error', function(err) {
+                    defer.reject('Error posting event: ', err);
+                });
+
+        },
+        function() {
+            defer.reject('Error making user id: ', req.session.profile.mid, ' an event organizer');
+        }
+    );
 
     return defer.promise;
 }
 
-function changeUserRole(req, res, role) {
-    var defer = q.defer();
+function ensureUserIsEventOrganizer(req, res) {
+    var defer = Q.defer();
+    var args = {
+        headers: {
+            Authorization: 'Bearer ' + req.session.accessToken
+        }
+    };
+    var url = 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.session.profile.mid;
 
+    restClient.get(url, args, function(meetupProfile) {
 
+        if (meetupProfile.role == 'Event Organizer') {
+            defer.resolve();
+        } else {
+            promoteUserToEventOrganizer(req, res).then(defer.resolve, defer.reject);
+        }
+    });
+    return defer.promise;
+}
+
+function promoteUserToEventOrganizer(req, res) {
+    var defer = Q.defer();
     meetupAdministrator.getAdministratorAccessToken()
         .then(function (token) {
             var args = {
                 parameters: {
-                    add_role: role
+                    add_role: 'event_organizer'
                 },
                 headers: {
                     Authorization: 'Bearer ' + token
-                    //'Content-Type': 'APPlication/x-www-form-urlencoded'
                 }
             };
-
-            console.log('111 ', 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.session.profile.mid + '?&sign=true');
-
-            restClient.post('https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.session.profile.mid,
-                args, function (a, b, c) {
-                    console.log('a ', a);
-                    console.log('c ', c);
-
-                    defer.resolve();
-                }).on('error', function(err) {
-                    defer.reject(err);
-                });
-
-        })
-
+            var url = 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.session.profile.mid;
+            restClient.post(url, args, defer.resolve)
+                .on('error', defer.reject);
+        });
     return defer.promise;
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,8 +151,38 @@ function changeUserRole(req, res, role) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function isEventValid(event) {
-    if (!event) return false;
-    if (!event.name || event.name === '') return false;
-    //TODO: need to check event.time
-    return true;
+    return (
+        event &&
+        IsPopulatedString(event.name) &&
+        IsPopulatedNumber(event.time)
+    )
 }
+
+//function doGet(options) {
+//    var defer = Q.defer();
+//
+//
+//
+//    var args = {
+//        parameters: {}
+//    }
+//    var args = {
+//        parameters: {
+//            add_role: role
+//        },
+//        headers: {
+//            Authorization: 'Bearer ' + token
+//            //'Content-Type': 'APPlication/x-www-form-urlencoded'
+//        }
+//    };
+//
+//    if (!options.url || options.url === '') throw 'doGet url invalid';
+//
+//    if (options.parameters) args.parameters = options.parameters;
+//    if (options.headers) args.headers = options.headers;
+//
+//    if (!options.excludeAccessToken) {
+//        args.headers.Authorization = 'Bearer '
+//    }
+//    restClient.get(options.url, )
+//}

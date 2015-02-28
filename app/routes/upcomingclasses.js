@@ -28,14 +28,14 @@ module.exports = function (app) {
     });
 
     app.post('/upcomingclasses', function(req, res) {
-
         var upcomingClass = {
             name: req.body.name,
             category: req.body.category,
-            time: new Date(2015, 03, 01).getTime()
+            time: new Date(req.body.time).getTime()
         };
 
         if (!isUpcomingClassValid(upcomingClass)) {
+            //TODO: should send back 500
             return req.json({ error: 'Upcoming Class invalid' });
         }
 
@@ -44,22 +44,30 @@ module.exports = function (app) {
             time: upcomingClass.time
         }
 
-        meetupApi.postEvent(req, res, eventToPost).then(function (eventReturned) {
+        meetupApi.postEvent(req, res, eventToPost).then(
+            function (eventReturned) {
+                var eventToSave = {
+                    eventId: eventReturned.id,
+                    category: upcomingClass.category
+                };
+                db.setUpcomingClasses(eventToSave);
 
-            var eventToSave = {
-                eventId: eventReturned.id,
-                category: upcomingClass.category
-            };
-
-            db.setUpcomingClasses(eventToSave);
-        });
+                res.json(eventReturned);
+            },
+            function (err) {
+                //TODO: 500
+                res.json({err: err});
+            }
+        );
 
     });
 }
 
 function isUpcomingClassValid(upcomingClass) {
-    if ( !upcomingClass.name || upcomingClass.name === '' ) return false;
-    if ( !upcomingClass.category || upcomingClass.category === '' ) return false;
-    if ( !upcomingClass.time ) return false;
-    return true;
+    return (
+        IsPopulatedString(upcomingClass.name) &&
+        IsPopulatedString(upcomingClass.category) &&
+        IsPopulatedNumber(upcomingClass.time)
+    )
 }
+

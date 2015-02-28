@@ -15,6 +15,11 @@ localLearnersApp.factory('ClassesService', function ($http, UserProfile) {
                     categories.unshift({ name: 'All Categories', value: '' });
                     callback(categories);
                 });
-        }
+        },
+        postClass: postClass
+    }
+
+    function postClass(classToPost) {
+        return $http.post('/upcomingclasses', classToPost);
     }
 })
