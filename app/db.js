@@ -122,8 +122,13 @@ module.exports.addFakeEvent = function (fakeEvent) {
     fe.save(function (err, savedEvent, numberAffected) {
         if (err) {
             defer.reject('Can not save fakeEvent');
+        } else {
+            console.log('yo');
+            defer.resolve(savedEvent);
         }
-    })
+    });
+
+    return defer.promise;
 }
 
 function isValidFakeEvent(fakeEvent) {

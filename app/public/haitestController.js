@@ -8,7 +8,7 @@ localLearnersApp
 
             var now = new Date(2015,3,20);
             var classToPost = {
-                name: 'test class name ' + now.getTime(),
+                name: 'test class name',
                 category: 'Technology',
                 time: now
             };

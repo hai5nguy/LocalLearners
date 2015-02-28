@@ -79,10 +79,9 @@ function postEvent(req, res, event) {
                 }
             }
 
-//            var url = MEETUP_API_ENDPOINT + '/event';
+            var url = MEETUP_API_ENDPOINT + '/event';
 
-            var url = 'https://api.meetup.com/2/event';
-
+//            var url = 'https://api.meetup.com/2/event';
 
                 restClient.post(url, args,
                 function(createdEvent) {
