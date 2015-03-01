@@ -21,6 +21,7 @@ module.exports = function (mongoose) {
         visibility: String,
         status: String,
         maybe_rsvp_count: Number,
+        event_hosts: Array,
         utc_offset: Number,
         id: String,
         time: Date,

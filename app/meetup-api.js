@@ -28,8 +28,11 @@ function getProfile(accessToken, callback) {
 
     restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
         function (data) {
+
+            console.log('user data ', data.name);
             var profile = {
                 mid: data.id,
+                name: data.name,
                 thumb_link: data.photo ? data.photo.thumb_link : 'http://photos4.meetupstatic.com/img/noPhoto_50.png'
             };
             callback(profile);
@@ -40,14 +43,15 @@ function getProfile(accessToken, callback) {
 function getEvents(req, res) {
     var defer = Q.defer();
 
-    restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + LOCAL_LEARNERS_ADMINISTRATOR_API_KEY,
+    restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&fields=event_hosts&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + LOCAL_LEARNERS_ADMINISTRATOR_API_KEY,
         function(data) {
             var rawEvents = data.results;
             var events = [];
             for (var i = 0; i < rawEvents.length; i++) {
                 var e = {
                     eventId: rawEvents[i].id,
-                    name: rawEvents[i].name
+                    name: rawEvents[i].name,
+                    event_hosts: rawEvents[i].event_hosts
                 }
                 events.push(e);
             }

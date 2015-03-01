@@ -1,25 +1,36 @@
-localLearnersApp.factory('ClassesService', function ($http, UserProfile) {
+localLearnersApp.factory('ClassesService', function ($http, $q) {
     return {
-        getUpcomingClasses: function(callback) {
-            $http.get('/upcomingclasses').success(function(classes) {
-                callback(classes);
-            });
-        },
-        postUpcomingClasses: function(upcomingClass, callback) {
-            $http.post('/upcomingclasses', upcomingClass);
-        },
-        getCategories: function(callback) {
-            $http.get('/categories')
-                .success(function(categories) {
-                    categories = _.sortBy(categories, "name");
-                    categories.unshift({ name: 'All Categories', value: '' });
-                    callback(categories);
-                });
-        },
+        getUpcomingClasses: getUpcomingClasses,
+        postUpcomingClasses: postUpcomingClasses,
+        getCategories: getCategories,
         postClass: postClass
     }
 
+    function getUpcomingClasses(callback) {
+        $http.get('/upcomingclasses').success(function(classes) {
+            callback(classes);
+        });
+    }
+
+    function postUpcomingClasses(upcomingClass, callback) {
+        $http.post('/upcomingclasses', upcomingClass);
+    }
+
+    function getCategories() {
+        var defer = $q.defer();
+        $http.get('/categories').then(
+            function (response) {
+                defer.resolve(response.data);
+            },
+            function (err) {
+                defer.reject(err);
+            }
+        );
+        return defer.promise;
+    }
     function postClass(classToPost) {
         return $http.post('/upcomingclasses', classToPost);
     }
+
+
 })

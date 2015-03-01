@@ -6,6 +6,7 @@ var db = require('../db.js');
 module.exports = function (app) {
     app.get('/fakemeetupapi/events', function (req, res) {
         db.getFakeEvents(function(events) {
+            //must be sent back like this because node-rest-client is a little bitch
             res.writeHead(200, {"Content-Type": "application/json"});
             res.end(JSON.stringify({ results: events }));
         });
@@ -15,10 +16,16 @@ module.exports = function (app) {
 
         var id = getRandomInt(1e3, 1e4).toString();
 
+        console.log()
+
         var fakeEvent = {
             visibility: 'public',
             status: 'upcoming',
             maybe_rsvp_count: 0,
+            event_hosts: [{
+                member_name: req.session.profile.name,
+                member_id: req.session.profile.mid
+            }],
             utc_offset: -14400000,
             id: id,
             time: req.query.time,

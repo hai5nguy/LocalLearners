@@ -16,7 +16,7 @@ module.exports = function (app) {
             function() {
                 res.json({
                     error: 'Can not retrieve classes'
-                })
+                });
             });
 
     });

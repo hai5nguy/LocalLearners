@@ -3,14 +3,21 @@ localLearnersApp.directive('llUpcomingClasses', function() {
         restrict: 'E',
         replace: true,
         templateUrl: 'components/classes/upcomingclasses/upcomingClassesTemplate.html',
-        controller: function($scope, ClassesService) {
-            ClassesService.getCategories(function(categories) {
-                $scope.categories = categories;
-                $scope.selectedCategory = $scope.categories[0];
-            });
+        controller: function($scope, $rootScope, ClassesService) {
+            ClassesService.getCategories()
+            .then(
+                function (cats) {
+                    cats.unshift({ name: 'All Categories', value: '' });
+                    $scope.categories = cats;
+                    $scope.selectedCategory = $scope.categories[0];
+                },
+                function () {
+                    $scope.categories = [ { name: 'Error loading categories', value: '' }];
+                }
+            );
 
             ClassesService.getUpcomingClasses(function(upcomingClasses) {
-//                console.log('upcoming', upcomingClasses);
+                console.log('upcoming', upcomingClasses);
                 $scope.availClasses = upcomingClasses;
             });
 
