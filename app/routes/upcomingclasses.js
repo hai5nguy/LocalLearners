@@ -35,8 +35,7 @@ module.exports = function (app) {
         };
 
         if (!isUpcomingClassValid(upcomingClass)) {
-            //TODO: should send back 500
-            return res.json({ error: 'Upcoming Class invalid' });
+            serverError(res, { error: 'Upcoming Class invalid' });
         }
 
         var eventToPost = {
@@ -44,55 +43,45 @@ module.exports = function (app) {
             time: upcomingClass.time
         }
 
-        meetupApi.postEvent(req, res, eventToPost).then(
+        var createdEvent;
+        meetupApi.postEvent(req, res, eventToPost)
+        .then(
             function (r) {
                 var response = JSON.parse(r);
                 if (response && response.status === 'success') {
-                    var createdEvent = response.createdEvent;
-
-                    var categoryQuery = { name: upcomingClass.category };
-                    saveCreatedEventToDB(createdEvent, categoryQuery).then(
-                        function(savedEvent) {
-                            res.json(savedEvent);
-                        },
-                        function (err) {
-                            //todo: handle error
-                        }
-                    );
+                    createdEvent = response.createdEvent;
                 } else {
-                    res.json({err: r}); //todo: 500
+                    serverError(res, r);
                 }
             },
             function (err) {
-                //TODO: 500
-                res.json({err: err});
+                serverError(res, err);
             }
-        );
-
+        ).then(
+            function () {
+                var categoryQuery = { name: upcomingClass.category };
+                return db.getCategory(categoryQuery);
+            }
+        ).then(
+            function (category) {
+                var eventToSave = {
+                    eventId: createdEvent.id,
+                    category: category
+                };
+                return db.setUpcomingClasses(eventToSave);
+            },
+            function (err) {
+                serverError(res, err);
+            }
+        ).then(
+            function (savedEvent) {
+                res.json({ status: 'success', savedClass: savedEvent });
+            },
+            function (err) {
+                serverError(res, err);
+            }
+        )
     });
-}
-
-function saveCreatedEventToDB(eventToSave, categoryQuery) {
-    var defer = Q.defer();
-    db.getCategory(categoryQuery)
-    .then(
-        function (category) {
-            var eventToSave = {
-                eventId: eventToSave.id,
-                category: category
-            };
-            return db.setUpcomingClasses(eventToSave);
-        }
-    )
-    .then(
-        function (savedEvent) {
-            defer.resolve(savedEvent);
-        },
-        function (err) {
-            //todo: handle error
-        }
-    );
-    return defer.promise;
 }
 
 function isUpcomingClassValid(upcomingClass) {
@@ -103,3 +92,6 @@ function isUpcomingClassValid(upcomingClass) {
     )
 }
 
+function serverError(res, err) {
+    res.send(500, { error: err });
+}

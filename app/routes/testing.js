@@ -90,9 +90,7 @@ module.exports = function (app) {
     });
 
     app.get('/dbtest', function (req, res) {
-        db.getFakeEvents(function(events) {
-            res.json(events);
-        });
+        res.send(500, { blah: 'blah blah' });//.end(); json({blah: 'blah'});
     });
 
     app.get('/changeuserrole', function (req, res) {
