@@ -64,11 +64,19 @@ module.exports = function(grunt) {
 //        ]);
 //    });
 
-    grunt.registerTask('default', 'start up a local web server', function(target) {
+    grunt.registerTask('default', 'start up a local web server', function (target) {
         grunt.task.run([
             'express',
             'watch'
         ]);
     });
+
+    grunt.registerTask('withsass', 'local web server with sass watch', function (target) {
+        grunt.task.run([
+            'sass',
+            'express',
+            'watch'
+        ]);
+    })
 
 };

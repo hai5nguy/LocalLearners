@@ -2,7 +2,7 @@
 
     <h3 class="text-center">Create Your Class</h3>
 
-    <form class="form">
+    <form class="form class-creation-form">
         <div class="form-group">
             <label for="classTitle">Class Title</label>
             <input placeholder="Intro to Guitar" name="classTitle" type="text" class="form-control" ng-model="newClass.name">
@@ -65,10 +65,10 @@
                     </label>
                 </div>
             </div>
-            <div>
-                <img id="spinner" src="http://www.dhp11.com/foswiki/pub/Internal/2012-06-12/spinner.gif" ng-show="loading" style="height: 75px; width: 75px"></img>
+            <div class="col-md-2">
+                <img id="spinner" src="http://fontfeest.nl/img/spinner.gif" ng-show="loading"></img>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <button type="button" class="btn btn-default pull-right" ng-click="submit()">Submit</button>
             </div>
         </div>

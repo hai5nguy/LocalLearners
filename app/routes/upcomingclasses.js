@@ -36,7 +36,7 @@ module.exports = function (app) {
 
         if (!isUpcomingClassValid(upcomingClass)) {
             //TODO: should send back 500
-            return req.json({ error: 'Upcoming Class invalid' });
+            return res.json({ error: 'Upcoming Class invalid' });
         }
 
         var eventToPost = {
@@ -45,14 +45,23 @@ module.exports = function (app) {
         }
 
         meetupApi.postEvent(req, res, eventToPost).then(
-            function (eventReturned) {
-                var eventToSave = {
-                    eventId: eventReturned.id,
-                    category: upcomingClass.category
-                };
-                db.setUpcomingClasses(eventToSave);
+            function (r) {
+                var response = JSON.parse(r);
+                if (response && response.status === 'success') {
+                    var createdEvent = response.createdEvent;
 
-                res.json(eventReturned);
+                    var categoryQuery = { name: upcomingClass.category };
+                    saveCreatedEventToDB(createdEvent, categoryQuery).then(
+                        function(savedEvent) {
+                            res.json(savedEvent);
+                        },
+                        function (err) {
+                            //todo: handle error
+                        }
+                    );
+                } else {
+                    res.json({err: r}); //todo: 500
+                }
             },
             function (err) {
                 //TODO: 500
@@ -61,6 +70,29 @@ module.exports = function (app) {
         );
 
     });
+}
+
+function saveCreatedEventToDB(eventToSave, categoryQuery) {
+    var defer = Q.defer();
+    db.getCategory(categoryQuery)
+    .then(
+        function (category) {
+            var eventToSave = {
+                eventId: eventToSave.id,
+                category: category
+            };
+            return db.setUpcomingClasses(eventToSave);
+        }
+    )
+    .then(
+        function (savedEvent) {
+            defer.resolve(savedEvent);
+        },
+        function (err) {
+            //todo: handle error
+        }
+    );
+    return defer.promise;
 }
 
 function isUpcomingClassValid(upcomingClass) {

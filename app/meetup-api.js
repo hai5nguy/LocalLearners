@@ -85,7 +85,7 @@ function postEvent(req, res, event) {
 
                 restClient.post(url, args,
                 function(createdEvent) {
-                    console.log('createdEVent ', createdEvent);
+//                    console.log('createdEVent ', createdEvent);
 
                     if (createdEvent.problem) {
                         defer.reject(createdEvent);

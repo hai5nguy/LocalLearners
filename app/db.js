@@ -18,6 +18,23 @@ module.exports.getCategories = function (callback) {
         callback(data);
     });
 }
+module.exports.getCategory = function (query) {
+    var defer = Q.defer();
+    models.Category.find(query, function (err, data) {
+        if (err) {
+            defer.reject(err);
+        } else {
+            var firstCategory = {
+                name: data[0].name,
+                value: data[0].value,
+                imageUrl: data[0].imageUrl
+            }
+//            console.log('category ', firstCategory);
+            defer.resolve(firstCategory);
+        }
+    });
+    return defer.promise;
+}
 
 module.exports.insertCategories = function (categories) {
     for (var i = 0; i < categories.length; i++) {
@@ -80,14 +97,14 @@ module.exports.addCategoriesToEvents = function (events) {
 function createUpcomingClass(upcomingClass) {
     var u = new models.UpcomingClass(upcomingClass);
     u.save(function(err, u, numberAffected) {
-//        console.log('db createUpcomingClass ', JSON.stringify(u), ' 4444 ', JSON.stringify(upcomingClass));
+        console.log('db createUpcomingClass ', JSON.stringify(u));
         //TODO: handle errors
     });
 }
 
 function updateUpcomingClass(upcomingClass) {
     models.UpcomingClass.update({ _id: upcomingClass._id }, upcomingClass, {}, function(err, numberAffected) {
-//        console.log('udapte', err, 'number ', numberAffected);
+        console.log('db updateUpcomingClass ', upcomingClass);
     });
 }
 
@@ -123,7 +140,6 @@ module.exports.addFakeEvent = function (fakeEvent) {
         if (err) {
             defer.reject('Can not save fakeEvent');
         } else {
-            console.log('yo');
             defer.resolve(savedEvent);
         }
     });

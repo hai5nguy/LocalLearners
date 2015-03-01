@@ -15,8 +15,6 @@ module.exports = function (app) {
 
         var id = getRandomInt(1e3, 1e4).toString();
 
-//        console.log('11 ', req);
-
         var fakeEvent = {
             visibility: 'public',
             status: 'upcoming',
