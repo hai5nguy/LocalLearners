@@ -17,6 +17,15 @@ module.exports = function (mongoose) {
         }
     });
 
+    var RequestedClassSchema = new Schema({
+        name: String,
+        category: {
+            name: String,
+            value: String,
+            imageUrl: String
+        }
+    });
+
     var FakeEventSchema = new Schema({
         visibility: String,
         status: String,
@@ -53,6 +62,7 @@ module.exports = function (mongoose) {
         Category: mongoose.model('Category', CategorySchema),
         UpcomingClass: mongoose.model('UpcomingClass', UpcomingClassSchema),
         FakeEvent: mongoose.model('FakeEvent', FakeEventSchema),
-        Member: mongoose.model('Member', MemberSchema)
+        Member: mongoose.model('Member', MemberSchema),
+        RequestedClass: mongoose.model('RequestedClass', RequestedClassSchema)
     }
 }

@@ -2,12 +2,10 @@ localLearnersApp.directive('llClassCreationForm', function() {
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: 'components/teach/classcreationform/classCreationFormTemplate.html',
+        templateUrl: 'components/classes/classcreationform/classCreationFormTemplate.html',
         controller: function($scope, ClassesService) {
             $scope.loading = false;
             $scope.newClass = {};
-            $scope.categories = [];
-
 
             $scope.submit = function() {
                 //todo: validation
@@ -16,7 +14,7 @@ localLearnersApp.directive('llClassCreationForm', function() {
                 var now = new Date(2015,3,20);
                 var classToPost = {
                     name: $scope.newClass.name,
-                    categoryName: $scope.selectedCategory.name,
+                    categoryName: $scope.newClass.category.name,
                     time: now
                 };
 
@@ -31,17 +29,13 @@ localLearnersApp.directive('llClassCreationForm', function() {
                 });
             };
 
-            ClassesService.getCategories()
-                .then(
-                function (cats) {
-                    cats.unshift({ name: '(Select a category)', value: '' });
-                    $scope.categories = cats;
-                    $scope.selectedCategory = $scope.categories[0];
-                },
-                function () {
-                    $scope.categories = [ { name: 'Error loading categories', value: '' }];
-                }
-            );
+            ClassesService.getCategories().then(function (categories) {
+                categories.unshift({ name: '(Select a category)', value: '' });
+                $scope.categories = categories;
+                $scope.newClass.category = $scope.categories[0];
+            }, function () {
+                $scope.categories = [ { name: 'Error loading categories', value: '' }];
+            });
 
         }
     }

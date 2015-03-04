@@ -21,6 +21,9 @@ module.exports = function(app) {
         getUpcomingClasses: getUpcomingClasses,
         upsertUpcomingClasses: upsertUpcomingClasses,
         addCategoriesToEvents: addCategoriesToEvents,
+        addRequestedClass: addRequestedClass,
+        getRequestedClasses: getRequestedClasses,
+
 
         //for development
         insertFakeEvents: insertFakeEvents,
@@ -145,6 +148,26 @@ function addCategoriesToEvents(events) {
     return defer.promise;
 }
 
+function addRequestedClass(requested) {
+    var defer = Q.defer();
+    var r = new models.RequestedClass(requested);
+    r.save(function(err, r, numberAffected) {
+        console.log('db.addRequestedClass ', JSON.stringify(r));
+        if (err) { defer.reject(err) }
+        else { defer.resolve(r) }
+    });
+    return defer.promise;
+}
+
+function getRequestedClasses() {
+    var defer = Q.defer();
+//    var q = (filter && filter.eventId) ? { eventId: filter.eventId } : {};
+    models.RequestedClass.find({}, function(err, requestedClasses) {
+        if (err) { defer.reject(err) }
+        else { defer.resolve(requestedClasses) }
+    });
+    return defer.promise;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Private Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
