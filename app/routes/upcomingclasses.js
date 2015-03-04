@@ -1,6 +1,6 @@
 var Q = require('../../node_modules/q');
 var meetupApi = require('../meetup-api.js')(THE_APP);
-var db = require('../db.js');
+var db = require('../db.js')(THE_APP);
 
 module.exports = function (app) {
 
@@ -10,7 +10,7 @@ module.exports = function (app) {
                 return db.addCategoriesToEvents(events);
             })
             .then(function (eventsWithCategories) {
-//               console.log('eventsWithCategories ', eventsWithCategories.length);
+//               console.log('eventsWithCategories ', JSON.stringify(eventsWithCategories));
                 res.json(eventsWithCategories);
             },
             function() {
@@ -30,68 +30,64 @@ module.exports = function (app) {
     app.post('/upcomingclasses', function(req, res) {
         var upcomingClass = {
             name: req.body.name,
-            category: req.body.category,
+            categoryName: req.body.categoryName,
             time: new Date(req.body.time).getTime()
         };
 
-        if (!isUpcomingClassValid(upcomingClass)) {
-            serverError(res, { error: 'Upcoming Class invalid' });
-        }
+        if (isUpcomingClassValid(upcomingClass)) {
+            var eventToPost = {
+                name: upcomingClass.name,
+                time: upcomingClass.time
+            };
 
-        var eventToPost = {
-            name: upcomingClass.name,
-            time: upcomingClass.time
-        }
+            meetupApi.postEvent(req, res, eventToPost).then(function (r) {
 
-        var createdEvent;
-        meetupApi.postEvent(req, res, eventToPost)
-        .then(
-            function (r) {
                 var response = JSON.parse(r);
                 if (response && response.status === 'success') {
-                    createdEvent = response.createdEvent;
+                    var createdEvent = response.createdEvent;
+
+                    db.getCategory({ name: upcomingClass.categoryName }).then(function (category) {
+
+                        var eventToSave = {
+                            eventId: createdEvent.id,
+                            category: category
+                        };
+
+                        db.addUpcomingClass(eventToSave).then(function (savedClass) {
+
+//                            console.log('/upcomingclasses savedClass ', JSON.stringify(savedClass));
+                            res.json({ status: 'success', savedClass: savedClass });
+
+                        }, function (err) {
+                            serverError(res, err);
+                        });
+
+                    }, function (err) {
+                        serverError(res, err);
+                    });
+
                 } else {
                     serverError(res, r);
                 }
-            },
-            function (err) {
+
+            }, function (err) {
                 serverError(res, err);
-            }
-        ).then(
-            function () {
-                var categoryQuery = { name: upcomingClass.category };
-                return db.getCategory(categoryQuery);
-            }
-        ).then(
-            function (category) {
-                var eventToSave = {
-                    eventId: createdEvent.id,
-                    category: category
-                };
-                return db.setUpcomingClasses(eventToSave);
-            },
-            function (err) {
-                serverError(res, err);
-            }
-        ).then(
-            function (savedEvent) {
-                res.json({ status: 'success', savedClass: savedEvent });
-            },
-            function (err) {
-                serverError(res, err);
-            }
-        )
+            });
+
+        } else {
+            serverError(res, { error: 'Upcoming Class invalid' });
+        }
     });
 }
 
 function isUpcomingClassValid(upcomingClass) {
     return (
         IsPopulatedString(upcomingClass.name) &&
-        IsPopulatedString(upcomingClass.category) &&
+        IsPopulatedString(upcomingClass.categoryName) &&
         IsPopulatedNumber(upcomingClass.time)
     )
 }
 
 function serverError(res, err) {
-    res.send(500, { error: err });
+    res.status(500).send({ error: err });
 }

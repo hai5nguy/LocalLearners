@@ -9,16 +9,16 @@ localLearnersApp
             var now = new Date(2015,3,20);
             var classToPost = {
                 name: 'test class name',
-                category: 'Technology',
+                categoryName: 'Technology',
                 time: now
             };
 
-            ClassesService.postClass(classToPost).then(
-                function (response) {
+            ClassesService.postClass(classToPost).then(function (response) {
+
                     $scope.loading = false;
                     $scope.result = response.data;
-                },
-                function (error) {
+
+                },function (error) {
 
                 }
             );

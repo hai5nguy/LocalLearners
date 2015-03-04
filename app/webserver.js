@@ -7,7 +7,9 @@ require('./environmentals.js');
 var express = require('express');
 global.THE_APP = express();
 
+require('./db.js')(THE_APP);
 require('./meetup-api.js')(THE_APP);
+require('./meetup-sync.js')(THE_APP);
 require('./authenticate.js')(THE_APP);
 require('./routes/routes.js')(THE_APP);
 

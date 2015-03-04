@@ -1,5 +1,5 @@
 var Q = require('../../node_modules/q');
-var db = require('../db.js');
+var db = require('../db.js')(THE_APP);
 var meetupApi = require('../meetup-api.js')(THE_APP);
 var meetupAdministrator;
 

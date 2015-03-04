@@ -16,21 +16,19 @@ localLearnersApp.directive('llClassCreationForm', function() {
                 var now = new Date(2015,3,20);
                 var classToPost = {
                     name: $scope.newClass.name,
-                    category: $scope.selectedCategory.name,
+                    categoryName: $scope.selectedCategory.name,
                     time: now
                 };
 
-                console.log('classtopost ', classToPost);
+//                console.log('classtopost ', classToPost);
 
-                ClassesService.postClass(classToPost).then(
-                    function (response) {
-                        $scope.loading = false;
-                        $scope.message = response.data;
-                    },
-                    function (error) {
-
-                    }
-                );
+                ClassesService.postClass(classToPost).then(function (response) {
+                    $scope.loading = false;
+                    $scope.message = response.data;
+                }, function (error) {
+                    $scope.loading = false;
+                    $scope.message = error;
+                });
             };
 
             ClassesService.getCategories()

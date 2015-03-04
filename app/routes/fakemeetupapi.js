@@ -1,6 +1,6 @@
 //var Q = require('../../node_modules/q');
 //var meetupApi = require('../meetup-api.js');
-var db = require('../db.js');
+var db = require('../db.js')(THE_APP);
 
 
 module.exports = function (app) {
@@ -23,8 +23,8 @@ module.exports = function (app) {
             status: 'upcoming',
             maybe_rsvp_count: 0,
             event_hosts: [{
-                member_name: req.session.profile.name,
-                member_id: req.session.profile.mid
+                member_name: 'fake user',
+                member_id: 'fake mid'
             }],
             utc_offset: -14400000,
             id: id,

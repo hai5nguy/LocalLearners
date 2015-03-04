@@ -40,7 +40,7 @@ function getProfile(accessToken, callback) {
     );
 }
 
-function getEvents(req, res) {
+function getEvents() {
     var defer = Q.defer();
 
     restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&fields=event_hosts&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + LOCAL_LEARNERS_ADMINISTRATOR_API_KEY,

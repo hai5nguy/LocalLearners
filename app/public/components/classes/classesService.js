@@ -12,8 +12,8 @@ localLearnersApp.factory('ClassesService', function ($http, $q) {
         });
     }
 
-    function postUpcomingClasses(upcomingClass, callback) {
-        $http.post('/upcomingclasses', upcomingClass);
+    function postUpcomingClasses(upcomingClass) {
+        return $http.post('/upcomingclasses', upcomingClass);
     }
 
     function getCategories() {
@@ -28,6 +28,7 @@ localLearnersApp.factory('ClassesService', function ($http, $q) {
         );
         return defer.promise;
     }
+
     function postClass(classToPost) {
         return $http.post('/upcomingclasses', classToPost);
     }

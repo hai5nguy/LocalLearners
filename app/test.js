@@ -5,9 +5,17 @@ function step1(step1arg) {
     var defer = Q.defer();
 
     setTimeout(function() {
-        console.log('step1');
-        defer.resolve('returnfromstep1')
-    }, 3000);
+        console.log('step 1');
+
+        for (var i = 0; i < 10; i++ ) {
+            console.log('i: ', i);
+            if (i > 5) {
+                defer.reject();
+                break;
+            }
+        }
+        defer.resolve();
+    }, 1000);
 
     return defer.promise;
 }
@@ -30,21 +38,16 @@ function step3(step3arg) {
     return defer.promise;
 }
 
-var blah;
-step1().then(
-    function(a) {
-        blah = a;
-    },
-    function() {
+function s(num) { console.log('success ', num) }
+function f(num) { console.log('fail ', num) }
 
-    }
-).then(
-    function() {
-        step2(blah);
-        console.log('success 2');
-    },
-    function () {
-        console.log('fail 2');
-    }
-)
+step1().then(function() {
+    s(1);
+}, function() {
+    f(1);
+});
+
+
+
+
 

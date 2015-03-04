@@ -2,23 +2,47 @@ var _ = require('underscore');
 var Q = require('q');
 var mongoose = require('mongoose');
 var models = require('./db-models.js')(mongoose);
-
-//mongoose.set('debug', true);
-
-mongoose.connect('mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa');
-
 var db = mongoose.connection;
 
+//mongoose.set('debug', true);
+mongoose.connect('mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa');
 db.once('open', function() {
     console.log('Connected to mongolab, database ready.');
 });
 
-module.exports.getCategories = function (callback) {
-    models.Category.find({}, function(err, data) {
-        callback(data);
-    });
+module.exports = function(app) {
+
+    return {
+        getCategories: getCategories,
+        getCategory: getCategory,
+        insertCategories: insertCategories,
+        addUpcomingClass: addUpcomingClass,
+        removeUpcomingClasses: removeUpcomingClasses,
+        getUpcomingClasses: getUpcomingClasses,
+        upsertUpcomingClasses: upsertUpcomingClasses,
+        addCategoriesToEvents: addCategoriesToEvents,
+
+        //for development
+        insertFakeEvents: insertFakeEvents,
+        getFakeEvents: getFakeEvents,
+        addFakeEvent: addFakeEvent
+    }
 }
-module.exports.getCategory = function (query) {
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Public Functions
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function getCategories(callback) {
+    var defer = Q.defer();
+    models.Category.find({}, function(err, categories) {
+        if (err) { defer.reject(err) }
+        else { defer.resolve(categories) }
+    });
+    return defer.promise;
+}
+
+function getCategory(query) {
     var defer = Q.defer();
     models.Category.find(query, function (err, data) {
         if (err) {
@@ -36,7 +60,7 @@ module.exports.getCategory = function (query) {
     return defer.promise;
 }
 
-module.exports.insertCategories = function (categories) {
+function insertCategories(categories) {
     for (var i = 0; i < categories.length; i++) {
         var newCategory = new models.Category(categories[i]);
         newCategory.save(function (err, category, numberAffected) {
@@ -48,24 +72,49 @@ module.exports.insertCategories = function (categories) {
     }
 }
 
-
-
-module.exports.getUpcomingClasses = getUpcomingClasses;
-function getUpcomingClasses(filter, callback) {
-    if (!filter) {
-        models.UpcomingClass.find({}, function(err, data) {
-            callback(data);
-        });
-    }
-    else if (filter.eventId) {
-        models.UpcomingClass.find({ eventId: filter.eventId }, function(err, data) {
-            callback(data);
-        });
-    }
+function addUpcomingClass(upcomingClass) {
+    var defer = Q.defer();
+    var u = new models.UpcomingClass(upcomingClass);
+    u.save(function(err, u, numberAffected) {
+//        console.log('db.addUpcomingClass ', JSON.stringify(u));
+        if (err) { defer.reject(err) }
+        else { defer.resolve(u) }
+    });
+    return defer.promise;
+}
+function removeUpcomingClasses(upcomingClasses) {
+    var defer = Q.defer();
+    var ids = _.pluck(upcomingClasses, 'eventId');
+    models.UpcomingClass.remove({ eventId: { $in: ids }}, function (err, nRemoved, unknown) {
+        if (err) { defer.reject(err) }
+        else { defer.resolve() }
+    });
+    return defer.promise;
 }
 
-module.exports.setUpcomingClasses = function(upcomingClass) {
-    getUpcomingClasses({ eventId: upcomingClass.eventId }, function(oldClass) {
+function getUpcomingClasses(filter) {
+    var defer = Q.defer();
+    var q = (filter && filter.eventId) ? { eventId: filter.eventId } : {};
+    models.UpcomingClass.find(q, function(err, upcomingClasses) {
+        if (err) { defer.reject(err) }
+        else { defer.resolve(upcomingClasses) }
+    });
+    return defer.promise;
+}
+
+function upsertUpcomingClasses(upcomingClass) {
+    var defer = Q.defer();
+
+    var classFound;
+    getUpcomingClasses({ eventId: upcomingClass.eventId })
+    .then(
+        function (c) {
+            classFound = c
+        },
+        function (err) {
+            defer.reject()
+        }
+            , function(oldClass) {
         if (IsEmptyNullUndefined(oldClass)) {
             createUpcomingClass(upcomingClass);
         }
@@ -73,10 +122,12 @@ module.exports.setUpcomingClasses = function(upcomingClass) {
             upcomingClass._id = oldClass[0]._id;
             updateUpcomingClass(upcomingClass);
         }
+        defer.resolve()
     });
+    return
 }
 
-module.exports.addCategoriesToEvents = function (events) {
+function addCategoriesToEvents(events) {
     var defer = Q.defer();
 
     var eventIds = _.pluck(events, 'eventId');
@@ -94,25 +145,37 @@ module.exports.addCategoriesToEvents = function (events) {
     return defer.promise;
 }
 
-function createUpcomingClass(upcomingClass) {
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Private Functions
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function insertUpcomingClass(upcomingClass) {
+    var defer = Q.defer();
     var u = new models.UpcomingClass(upcomingClass);
     u.save(function(err, u, numberAffected) {
-        console.log('db createUpcomingClass ', JSON.stringify(u));
-        //TODO: handle errors
+        console.log('db insertUpcomingClass ', JSON.stringify(u));
+        if (err) { defer.reject(err) }
+        else { defer.resolve(u) }
     });
+    return defer.promise;
 }
 
 function updateUpcomingClass(upcomingClass) {
+    var defer = Q.defer();
     models.UpcomingClass.update({ _id: upcomingClass._id }, upcomingClass, {}, function(err, numberAffected) {
         console.log('db updateUpcomingClass ', upcomingClass);
+        if (err) { defer.reject(err) }
+        else { defer.resolve(upcomingClass) }
     });
+    return defer.promise;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //for local development
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports.insertFakeEvents = function (fakeEvents) {
+function insertFakeEvents(fakeEvents) {
     for (var i = 0; i < fakeEvents.length; i++) {
         var newEvent = new models.FakeEvent(fakeEvents[i]);
         newEvent.save(function (err, fakeEvent, numberAffected) {
@@ -123,12 +186,14 @@ module.exports.insertFakeEvents = function (fakeEvents) {
         });
     }
 }
-module.exports.getFakeEvents = function (callback) {
+
+function getFakeEvents(callback) {
     models.FakeEvent.find({}, function(err, events) {
         callback(events);
     });
 }
-module.exports.addFakeEvent = function (fakeEvent) {
+
+function addFakeEvent(fakeEvent) {
     var defer = Q.defer();
 
     if (!isValidFakeEvent(fakeEvent)) {

@@ -12,12 +12,12 @@ localLearnersApp.directive('llUpcomingClasses', function() {
                     $scope.selectedCategory = $scope.categories[0];
                 },
                 function () {
-                    $scope.categories = [ { name: 'Error loading categories', value: '' }];
+                    $scope.categories = [{ name: 'Error loading categories', value: '' }];
                 }
             );
 
             ClassesService.getUpcomingClasses(function(upcomingClasses) {
-                console.log('upcoming', upcomingClasses);
+//                console.log('upcoming', upcomingClasses);
                 $scope.availClasses = upcomingClasses;
             });
 
