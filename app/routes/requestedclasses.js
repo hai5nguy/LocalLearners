@@ -13,22 +13,6 @@ module.exports = function (app) {
             serverError(res, err);
         });
 
-
-
-//        meetupApi.getEvents(req, res)
-//            .then(function(events) {
-//                return db.addCategoriesToEvents(events);
-//            })
-//            .then(function (eventsWithCategories) {
-////               console.log('eventsWithCategories ', JSON.stringify(eventsWithCategories));
-//                res.json(eventsWithCategories);
-//            },
-//            function() {
-//                res.json({
-//                    error: 'Can not retrieve classes'
-//                });
-//            });
-
     });
 
 //    app.get('/requestedclasses/:id', function (req, res) {
@@ -40,7 +24,9 @@ module.exports = function (app) {
     app.post('/requestedclasses', function(req, res) {
         var requestedClass = {
             name: req.body.name,
-            categoryName: req.body.categoryName
+            categoryName: req.body.categoryName,
+            category: {},
+            interestedMembers: []
         };
 
         if (isRequestedClassValid(requestedClass)) {
@@ -49,6 +35,7 @@ module.exports = function (app) {
 
                 delete requestedClass.categoryName;
                 requestedClass.category = category;
+                requestedClass.interestedMembers.push(req.session.profile);
 
                 db.addRequestedClass(requestedClass).then(function (savedRequested) {
 //                    console.log('/requestedclasses savedrequested ', JSON.stringify(savedRequested));

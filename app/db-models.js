@@ -23,7 +23,8 @@ module.exports = function (mongoose) {
             name: String,
             value: String,
             imageUrl: String
-        }
+        },
+        interestedMembers: Array
     });
 
     var FakeEventSchema = new Schema({
