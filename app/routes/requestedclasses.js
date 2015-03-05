@@ -7,7 +7,7 @@ module.exports = function (app) {
     app.get('/requestedclasses', function (req, res) {
 
         db.getRequestedClasses().then(function (requestedClasses) {
-            console.log('/requestedclasses requestedClasses ', JSON.stringify(requestedClasses));
+            //console.log('/requestedclasses requestedClasses ', JSON.stringify(requestedClasses));
             res.json(requestedClasses);
         }, function (err) {
             serverError(res, err);

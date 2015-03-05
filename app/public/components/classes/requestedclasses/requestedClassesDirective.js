@@ -4,27 +4,18 @@ localLearnersApp.directive('llRequestedClasses', function() {
         replace: true,
         templateUrl: 'components/classes/requestedclasses/requestedClassesTemplate.html',
         controller: function($scope, $rootScope, ClassesService) {
-//            ClassesService.getCategories()
-//                .then(
-//                function (cats) {
-//                    cats.unshift({ name: 'All Categories', value: '' });
-//                    $scope.categories = cats;
-//                    $scope.selectedCategory = $scope.categories[0];
-//                },
-//                function () {
-//                    $scope.categories = [{ name: 'Error loading categories', value: '' }];
-//                }
-//            );
-//
-//            ClassesService.getUpcomingClasses(function(upcomingClasses) {
-////                console.log('upcoming', upcomingClasses);
-//                $scope.availClasses = upcomingClasses;
-//            });
-
-            console.log('underscore ', _);
-
             ClassesService.getRequestedClasses().then(function(requestedClasses) {
-                $scope.requestedClasses = requestedClasses;
+
+                var requestedGroup = _.groupBy(requestedClasses, function (r) { return r.category.name });
+
+                _.each(requestedGroup, function(group, i) {
+                    requestedGroup[i] = _.first(
+                        _.sortBy(group, function (r) {
+                            return r.interestedMembers.length;
+                        }), 4);
+                });
+
+                $scope.requestedGroup = requestedGroup;
             }, function (err) {
                 //todo: handle errors
                 console.log('requestedclassesdirective error');
