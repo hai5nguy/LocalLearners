@@ -35,16 +35,12 @@ module.exports = function(grunt) {
                     script: 'APP/webserver.js'
                 }
             }
-        },
-        'node-inspector': {
-            dev: {}
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-express-server');
-    grunt.loadNpmTasks('grunt-node-inspector');
 
 //    grunt.registerTask('default', ['sass:dist', 'watch']);
 //
