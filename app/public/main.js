@@ -85,8 +85,9 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ngRoute
         $locationProvider.html5Mode(true);
 
     }).constant('EVENTS', {
-        searchShortcutKeyPressed: 'search-shortcut-key-pressed',
+        searchCommencing: 'search-commencing',
         searchFilterUpdated: 'search-filter-updated',
+        searchShortcutKeyPressed: 'search-shortcut-key-pressed',
         authLoginSuccess: 'auth-login-success',
         authLoginFailed: 'auth-login-failed'
     });

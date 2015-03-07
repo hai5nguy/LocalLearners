@@ -1,4 +1,9 @@
 localLearnersApp.factory('ClassesService', function ($http, $q) {
+
+    const _UPCOMING_CLASSES_TTL = 60000;
+
+    var upcomingClassesPromise = null;
+
     return {
         getUpcomingClasses: getUpcomingClasses,
         postUpcomingClasses: postUpcomingClasses,
@@ -9,13 +14,21 @@ localLearnersApp.factory('ClassesService', function ($http, $q) {
     }
 
     function getUpcomingClasses() {
-        var defer = $q.defer();
-        $http.get('/upcomingclasses').then(function(response) {
-            defer.resolve(response.data);
-        }, function (err) {
-            defer.reject(err);
-        });
-        return defer.promise;
+        var now = new Date();
+        if (!upcomingClassesPromise || now - upcomingClassesPromise.lastUpdated > _UPCOMING_CLASSES_TTL) {
+            var defer = $q.defer();
+            $http.get('/upcomingclasses').then(function (response) {
+                defer.resolve(response.data);
+            }, function (err) {
+                defer.reject(err);
+            });
+            upcomingClassesPromise = defer.promise;
+            upcomingClassesPromise.lastUpdated = new Date();
+            //console.log('guc new');
+        } else {
+            //console.log('guc using old');                
+        }
+        return upcomingClassesPromise;
     }
 
     function postUpcomingClasses(upcomingClass) {

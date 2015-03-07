@@ -4,8 +4,16 @@ localLearnersApp.controller('HeaderController', function($scope, $rootScope, EVE
     $scope.$watch('searchText', function(newSearchText, originalSearchText) {
         $rootScope.$emit(EVENTS.searchFilterUpdated, newSearchText);
     });
+    
+    var searchBox = $('#headerSearchBox');
 
     $rootScope.$on(EVENTS.searchShortcutKeyPressed, function () {
-        $('#headerSearchBox').val('').focus();
+        searchBox.val('');
+        searchBox.focus();
     });
+
+    $scope.searchBoxOnFocus = function () {
+        searchBox.select();
+        $rootScope.$emit(EVENTS.searchCommencing);
+    }
 });

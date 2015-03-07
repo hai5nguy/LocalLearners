@@ -8,15 +8,24 @@ localLearnersApp.directive('llMainSearch', function() {
                 name: ''
             };
 
-            $rootScope.$on(EVENTS.searchFilterUpdated, function(event, searchText) {
+            $rootScope.$on(EVENTS.searchCommencing, function () {
+                updateSearchDate();
+            });
+
+            $rootScope.$on(EVENTS.searchFilterUpdated, function (event, searchText) {
                 $scope.search.name = searchText;
             });
 
-            ClassesService.getUpcomingClasses().then(function(upcomingClasses) {
-                $scope.upcomingClasses = upcomingClasses;
-            }, function (err) {
-                console.log('mainsearchtempate error: ', err);
-            });
+            function updateSearchDate() {
+                ClassesService.getUpcomingClasses().then(function(upcomingClasses) {
+                    $scope.upcomingClasses = upcomingClasses;
+                }, function (err) {
+                    console.log('mainsearchtempate error: ', err);
+                });
+            }
+
         }
     }
+
+
 });

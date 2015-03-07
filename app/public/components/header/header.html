@@ -31,7 +31,8 @@
           <div class="form-group">
             <input  type="hidden" name="output" value="googleabout" />
             <input  type="hidden" name="sitesearch" value="locallearners.net" />
-            <input  type="text"   name="q" class="headerSearchBox form-control" placeholder="Click or type / to Search" ng-model="searchText" id="headerSearchBox" autocomplete="off" />
+            <input  type="text"   name="q" class="headerSearchBox form-control" placeholder="Click or type / to Search"
+                ng-model="searchText" id="headerSearchBox" autocomplete="off" ng-focus="searchBoxOnFocus()" />
             <!--<button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-search" title="Submit"></span></button>-->
           </div>
         </form>
