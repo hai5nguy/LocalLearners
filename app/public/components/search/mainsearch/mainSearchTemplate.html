@@ -1,0 +1,6 @@
+<div id="main-search" ng-show="(search.name.length >= 2)">
+    <input type="hidden" ng-model="search.name"></input>
+    <div ng-repeat="upcomingClass in upcomingClasses | filter:search">
+        <div>{{upcomingClass.name}}</div>
+    </div>
+</div>

@@ -84,8 +84,9 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ngRoute
 
         $locationProvider.html5Mode(true);
 
-    })
-    .constant('AUTH_EVENTS', {
-        loginSuccess: 'auth-login-success',
-        loginFailed: 'auth-login-failed'
+    }).constant('EVENTS', {
+        searchShortcutKeyPressed: 'search-shortcut-key-pressed',
+        searchFilterUpdated: 'search-filter-updated',
+        authLoginSuccess: 'auth-login-success',
+        authLoginFailed: 'auth-login-failed'
     });

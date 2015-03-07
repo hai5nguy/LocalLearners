@@ -1,11 +1,11 @@
-localLearnersApp.factory('AuthenticationService', function($http, $rootScope, UserProfile, AUTH_EVENTS) {
+localLearnersApp.factory('AuthenticationService', function($http, $rootScope, UserProfile, EVENTS) {
 
     function CheckToSeeIfUserIsLoggedIn() {
         return $http.get('/profile').success(function(profile) {
 
             UserProfile.create(profile);
             if (!!UserProfile.mid) {
-                $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                $rootScope.$broadcast(EVENTS.authLoginSuccess);
             }
         });
     }

@@ -8,10 +8,14 @@ localLearnersApp.factory('ClassesService', function ($http, $q) {
         getRequestedClasses: getRequestedClasses
     }
 
-    function getUpcomingClasses(callback) {
-        $http.get('/upcomingclasses').success(function(classes) {
-            callback(classes);
+    function getUpcomingClasses() {
+        var defer = $q.defer();
+        $http.get('/upcomingclasses').then(function(response) {
+            defer.resolve(response.data);
+        }, function (err) {
+            defer.reject(err);
         });
+        return defer.promise;
     }
 
     function postUpcomingClasses(upcomingClass) {
@@ -20,14 +24,11 @@ localLearnersApp.factory('ClassesService', function ($http, $q) {
 
     function getCategories() {
         var defer = $q.defer();
-        $http.get('/categories').then(
-            function (response) {
-                defer.resolve(response.data);
-            },
-            function (err) {
-                defer.reject(err);
-            }
-        );
+        $http.get('/categories').then(function (response) {
+            defer.resolve(response.data);
+        },function (err) {
+            defer.reject(err);
+        });
         return defer.promise;
     }
 

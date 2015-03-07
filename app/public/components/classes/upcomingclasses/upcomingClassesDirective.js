@@ -16,8 +16,7 @@ localLearnersApp.directive('llUpcomingClasses', function() {
                 }
             );
 
-            ClassesService.getUpcomingClasses(function(upcomingClasses) {
-//                console.log('upcoming', upcomingClasses);
+            ClassesService.getUpcomingClasses().then(function(upcomingClasses) {
                 $scope.availClasses = upcomingClasses;
             });
 

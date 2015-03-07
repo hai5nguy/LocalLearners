@@ -10,7 +10,7 @@ module.exports = function (app) {
                 return db.addCategoriesToEvents(events);
             })
             .then(function (eventsWithCategories) {
-//               console.log('eventsWithCategories ', JSON.stringify(eventsWithCategories));
+               //console.log('eventsWithCategories ', JSON.stringify(eventsWithCategories));
                 res.json(eventsWithCategories);
             },
             function() {

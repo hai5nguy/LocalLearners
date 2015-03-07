@@ -8195,6 +8195,7 @@ header li:last-of-type {
 
 .navbar {
   border-radius: 0px;
+  margin-bottom: 0px;
 }
 .navbar .dropdown img {
   height: 38px;
@@ -8239,6 +8240,12 @@ header li:last-of-type {
 .navbar-form {
   margin-right: 0px;
   margin-left: 0px;
+}
+
+#main-search {
+  position: absolute;
+  top: 60px;
+  background: orange;
 }
 
 @font-face {

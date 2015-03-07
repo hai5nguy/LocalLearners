@@ -1,4 +1,4 @@
-localLearnersApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationService, AUTH_EVENTS, UserProfile) {
+localLearnersApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScope, AuthenticationService, EVENTS, UserProfile) {
 
     var useTemplate = 'components/header/profile/profile.html';
 
@@ -52,7 +52,7 @@ localLearnersApp.directive('llUserProfile', function(MeetupProfileSvc, $rootScop
 
             //$scope.userProfile = AuthenticationService.getUser();
 
-            $rootScope.$on(AUTH_EVENTS.loginSuccess, function(event, data) {
+            $rootScope.$on(EVENTS.authLoginSuccess, function(event, data) {
                 //console.log('event ', event);
                 //console.log('data ', data);
 

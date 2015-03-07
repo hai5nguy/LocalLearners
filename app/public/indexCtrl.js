@@ -1,6 +1,5 @@
 localLearnersApp
-    .controller('IndexCtrl', function($scope, MeetupProfileSvc) {
-        //console.log('accesstoken', MeetupProfile.accessToken);
+    .controller('IndexCtrl', function($scope, $rootScope, $document, MeetupProfileSvc, EVENTS) {
         $scope.appSettings = {
             url: {
                 header: 'components/header/header.html',
@@ -9,9 +8,28 @@ localLearnersApp
         }
         $scope.userAuthenticated =  MeetupProfileSvc.authenticated;
 
-//        $scope.test = function() { return MeetupProfile.accessToken; }
 
-//        alert(MeetupProfile.accessToken);
+        //$document[0].addEventListener('keypress', function(e) {
+        //    if (e.which == 47) {
+        //        console.log('yo 47');
+        //        $rootScope.$emit(EVENTS.searchShortcutKeyPressed, '');
+        //        e.preventDefault();
+        //    }
+        //}, false);
+        //
+        $document.bind('keypress', function(e) {
+
+            if (e.which == 47) {  // 47 = /
+                console.log('yo 47');
+                $rootScope.$emit(EVENTS.searchShortcutKeyPressed);
+                e.preventDefault();
+                return false;
+            }
+            //console.log('Got keypress:', e.which);
+            //$rootScope.$broadcast('keypress', e);
+            //$rootScope.$broadcast('keypress:' + e.which, e);
+        });
+
     })
     .directive('includeReplace', function () {
         return {
