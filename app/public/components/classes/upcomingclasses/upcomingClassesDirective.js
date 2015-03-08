@@ -2,6 +2,7 @@ localLearnersApp.directive('llUpcomingClasses', function() {
     return {
         restrict: 'E',
         replace: true,
+        scope: {},
         templateUrl: 'components/classes/upcomingclasses/upcomingClassesTemplate.html',
         controller: function($scope, $rootScope, ClassesService) {
             ClassesService.getCategories()

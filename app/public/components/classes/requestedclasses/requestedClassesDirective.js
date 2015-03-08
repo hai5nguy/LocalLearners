@@ -2,6 +2,7 @@ localLearnersApp.directive('llRequestedClasses', function() {
     return {
         restrict: 'E',
         replace: true,
+        scope: {},
         templateUrl: 'components/classes/requestedclasses/requestedClassesTemplate.html',
         controller: function($scope, $rootScope, ClassesService) {
             ClassesService.getRequestedClasses().then(function(requestedClasses) {

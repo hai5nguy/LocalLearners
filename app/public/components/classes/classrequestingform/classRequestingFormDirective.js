@@ -2,6 +2,7 @@ localLearnersApp.directive('llClassRequestingForm', function() {
     return {
         restrict: 'E',
         replace: true,
+        scope: {},
         templateUrl: 'components/classes/classrequestingform/classRequestingFormTemplate.html',
         controller: function($scope, ClassesService) {
 //            $scope.loading = false;

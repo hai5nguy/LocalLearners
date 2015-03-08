@@ -89,5 +89,6 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ngRoute
         searchFilterUpdated: 'search-filter-updated',
         searchShortcutKeyPressed: 'search-shortcut-key-pressed',
         authLoginSuccess: 'auth-login-success',
-        authLoginFailed: 'auth-login-failed'
+        authLoginFailed: 'auth-login-failed',
+        topRequestedClassesFilter: 'top-requested-classes-filter'
     });

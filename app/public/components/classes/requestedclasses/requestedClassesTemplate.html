@@ -5,10 +5,10 @@
 
         <div class="row">
 
-            <div class="col-md-3 col-sm-4 col-xs-6" ng-repeat="(categoryName, category) in requestedGroup">
+            <div class="col-md-3 col-sm-4 col-xs-6" ng-repeat="(categoryName, classGroup) in requestedGroup">
                 <div class="panel panel-primary">
                     <div class="panel-heading">{{categoryName}}</div>
-                    <ul class="list-group" ng-repeat="requestedClass in category">
+                    <ul class="list-group" ng-repeat="requestedClass in classGroup">
                         <li class="list-group-item">
                             <span class="small badge glyphicon glyphicon-user">{{requestedClass.interestedMembers.length}}</span>
                             {{requestedClass.name}}
