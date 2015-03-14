@@ -55,15 +55,16 @@ module.exports = function (mongoose) {
         }
     });
 
-    var MemberSchema = new Schema({
-        memberId: Number
+    var UserSchema = new Schema({
+        meetupId: Number,
+		accessToken: String
     });
 
     return {
         Category: mongoose.model('Category', CategorySchema),
         UpcomingClass: mongoose.model('UpcomingClass', UpcomingClassSchema),
         FakeEvent: mongoose.model('FakeEvent', FakeEventSchema),
-        Member: mongoose.model('Member', MemberSchema),
+        User: mongoose.model('User', UserSchema),
         RequestedClass: mongoose.model('RequestedClass', RequestedClassSchema)
     }
 }

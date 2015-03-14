@@ -23,7 +23,9 @@ module.exports = function(app) {
         addCategoriesToEvents: addCategoriesToEvents,
         addRequestedClass: addRequestedClass,
         getRequestedClasses: getRequestedClasses,
-
+		getUser: getUser,
+		addUser: addUser,
+		findAndModifyUser: findAndModifyUser,
 
         //for development
         insertFakeEvents: insertFakeEvents,
@@ -127,7 +129,7 @@ function upsertUpcomingClasses(upcomingClass) {
         }
         defer.resolve()
     });
-    return
+    return defer.promise;
 }
 
 function addCategoriesToEvents(events) {
@@ -168,6 +170,64 @@ function getRequestedClasses() {
     });
     return defer.promise;
 }
+
+function getUser(query) {
+	var defer = Q.defer();
+	models.User.findOne(query, function(err, user) {
+		if (err) { defer.reject(user) }
+		else { defer.resolve(user) }
+	});
+	return defer.promise;
+}
+
+function addUser(user) {
+	var defer = Q.defer();
+	var u = new models.User(user);
+	u.save(function(err, u, numberAffected) {
+		console.log('db.adduser ', JSON.stringify(u));
+		if (err) { defer.reject(err) }
+		else { defer.resolve(u) }
+	});
+	return defer.promise;
+}
+
+function findAndModifyUser(query, updatedUser) {
+
+	var defer = Q.defer();
+	models.User.findOneAndUpdate(query, updatedUser, {
+		new: true,
+		upsert: true
+	}, function (err, user) {
+		console.log('db.findandmodifyuser: ', JSON.stringify(err), ' ', JSON.stringify(user));
+		if (err) { defer.reject(user) }
+		else { defer.resolve(user) }
+	});
+	return defer.promise;
+
+	//models.User.findAndModify({
+	//	query: query,
+	//	update: updatedUser,
+	//	new: true,
+	//	upsert: true
+	//});
+
+//	db.collection.findAndModify({
+//			query: <document>,
+//		sort: <document>,
+//		remove: <boolean>,
+//		update: <document>,
+//		new: <boolean>,
+//		fields: <document>,
+//		upsert: <boolean>
+//});
+
+//	db.collection.update(
+//	<query>,
+//	{ $setOnInsert: { <field1>: <value1>, ... } },
+//{ upsert: true }
+//)
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Private Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

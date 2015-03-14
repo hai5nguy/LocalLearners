@@ -10,7 +10,7 @@ global.THE_APP = express();
 require('./db.js')(THE_APP);
 require('./meetup-api.js')(THE_APP);
 require('./meetup-sync.js')(THE_APP);
-require('./authenticate.js')(THE_APP);
+require('./authentication.js')(THE_APP);
 require('./routes/routes.js')(THE_APP);
 
 THE_APP.use(express.static(__dirname + '/public'));
