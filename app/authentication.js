@@ -25,20 +25,17 @@ module.exports = function (app) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function ensureAuthenticated(req, res, next) {
-    console.log('isauthenticated ', req.isAuthenticated());
-    return next();
-
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        console.log('ensureAuthenticated fail for: ', req.method, ' ', req.originalUrl);
+        return res.sendStatus(401);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Private Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//pp.use(express.cookieParser());
-//app.use(express.session({ secret: '--- OMMITTED ---' }));
-//app.use(passport.initialize());
-//app.use(passport.session());
 
 function setupPassport(app) {
     app.use(cookieParser());
@@ -52,28 +49,13 @@ function setupPassport(app) {
     });
 
     passport.deserializeUser(function(id, done) {
-		db.getUser({ _id : id }).then(function (user) {
-			done(null, user);
-		}, function (err) {
-			console.log('passport.deserializeUser error: ', JSON.stringify(err));
-			done(null, false);
-		});
+        db.getUser({ _id : id }).then(function (user) {
+            done(null, user);
+        }, function (err) {
+            console.log('passport.deserializeUser error: ', JSON.stringify(err));
+            done(null, false);
+        });
     });
-
-
-	//serializeUser: function(user, done) {
-	//	done(null, user.id);
-	//},
-	//
-	//deserializeUser: function(id, done) {
-	//	var user = Users.findUserById(id);
-	//
-	//	if (user) {
-	//		done(null, user);
-	//	} else {
-	//		done(null, false);
-	//	}
-	//},
 
     app.use(session({
         secret: 'blah',
@@ -85,99 +67,76 @@ function setupPassport(app) {
     }));
 
     app.use(passport.initialize());
+    app.use(passport.session());
 
-	app.use(passport.session());
+    passport.use(
+        'provider', 
+        new OAuth2Strategy({
+            authorizationURL: 'https://secure.meetup.com/oauth2/authorize',
+            tokenURL: 'https://secure.meetup.com/oauth2/access',
+            clientID: MEETUP_KEY,
+            clientSecret: MEETUP_SECRET,
+            callbackURL: 'http://localhost:5000/authenticate/callback'
+        }, function(accessToken, refreshToken, profile, done) {
 
+            meetupApi.getProfile(accessToken, function(profile) {
 
-	passport.use('provider', new OAuth2Strategy({
-                authorizationURL: 'https://secure.meetup.com/oauth2/authorize',
-                tokenURL: 'https://secure.meetup.com/oauth2/access',
-                clientID: MEETUP_KEY,
-                clientSecret: MEETUP_SECRET,
-                callbackURL: 'http://localhost:5000/authenticate/callback'
-            },
-            function(accessToken, refreshToken, profile, done) {
+                var query = {
+                    meetupId: profile.meetupId
+                };
+                var updatedUser = {
+                    meetupId: profile.meetupId,
+                    name: profile.name,
+                    accessToken: accessToken,
+                    thumbLink: profile.thumbLink
+                };
+                db.findAndModifyUser(query, updatedUser).then(function (result) {
+                    done(result.err, result.user);
+                });
 
-
-				//console.log('profile ', profile);
-				//db.getMember({ })
-                console.log('accessToken: ', accessToken);
-
-
-				meetupApi.getProfile(accessToken, function(profile) {
-
-
-				    //req.session.profile = profile;
-
-					console.log('profile: ', JSON.stringify(profile));
-
-					var query = {
-						meetupId: profile.mid
-					};
-					var updatedUser = {
-						meetupId: profile.mid,
-						accessToken: accessToken
-					};
-					db.findAndModifyUser(query, updatedUser).then(function (user) {
-						console.log('success ', JSON.stringify(user));
-						done(null, user);
-					}, function (err) {
-						console.log('fail ', JSON.stringify(err));
-					});
-
-					//db.getUser({ meetupId: profile.mid }).then(function (user) {
-					//	console.log('success ', JSON.stringify(user));
-					//	done(null, user);
-					//}, function (err) {
-					//	console.log('fail ', JSON.stringify(err));
-					//});
-				});
-
-                //return done(null, );
-            })
+            });
+        })
     );
 
-	//
-	//passport.use(new google_strategy({
-	//		clientID: '442704851010.apps.googleusercontent.com',
-	//		clientSecret: 'uRQL8HQ7zmf_yyfDoyUL1_eZ',
-	//		callbackURL: 'http://devbox.example.com:3000/auth/google/callback'
-	//	},
-	//	function(accessToken, refreshToken, profile, done) {
-	//		UserDB.findOne({email: profile._json.email},function(err,usr) {
-	//			usr.token = accessToken;
-	//			usr.save(function(err,usr,num) {
-	//				if(err) {
-	//					console.log('error saving token');
-	//				}
-	//			});
-	//			process.nextTick(function() {
-	//				return done(null,profile);
-	//			});
-	//		});
-	//	}
-	//));
+    //
+    //passport.use(new google_strategy({
+    //		clientID: '442704851010.apps.googleusercontent.com',
+    //		clientSecret: 'uRQL8HQ7zmf_yyfDoyUL1_eZ',
+    //		callbackURL: 'http://devbox.example.com:3000/auth/google/callback'
+    //	},
+    //	function(accessToken, refreshToken, profile, done) {
+    //		UserDB.findOne({email: profile._json.email},function(err,usr) {
+    //			usr.token = accessToken;
+    //			usr.save(function(err,usr,num) {
+    //				if(err) {
+    //					console.log('error saving token');
+    //				}
+    //			});
+    //			process.nextTick(function() {
+    //				return done(null,profile);
+    //			});
+    //		});
+    //	}
+    //));
 }
 
 function setAuthenticationRoutes(app) {
 
-    app.get('/authenticate', passport.authenticate('provider'));
+    app.get('/login', passport.authenticate('provider'));
+
+    app.get('/logout', function (req, res) {
+        req.logout();
+        res.json( { message: 'success' });
+    });
 
     app.get('/authenticate/callback',
         passport.authenticate('provider', {
             failureRedirect: '/fail'
         }),
         function (req, res) {
-			res.redirect('/');
-
-
-            //req.session.accessToken = req.user.accessToken;
-            //meetupApi.getProfile(req.session.accessToken, function(profile) {
-            //    req.session.profile = profile;
-            //    res.redirect('/');
-            //});
+            res.redirect('/');
         });
-
+    
     /*
 
      http://docs.mongodb.org/manual/reference/method/db.collection.findAndModify/#db.collection.findAndModify

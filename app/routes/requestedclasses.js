@@ -1,6 +1,7 @@
 var Q = require('../../node_modules/q');
 var meetupApi = require('../meetup-api.js')(THE_APP);
 var db = require('../db.js')(THE_APP);
+var authentication = require('../authentication.js')(THE_APP);
 
 module.exports = function (app) {
 
@@ -21,7 +22,12 @@ module.exports = function (app) {
 //
 //    });
 
-    app.post('/requestedclasses', function(req, res) {
+    app.post('/requestedclasses', function(req, res, next) {
+        
+        if (!req.isAuthenticated()) {
+            authentication.logUserIn(req, res);
+        }
+        
         var requestedClass = {
             name: req.body.name,
             categoryName: req.body.categoryName,
@@ -58,7 +64,7 @@ function isRequestedClassValid(requestedClass) {
     return (
         IsPopulatedString(requestedClass.name) &&
         IsPopulatedString(requestedClass.categoryName)
-        )
+    )
 }
 
 function serverError(res, err) {

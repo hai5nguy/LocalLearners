@@ -1,17 +1,12 @@
 <ul>
 
-    <li ng-show="!user.isAuthenticated()" ng-click="signIn()">
-        <!--<a href="https://secure.meetup.com/oauth2/authorize?client_id=h0dl8qkd82gbjan5cpr8plb4jq&response_type=token&redirect_uri=http://localhost:5000" target="_blank">Sign In</a>-->
+    <li ng-show="!authenticated" ng-click="login()">
         <a class="btn btn-success login">Login</a>
-
-
     </li>
 
-
-
-    <li class="dropdown" ng-show="user.isAuthenticated()">
+    <li class="dropdown" ng-show="authenticated">
         <a class="dropdown-toggle btn btn-success login" data-toggle="dropdown" role="button" aria-expanded="false">
-          <img ng-src="{{userProfile.thumb_link}}" />
+          <img ng-src="{{user.thumbLink}}" />
           <!--{{Profile.name}} -->
           <span class="caret"></span>
         </a>
@@ -19,7 +14,7 @@
             <li><a href="/profile">View Profile</a></li>
             <li><a href="/account">Account Settings</a></li>
             <li class="divider"></li>
-            <li ng-click="signOut()"><a>Log Out</a></li>
+            <li ng-click="logout()"><a>Log Out</a></li>
         </ul>
     </li>
 

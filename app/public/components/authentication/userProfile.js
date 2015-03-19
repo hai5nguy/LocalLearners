@@ -1,12 +1,23 @@
-localLearnersApp.factory('UserProfile', function() {
+localLearnersApp.factory('UserProfile', function(EVENTS) {
+    
     return {
-        create: function (profile) {
-            this.mid = profile.mid;
-            this.thumb_link = profile.thumb_link;
-        },
-        destroy: function () {
-            this.mid = null;
-            this.thumb_link = null;
-        }
+        create: create,
+        destroy: destroy
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Public Functions
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function create(profile) {
+        this.meetupId = profile.meetupId;
+        this.name = profile.name;
+        this.thumbLink = profile.thumbLink;
+    }
+    function destroy() {
+        this.meetupId = null;
+        this.name = null;
+        this.thumb_link = null;
+    }
+    
 });

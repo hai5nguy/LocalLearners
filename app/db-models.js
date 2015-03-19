@@ -57,7 +57,9 @@ module.exports = function (mongoose) {
 
     var UserSchema = new Schema({
         meetupId: Number,
-		accessToken: String
+        name: String,
+		accessToken: String,
+        thumbLink: String
     });
 
     return {

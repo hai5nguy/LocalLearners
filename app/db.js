@@ -192,40 +192,15 @@ function addUser(user) {
 }
 
 function findAndModifyUser(query, updatedUser) {
-
 	var defer = Q.defer();
 	models.User.findOneAndUpdate(query, updatedUser, {
 		new: true,
 		upsert: true
 	}, function (err, user) {
-		console.log('db.findandmodifyuser: ', JSON.stringify(err), ' ', JSON.stringify(user));
-		if (err) { defer.reject(user) }
-		else { defer.resolve(user) }
+        //console.log('db.findandmodifyuser: ', JSON.stringify(err), ' ', JSON.stringify(user));
+        defer.resolve({ err: err, user: user});
 	});
 	return defer.promise;
-
-	//models.User.findAndModify({
-	//	query: query,
-	//	update: updatedUser,
-	//	new: true,
-	//	upsert: true
-	//});
-
-//	db.collection.findAndModify({
-//			query: <document>,
-//		sort: <document>,
-//		remove: <boolean>,
-//		update: <document>,
-//		new: <boolean>,
-//		fields: <document>,
-//		upsert: <boolean>
-//});
-
-//	db.collection.update(
-//	<query>,
-//	{ $setOnInsert: { <field1>: <value1>, ... } },
-//{ upsert: true }
-//)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -66,11 +66,10 @@
     <!-- |                                   ANGULAR STUFF                                   | -->
     <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <!--<script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>-->
     <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
-
-
 
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="indexCtrl.js"></script>
@@ -112,7 +111,7 @@
 
     <header ng-include="appSettings.url.header"></header>
 
-    <ng-view></ng-view>
+    <div ui-view></div>
 
     <footer ng-include="appSettings.url.footer"></footer>
 

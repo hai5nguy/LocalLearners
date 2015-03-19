@@ -29,11 +29,11 @@ function getProfile(accessToken, callback) {
     restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
         function (data) {
 
-            console.log('user data ', data.name);
+            console.log('member/self name: ', data.name, '|', data.id, typeof data.id);
             var profile = {
-                mid: data.id,
+                meetupId: data.id,
                 name: data.name,
-                thumb_link: data.photo ? data.photo.thumb_link : 'http://photos4.meetupstatic.com/img/noPhoto_50.png'
+                thumbLink: data.photo ? data.photo.thumb_link : 'http://photos4.meetupstatic.com/img/noPhoto_50.png'
             };
             callback(profile);
         }
