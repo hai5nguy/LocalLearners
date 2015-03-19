@@ -29,7 +29,7 @@ function getProfile(accessToken, callback) {
     restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
         function (data) {
 
-            console.log('member/self name: ', data.name, '|', data.id, typeof data.id);
+            console.log('member/self name: ', data.name, '|', data.id);
             var profile = {
                 meetupId: data.id,
                 name: data.name,

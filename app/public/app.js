@@ -1,47 +1,32 @@
 var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.router'])
     .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
-        
-        //
-        //routerApp.config(function($stateProvider, $urlRouterProvider) {
-        //
-        //    $urlRouterProvider.otherwise('/home');
-        //
-        //    $stateProvider
-        //
-        //        // HOME STATES AND NESTED VIEWS ========================================
-        //        .state('home', {
-        //            url: '/home',
-        //            templateUrl: 'partial-home.html'
-        //        })
-        //
-        //        // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-        //        .state('about', {
-        //            // we'll get to this in a bit       
-        //        });
-        //
-        //});
-
         $urlRouterProvider.otherwise('/');
-        
+
+        $locationProvider.html5Mode(true);
+
         $stateProvider
             .state('main', {
                 url: '/',
                 templateUrl: '/components/main/main.html'
             })
-            .state('classes', {
-                url: '/classes',
-                templateUrl: '/components/classes/classes.html'
+            .state('upcomingclasses', {
+                url: '/upcoming',
+                templateUrl: '/components/classes/upcoming.html'
+            })
+            .state('requestedclasses', {
+                url: '/requested',
+                templateUrl: '/components/classes/requested.html'
+            })
+            .state('teach', {
+                url: '/teach',
+                templateUrl: '/components/teach/teach.html'
+            })
+            .state('host', {
+                url: '/host',
+                templateUrl: 'components/host/host.html'
             });
 
-        $locationProvider.html5Mode(true);
-
-
-//        $routeProvider
-//            .when('/', {
-//                templateUrl: 'components/main/main.html',
-//                controller: 'MainCtrl'
-//            })
 //            .when('/about', {
 //                templateUrl: 'components/about/about.html'
 //                //controller: 'AboutCtrl'
@@ -82,10 +67,6 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
 //                templateUrl: 'components/help/help.html',
 ////                controller: 'HelpCtrl'
 //            })
-//            .when('/host', {
-//                templateUrl: 'components/host/host.html'
-//                //controller: 'HostCtrl'
-//            })
 //            .when('/locations', {
 //                templateUrl: 'components/contact/contact.html',
 //                //controller: 'ContactCtrl'
@@ -106,10 +87,7 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
 //                templateUrl: 'components/requested/requested.html',
 ////                controller: 'RequestedCtrl'
 //            })
-//            .when('/teach', {
-//                templateUrl: 'components/teach/teach.html'
-//                //controller: 'TeachCtrl'
-//            })
+//
 //            .when('/terms', {
 //                templateUrl: 'components/terms/terms.html',
 ////                controller: 'TermsCtrl'
@@ -121,7 +99,8 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
 //
 //        $locationProvider.html5Mode(true);
 
-    }).constant('EVENTS', {
+    })
+    .constant('EVENTS', {
         searchCommencing: 'search-commencing',
         searchFilterUpdated: 'search-filter-updated',
         searchShortcutKeyPressed: 'search-shortcut-key-pressed',

@@ -1,10 +1,9 @@
-localLearnersApp.factory('AuthenticationService', function($http, $q, $rootScope, UserProfile, EVENTS) {
+localLearnersApp.factory('AuthenticationService', function($http, $q, $rootScope, CurrentUser, EVENTS) {
 
     return {
         login: login,
         logout: logout,
-        checkAuthenticated: checkAuthenticated,
-        initialize: initialize
+        checkAuthenticated: checkAuthenticated
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,10 +16,10 @@ localLearnersApp.factory('AuthenticationService', function($http, $q, $rootScope
     
     function logout() {
         $http.get('/logout').then(function(response) {
-            console.log('logging out response:', response);
+            //console.log('logging out response:', response);
             if (response.data && response.data.message === 'success') {
                 $rootScope.$emit(EVENTS.authUserLoggedOut);
-                UserProfile.destroy();
+                CurrentUser.destroy();
             }
         }, function (err) {
             console.error('AuthenticationService failed to logout user: ', err);
@@ -31,7 +30,7 @@ localLearnersApp.factory('AuthenticationService', function($http, $q, $rootScope
         var getProfile = $http.get('/profile');
         getProfile.then(function (response) {
             if (response.data && response.data.meetupId) {
-                UserProfile.create(response.data);
+                CurrentUser.create(response.data);
                 $rootScope.$emit(EVENTS.authUserLoggedIn);
             }
         }, function (err) {
@@ -39,23 +38,8 @@ localLearnersApp.factory('AuthenticationService', function($http, $q, $rootScope
         });
     }
     
-    function initialize() {
-        CheckToSeeIfUserIsLoggedIn();
-    }
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Private Functions
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    function CheckToSeeIfUserIsLoggedIn() {
-        return $http.get('/profile').success(function(profile) {
-
-            UserProfile.create(profile);
-            if (!!UserProfile.mid) {
-                $rootScope.$broadcast(EVENTS.authUserLoggedIn);
-            }
-        });
-    }
-
     
 });

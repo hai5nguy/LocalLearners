@@ -63,7 +63,7 @@
     <script type="text/javascript">window.jQuery || document.write('<script src="components/common/vendors/jquery-2.1.1.min.js"><\/script>')</script> <!-- Local fallback -->
     <script type="text/javascript">$.fn.modal || document.write('<script src="components/common/vendors/bootstrap.min.js"><\/script>')</script> <!-- Local fallback -->
     <!--  ___________________________________________________________________________________  -->
-    <!-- |                                   ANGULAR STUFF                                   | -->
+    <!-- |                                   ANGULAR CORE                                    | -->
     <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <!--<script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>-->
@@ -71,33 +71,40 @@
     <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
 
-    <script type="text/javascript" src="main.js"></script>
+    <!--  ___________________________________________________________________________________  -->
+    <!-- |                                   THE APP                                         | -->
+    <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
+    <script type="text/javascript" src="app.js"></script>
+    
+    <!--  ___________________________________________________________________________________  -->
+    <!-- |                                  CONTROLLERS                                      | -->
+    <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
+    
     <script type="text/javascript" src="indexCtrl.js"></script>
     <script type="text/javascript" src="components/main/mainCtrl.js"></script>
     <script type="text/javascript" src="components/header/headerController.js"></script>
 
     <script type="text/javascript" src="haitestController.js"></script>
 
-
-    <!--<script type="text/javascript" src="components/authenticate/authenticateCtrl.js"></script>-->
-
-    <!--<script type="text/javascript" src="js/controllers/ProfileController.js"></script>-->
-    <script type="text/javascript" src="components/authentication/userProfile.js"></script>
+    <!--  ___________________________________________________________________________________  -->
+    <!-- |                               SERVICES/FACTORIES                                  | -->
+    <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
+    <script type="text/javascript" src="components/authentication/currentUser.js"></script>
     <script type="text/javascript" src="components/authentication/authenticationService.js"></script>
     <script type="text/javascript" src="components/classes/classesService.js"></script>
 
-
-    <!--<script type="text/javascript" src="components/header/profile/loggedOutCtrl.js"></script>-->
-    <script type="text/javascript" src="components/header/profile/userProfileDirective.js"></script>
-    <script type="text/javascript" src="components/search/mainsearch/mainSearchDirective.js"></script>
+    <!--  ___________________________________________________________________________________  -->
+    <!-- |                                   DIRECTIVES                                      | -->
+    <!--  ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯  -->
+    <script type="text/javascript" src="components/authentication/userProfile/userProfileDirective.js"></script>
     <script type="text/javascript" src="components/classes/upcomingclasses/upcomingClassesDirective.js"></script>
     <script type="text/javascript" src="components/classes/requestedclasses/requestedClassesDirective.js"></script>
     <script type="text/javascript" src="components/classes/classcreationform/classCreationFormDirective.js"></script>
     <script type="text/javascript" src="components/classes/classrequestingform/classRequestingFormDirective.js"></script>
     <script type="text/javascript" src="components/classes/mostrequested/mostRequestedDirective.js"></script>
     <script type="text/javascript" src="components/classes/toprequested/topRequestedClassesDirective.js"></script>
+    <script type="text/javascript" src="components/search/mainsearch/mainSearchDirective.js"></script>
 
-    <script type="text/javascript" src="components/header/profile/meetupProfileSvc.js"></script>
 
     <!--  ___________________________________________________________________________________  -->
     <!-- |                               PLUGINS AND CUSTOM JS                               | -->
@@ -109,11 +116,11 @@
   </head>
   <body ng-controller="IndexCtrl">
 
-    <header ng-include="appSettings.url.header"></header>
+    <header ng-include="templates.header"></header>
 
     <div ui-view></div>
 
-    <footer ng-include="appSettings.url.footer"></footer>
+    <footer ng-include="templates.footer"></footer>
 
   </body>
 </html>

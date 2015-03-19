@@ -1,4 +1,4 @@
-localLearnersApp.factory('UserProfile', function(EVENTS) {
+localLearnersApp.factory('CurrentUser', function(EVENTS) {
     
     return {
         create: create,

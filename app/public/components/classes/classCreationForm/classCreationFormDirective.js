@@ -29,7 +29,6 @@ localLearnersApp.directive('llClassCreationForm', function() {
             };
 
             ClassesService.getCategories().then(function (categories) {
-                console.log('in creation');
                 categories.unshift({ name: '(Select a category)', value: '' });
                 $scope.categories = categories;
                 $scope.newClass.category = $scope.categories[0];
