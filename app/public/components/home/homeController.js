@@ -1,4 +1,4 @@
-localLearnersApp.controller('MainCtrl', function($scope, ClassesService) {
+localLearnersApp.controller('HomeController', function($scope) {
 
     $scope.getClassInfo = function(availClass) {
         $scope.availClass = availClass; // binds clicked class to scope

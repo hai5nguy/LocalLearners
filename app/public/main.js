@@ -6,17 +6,25 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
         $locationProvider.html5Mode(true);
 
         $stateProvider
-            .state('main', {
+            .state('home', {
                 url: '/',
-                templateUrl: '/components/main/main.html'
+                templateUrl: '/components/home/home.html'
             })
-            .state('upcomingclasses', {
+            .state('upcoming', {
                 url: '/upcoming',
                 templateUrl: '/components/classes/upcoming.html'
             })
-            .state('requestedclasses', {
+            .state('createupcoming', {
+                url: '/createupcoming',
+                templateUrl: '/components/classes/createupcoming.html'
+            })
+            .state('requested', {
                 url: '/requested',
                 templateUrl: '/components/classes/requested.html'
+            })
+            .state('createrequest', {
+                url: '/createrequest',
+                templateUrl: '/components/classes/createrequest.html'
             })
             .state('teach', {
                 url: '/teach',
