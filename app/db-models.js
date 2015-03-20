@@ -1,4 +1,9 @@
+var mongooseAutoIncrement = require('mongoose-auto-increment');
+
 module.exports = function (mongoose) {
+    
+    mongooseAutoIncrement.initialize(mongoose.connection);
+
     var Schema = mongoose.Schema;
 //    var ObjectId = Schema.ObjectId;
 
@@ -16,7 +21,7 @@ module.exports = function (mongoose) {
             imageUrl: String
         }
     });
-
+    
     var RequestedClassSchema = new Schema({
         name: String,
         category: {
@@ -26,6 +31,8 @@ module.exports = function (mongoose) {
         },
         interestedMembers: Array
     });
+    RequestedClassSchema.plugin(mongooseAutoIncrement.plugin, 'RequestedClass');
+
 
     var FakeEventSchema = new Schema({
         visibility: String,

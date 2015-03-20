@@ -1,7 +1,7 @@
 var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.router'])
     .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
-        $urlRouterProvider.otherwise('/');
+        //$urlRouterProvider.otherwise('/');
 
         $locationProvider.html5Mode(true);
 
@@ -19,8 +19,17 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
                 templateUrl: '/components/classes/createupcoming.html'
             })
             .state('requested', {
+                abstract: true,
                 url: '/requested',
-                templateUrl: '/components/classes/requested.html'
+                templateUrl: '/components/classes/requested/requested.html'
+            })
+            .state('requested.list', {
+                url: '',
+                templateUrl: '/components/classes/requested/list.html'
+            })
+            .state('requested.detail', {
+                url: '/:id',
+                templateUrl: '/components/classes/requested/detail.html'
             })
             .state('createrequest', {
                 url: '/createrequest',
