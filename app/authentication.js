@@ -7,10 +7,6 @@ var MongoStore = require('connect-mongo')(session);
 var meetupApi = require('./meetup-api.js')(THE_APP);
 var db = require('./db.js')(THE_APP);
 
-var MEETUP_KEY = process.env.MEETUP_KEY || 'h0dl8qkd82gbjan5cpr8plb4jq';  //todo: move to environmentals
-var MEETUP_SECRET = process.env.MEETUP_SECRET || 'seagvb265dc9j1vm53q9pvu9r8';
-
-
 module.exports = function (app) {
     setupPassport(app);
     setAuthenticationRoutes(app);
@@ -62,7 +58,7 @@ function setupPassport(app) {
         resave: false,
         saveUninitialized: true,
         store: new MongoStore({
-            url: 'mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa'
+            url: LL_MONGODB_CONNECTION_STRING
         })
     }));
 
@@ -74,8 +70,8 @@ function setupPassport(app) {
         new OAuth2Strategy({
             authorizationURL: 'https://secure.meetup.com/oauth2/authorize',
             tokenURL: 'https://secure.meetup.com/oauth2/access',
-            clientID: MEETUP_KEY,
-            clientSecret: MEETUP_SECRET,
+            clientID: LL_MEETUP_OAUTH2_CLIENTID,
+            clientSecret: LL_MEETUP_OAUTH2_SECRET,
             callbackURL: 'http://localhost:5000/authenticate/callback'
         }, function(accessToken, refreshToken, profile, done) {
 

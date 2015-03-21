@@ -1,4 +1,10 @@
 //hide this better
+
+global.LL_MONGODB_CONNECTION_STRING         = process.env.LL_MONGODB_CONNECTION_STRING      || 'mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa'
+
+global.LL_MEETUP_OAUTH2_CLIENTID            = process.env.LL_MEETUP_OAUTH2_CLIENTID         || 'h0dl8qkd82gbjan5cpr8plb4jq';
+global.LL_MEETUP_OAUTH2_SECRET              = process.env.LL_MEETUP_OAUTH2_SECRET           || 'seagvb265dc9j1vm53q9pvu9r8';
+
 global.LL_ADMINISTRATOR_EMAIL               = process.env.LL_ADMINISTRATOR_EMAIL            || 'locallearnersmeetup@gmail.com';
 global.LL_ADMINISTRATOR_PASSWORD            = process.env.LL_ADMINISTRATOR_PASSWORD         || 'thirstyscholar1';
 

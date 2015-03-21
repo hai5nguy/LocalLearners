@@ -5,7 +5,8 @@ var models = require('./db-models.js')(mongoose);
 var db = mongoose.connection;
 
 //mongoose.set('debug', true);
-mongoose.connect('mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa');
+mongoose.connect(LL_MONGODB_CONNECTION_STRING);
+
 db.once('open', function() {
     console.log('Connected to mongolab, database ready.');
 });
