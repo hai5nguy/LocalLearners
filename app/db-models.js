@@ -23,6 +23,7 @@ module.exports = function (mongoose) {
     });
     
     var RequestedClassSchema = new Schema({
+        requestedId: Number,
         name: String,
         category: {
             name: String,
@@ -31,9 +32,26 @@ module.exports = function (mongoose) {
         },
         interestedMembers: Array
     });
-    RequestedClassSchema.plugin(mongooseAutoIncrement.plugin, 'RequestedClass');
+    RequestedClassSchema.plugin(mongooseAutoIncrement.plugin, {
+        model: 'RequestedClass',
+        field: 'requestedId',
+        startAt: 1
+    });
 
+    var UserSchema = new Schema({
+        userId: Number,
+        meetupId: Number,
+        name: String,
+		accessToken: String,
+        thumbLink: String
+    });
+    UserSchema.plugin(mongooseAutoIncrement.plugin, {
+        model: 'User',
+        field: 'userId',
+        startAt: 1
+    });
 
+    //<editor-fold desc="Development ////////////////////////////////////////////////////////////////////////////////////////////////">
     var FakeEventSchema = new Schema({
         visibility: String,
         status: String,
@@ -61,13 +79,7 @@ module.exports = function (mongoose) {
             who: String
         }
     });
-
-    var UserSchema = new Schema({
-        meetupId: Number,
-        name: String,
-		accessToken: String,
-        thumbLink: String
-    });
+    //</editor-fold>
 
     return {
         Category: mongoose.model('Category', CategorySchema),

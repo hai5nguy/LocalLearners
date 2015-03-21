@@ -95,7 +95,8 @@ module.exports = function (app) {
     });
 
     app.get('/dbtest', function (req, res) {
-        res.send(500, { blah: 'blah blah' });//.end(); json({blah: 'blah'});
+        //res.send(500, { blah: 'blah blah' });//.end(); json({blah: 'blah'});
+        db.upsertUser({ meetupId: 85189222 }, { name: 'test 4' });
     });
 
     app.get('/changeuserrole', function (req, res) {
@@ -111,7 +112,6 @@ module.exports = function (app) {
             .then(function(t) {
                 console.log('token ', t)
             });
-
         res.send('done');
     });
 

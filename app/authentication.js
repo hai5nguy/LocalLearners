@@ -45,11 +45,11 @@ function setupPassport(app) {
     }));
 
     passport.serializeUser(function(user, done) {
-        done(null, user._id);
+        done(null, user.userId);
     });
 
-    passport.deserializeUser(function(id, done) {
-        db.getUser({ _id : id }).then(function (user) {
+    passport.deserializeUser(function(userId, done) {
+        db.getUser({ userId : userId }).then(function (user) {
             done(null, user);
         }, function (err) {
             console.log('passport.deserializeUser error: ', JSON.stringify(err));
@@ -84,14 +84,16 @@ function setupPassport(app) {
                 var query = {
                     meetupId: profile.meetupId
                 };
-                var updatedUser = {
+                var user = {
                     meetupId: profile.meetupId,
                     name: profile.name,
                     accessToken: accessToken,
                     thumbLink: profile.thumbLink
                 };
-                db.findAndModifyUser(query, updatedUser).then(function (result) {
-                    done(result.err, result.user);
+                db.upsertUser(query, user).then(function (user) {
+                    done(null, user) 
+                }, function (err) {
+                    console.error('Authentication passport error, unable to upsert user, err: ', err);
                 });
 
             });
