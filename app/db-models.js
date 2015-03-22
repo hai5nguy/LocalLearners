@@ -1,11 +1,7 @@
-var mongooseAutoIncrement = require('mongoose-auto-increment');
-
 module.exports = function (mongoose) {
     
-    mongooseAutoIncrement.initialize(mongoose.connection);
-
     var Schema = mongoose.Schema;
-//    var ObjectId = Schema.ObjectId;
+    //var ObjectId = Schema.ObjectId;
 
     var CategorySchema = new Schema({
         name: String,
@@ -23,34 +19,23 @@ module.exports = function (mongoose) {
     });
     
     var RequestedClassSchema = new Schema({
-        requestedId: Number,
         name: String,
         category: {
             name: String,
             value: String,
             imageUrl: String
         },
-        interestedMembers: Array
-    });
-    RequestedClassSchema.plugin(mongooseAutoIncrement.plugin, {
-        model: 'RequestedClass',
-        field: 'requestedId',
-        startAt: 1
+        requester: { type: Schema.Types.ObjectId, ref: 'User' },
+        interestedUsers: [{ type: Schema.Types.ObjectId, ref: 'User' }]
     });
 
     var UserSchema = new Schema({
-        userId: Number,
         meetupId: Number,
         name: String,
 		accessToken: String,
         thumbLink: String
     });
-    UserSchema.plugin(mongooseAutoIncrement.plugin, {
-        model: 'User',
-        field: 'userId',
-        startAt: 1
-    });
-
+    
     //<editor-fold desc="Development ////////////////////////////////////////////////////////////////////////////////////////////////">
     var FakeEventSchema = new Schema({
         visibility: String,

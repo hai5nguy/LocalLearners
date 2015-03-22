@@ -1,3 +1,23 @@
 <div ng-controller="Requested.DetailController">
-    name: {{name}}
+    <ul>
+        <li>id: {{requestedClass._id}}</li>
+        <li>name: {{requestedClass.name}}</li>
+        <li>category: {{requestedClass.category.name}}</li>
+        <li>requester: {{requestedClass.requester.name}}
+            <img style="width: 36px; height: 36px;" ng-src="{{requestedClass.requester.thumbLink}}" />
+        </li>
+        <li>interested users:
+            <ul>
+                <li ng-repeat="user in requestedClass.interestedUsers">
+                    {{user.name}} <img style="width: 36px; height: 36px;" ng-src="{{user.thumbLink}}" />
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <div ng-click="interestedClicked()">
+        <img src="http://placehold.it/40x40" />  I'm interested in learning this class! 
+    </div>
+    
 </div>
+
+<a ui-sref="requested.list">Back to List</a> 

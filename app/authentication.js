@@ -41,11 +41,11 @@ function setupPassport(app) {
     }));
 
     passport.serializeUser(function(user, done) {
-        done(null, user.userId);
+        done(null, user._id);
     });
 
-    passport.deserializeUser(function(userId, done) {
-        db.getUser({ userId : userId }).then(function (user) {
+    passport.deserializeUser(function(id, done) {
+        db.getUser({ _id : id }).then(function (user) {
             done(null, user);
         }, function (err) {
             console.log('passport.deserializeUser error: ', JSON.stringify(err));

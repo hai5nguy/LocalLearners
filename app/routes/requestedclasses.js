@@ -15,24 +15,31 @@ module.exports = function (app) {
         });
 
     });
-
-//    app.get('/requestedclasses/:id', function (req, res) {
-//        //TODO: implement this
-//        res.json({ upcomingclass: 'upcoming class with id ' + req.params.id });
-//
-//    });
-
-    app.post('/requestedclasses', function(req, res, next) {
+    
+    app.get('/api/requested/:id', function (req, res) {
         
-        if (!req.isAuthenticated()) {
-            authentication.logUserIn(req, res);
-        }
+        db.getRequestedClass(req.params.id).then(function(requestedClass) {
+            //console.log('api/requested/:id requestedClass', JSON.stringify(requestedClass));
+            res.json(requestedClass);
+        }, function (err) {
+            serverError(res, err);
+        });
+        
+    });
+
+    app.post('/requestedclasses', function (req, res, next) {
+        
+        //todo: authentication
+        //if (!req.isAuthenticated()) {
+        //    authentication.logUserIn(req, res);
+        //}
         
         var requestedClass = {
             name: req.body.name,
             categoryName: req.body.categoryName,
             category: {},
-            interestedMembers: []
+            requester: req.user._id,
+            interestedUsers: [ req.user._id ]
         };
 
         if (isRequestedClassValid(requestedClass)) {
@@ -41,10 +48,9 @@ module.exports = function (app) {
 
                 delete requestedClass.categoryName;
                 requestedClass.category = category;
-                requestedClass.interestedMembers.push(req.session.profile);
 
                 db.addRequestedClass(requestedClass).then(function (savedRequested) {
-//                    console.log('/requestedclasses savedrequested ', JSON.stringify(savedRequested));
+                    //console.log('/requestedclasses savedrequested ', JSON.stringify(savedRequested));
                     res.json({ status: 'success', savedRequested: savedRequested });
                 }, function (err) {
                     serverError(res, err);
@@ -57,6 +63,15 @@ module.exports = function (app) {
         } else {
             serverError(res, { error: 'Upcoming Class invalid' });
         }
+    });
+    
+    app.post('/api/requested/:id/addinteresteduser', function (req, res) {
+        var addUser = db.Requested.addInterestedUser(req.params.id, req.user._id);
+        addUser.then(function(requestedClass) {
+            res.json({ status: 'success', requestedClass: requestedClass })
+        }, function (err) {
+            serverError(res, err);
+        });
     });
 }
 

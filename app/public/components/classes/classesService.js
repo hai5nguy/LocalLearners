@@ -10,7 +10,8 @@ localLearnersApp.factory('ClassesService', function ($http, $q) {
         getCategories: getCategories,
         postClass: postClass,
         postRequestedClass: postRequestedClass,
-        getRequestedClasses: getRequestedClasses
+        getRequestedClasses: getRequestedClasses,
+        getRequestedClass: getRequestedClass
     }
 
     function getUpcomingClasses() {
@@ -55,7 +56,20 @@ localLearnersApp.factory('ClassesService', function ($http, $q) {
 
     function getRequestedClasses() {
         var defer = $q.defer();
-        $http.get('/requestedclasses').then(
+        $http.get('requestedclasses').then(
+            function (response) {
+                defer.resolve(response.data);
+            },
+            function (err) {
+                defer.reject(err);
+            }
+        );
+        return defer.promise;
+    }
+    
+    function getRequestedClass(id) {
+        var defer = $q.defer();
+        $http.get('/api/requested/' + id).then(
             function (response) {
                 defer.resolve(response.data);
             },

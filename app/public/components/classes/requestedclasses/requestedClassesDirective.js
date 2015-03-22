@@ -12,7 +12,7 @@ localLearnersApp.directive('llRequestedClasses', function() {
                 _.each(requestedGroup, function(group, i) {
                     requestedGroup[i] = _.first(
                         _.sortBy(group, function (r) {
-                            return r.interestedMembers.length;
+                            return -r.interestedUsers.length;
                         }), 4);
                 });
 

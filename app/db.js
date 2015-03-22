@@ -11,28 +11,46 @@ db.once('open', function() {
     console.log('Connected to mongolab, database ready.');
 });
 
+var thisModule;
+
 module.exports = function(app) {
 
-    return {
+    thisModule = {
+
+        /* categories */
         getCategories: getCategories,
         getCategory: getCategory,
         insertCategories: insertCategories,
+
+        /* upcoming classes */
         addUpcomingClass: addUpcomingClass,
         removeUpcomingClasses: removeUpcomingClasses,
         getUpcomingClasses: getUpcomingClasses,
         upsertUpcomingClasses: upsertUpcomingClasses,
         addCategoriesToEvents: addCategoriesToEvents,
+
+        /* requested classes */
         addRequestedClass: addRequestedClass,
+        getRequestedClass: getRequestedClass,
         getRequestedClasses: getRequestedClasses,
-		getUser: getUser,
+        
+        Requested: {
+            get: Requested_get,
+            addInterestedUser: Requested_addInterestedUser  
+        },
+
+        /* users */
+        getUser: getUser,
 		//addUser: addUser,
         upsertUser: upsertUser,
 
-        //for development
+        /* fakes - development purpose */
         insertFakeEvents: insertFakeEvents,
         getFakeEvents: getFakeEvents,
         addFakeEvent: addFakeEvent
     }
+    
+    return thisModule;
     
 }
 
@@ -163,12 +181,68 @@ function addRequestedClass(requested) {
     return defer.promise;
 }
 
-function getRequestedClasses() {
+function getRequestedClass(id) {
     var defer = Q.defer();
-//    var q = (filter && filter.eventId) ? { eventId: filter.eventId } : {};
-    models.RequestedClass.find({}, function(err, requestedClasses) {
+    var query = models.RequestedClass.find({ _id: id});
+    query.populate('requester', 'name thumbLink');
+    query.populate('interestedUsers', 'name thumbLink');
+    query.exec(function (err, requestClasses) {
+        if (!err) {
+            defer.resolve(requestClasses[0]);
+        } else {
+            defer.reject(err);
+        }
+    });
+    return defer.promise;
+}
+
+function getRequestedClasses(id) {
+    var defer = Q.defer();
+    var query = id ? { _id: id } : {};
+    models.RequestedClass.find(query, function(err, requestedClasses) {
         if (err) { defer.reject(err) }
         else { defer.resolve(requestedClasses) }
+    });
+    return defer.promise;
+}
+
+function Requested_get(id) {
+    var defer = Q.defer();
+    var query = models.RequestedClass.find({ _id: id});
+    query.populate('requester', 'name thumbLink');
+    query.populate('interestedUsers', 'name thumbLink');
+    query.exec(function (err, requestClasses) {
+        if (!err) {
+            defer.resolve(requestClasses[0]);
+        } else {
+            defer.reject(err);
+        }
+    });
+    return defer.promise;
+}
+
+function Requested_addInterestedUser(requestedClassId, userId) {
+    console.log('1111 ', requestedClassId, '  ', userId);
+    var defer = Q.defer();
+    models.RequestedClass.findOne({ _id: requestedClassId }, function (err, requested) {
+        console.log('2222 ', JSON.stringify(requested));
+        if (!err) {
+            if (requested.interestedUsers.indexOf(userId) !== -1) {
+                defer.resolve(requested); 
+                return;
+            }
+            requested.interestedUsers.push(userId);
+            requested.save(function (err, savedRequested) {
+                console.log('3333 ', JSON.stringify(savedRequested));
+                if (!err) {
+                    thisModule.Requested.get(savedRequested._id).then(defer.resolve, defer.reject);
+                } else {
+                    defer.reject(err);
+                }
+            });
+        } else {
+            defer.reject(err);
+        }
     });
     return defer.promise;
 }
@@ -232,8 +306,8 @@ function addUser(user) {
 
 function updateUser(query, user) {
     var defer = Q.defer();
-    models.User.update(query, { $set: user }, function (err, numberAffected, c, d) {
-        console.log('update |',err,'|',numberAffected,'|',c,'|',d);
+    models.User.update(query, { $set: user }, function (err, numberAffected) {
+        console.log('db.updateuser |',err,'|',numberAffected);
         if (err) {
             defer.reject(err);
         } else {
@@ -242,7 +316,6 @@ function updateUser(query, user) {
     });
     return defer.promise;
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //for local development
