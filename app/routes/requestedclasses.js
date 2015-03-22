@@ -73,6 +73,16 @@ module.exports = function (app) {
             serverError(res, err);
         });
     });
+
+    app.post('/api/requested/:id/setuserinterested', function (req, res) {
+        var setInterested = db.Requested.setUserInterested(req.params.id, req.user._id, req.body.interested);
+        setInterested.then(function(requestedClass) {
+            res.json({ status: 'success', requestedClass: requestedClass })
+        }, function (err) {
+            serverError(res, err);
+        });
+    });
+    
 }
 
 function isRequestedClassValid(requestedClass) {

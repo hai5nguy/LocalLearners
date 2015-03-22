@@ -5,6 +5,7 @@ module.exports = function (app) {
             //res.(req);
             console.log();
             var user = {
+                _id: req.user._id,
                 meetupId: req.user.meetupId,
                 name: req.user.name,
                 thumbLink: req.user.thumbLink

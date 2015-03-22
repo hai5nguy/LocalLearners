@@ -6,8 +6,8 @@ localLearnersApp.factory('RequestedClassesService', function ($http, $q) {
 
     return {
 
-        addInterestedUser: addInterestedUser
-        
+        addInterestedUser: addInterestedUser,
+        setUserInterested: setUserInterested
         //getUpcomingClasses: getUpcomingClasses,
         //postUpcomingClasses: postUpcomingClasses,
         //getCategories: getCategories,
@@ -39,7 +39,24 @@ localLearnersApp.factory('RequestedClassesService', function ($http, $q) {
         return defer.promise;
     }
     
-    
+    function setUserInterested(requestedClassId, interested) {
+        var defer = $q.defer();
+
+        $http.post('/api/requested/' + requestedClassId + '/setuserinterested', { interested: interested }).then(function (response) {
+            console.log('1111 ', response);
+            if (response && response.data && response.data.status === 'success') {
+                defer.resolve(response.data.requestedClass);
+            } else {
+                console.error('RequestedClassesService setuserinterested response: ', JSON.stringify(response));
+                defer.reject('Unable to added you to requested class');
+            }
+        }, function (err) {
+            console.error('RequestedClassesService setuserinterested error: ', JSON.stringify(err));
+            defer.reject('Unable to added you to requested class');
+        });
+            
+        return defer.promise;
+    }
     //function getUpcomingClasses() {
     //    var now = new Date();
     //    if (!upcomingClassesPromise || now - upcomingClassesPromise.lastUpdated > _UPCOMING_CLASSES_TTL) {
