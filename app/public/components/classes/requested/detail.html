@@ -14,15 +14,20 @@
             </ul>
         </li>
     </ul>
+    <div ng-click="login()" ng-show="action === 'login'">
+        <img src="http://placehold.it/40x40" />  Login to vote!
+    </div>
     <div ng-click="setInterested(true)" ng-show="action === 'addInterested'">
         <img src="http://placehold.it/40x40" />  I'm interested in learning this class! 
     </div>
     <div ng-click="setInterested(false)" ng-show="action === 'removeInterested'">
         <img src="http://placehold.it/40x40" />  I'm not interested in this class (sad face)!
     </div>
-    <div ng-click="login()" ng-show="action === 'login'">
-        <img src="http://placehold.it/40x40" />  Login to vote!
+    <br />
+    <div ng-click="teach(requestedClass._id)">
+        <img src="http://placehold.it/40x40" />  I can teach this class!"
     </div>
+
 </div>
 
 <a ui-sref="requested.list">Back to List</a> 

@@ -36,8 +36,10 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
                 templateUrl: '/components/classes/createrequest.html'
             })
             .state('teach', {
-                url: '/teach',
-                templateUrl: '/components/teach/teach.html'
+                //url: '/teach',
+                templateUrl: '/components/teach/teach.html',
+                controller: 'TeachController',
+                params: { classDetails: null }
             })
             .state('host', {
                 url: '/host',

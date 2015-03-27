@@ -36,7 +36,6 @@ module.exports = function(app) {
         
         Requested: {
             get: Requested_get,
-            addInterestedUser: Requested_addInterestedUser,
             setUserInterested: Requested_setUserInterested
         },
 
@@ -222,51 +221,16 @@ function Requested_get(id) {
     return defer.promise;
 }
 
-function Requested_addInterestedUser(requestedClassId, userId) {
-    console.log('1111 ', requestedClassId, '  ', userId);
-    var defer = Q.defer();
-    models.RequestedClass.findOne({ _id: requestedClassId }, function (err, requested) {
-        console.log('2222 ', JSON.stringify(requested));
-        if (!err) {
-            if (requested.interestedUsers.indexOf(userId) !== -1) {
-                defer.resolve(requested); 
-                return;
-            }
-            requested.interestedUsers.push(userId);
-            requested.save(function (err, savedRequested) {
-                console.log('3333 ', JSON.stringify(savedRequested));
-                if (!err) {
-                    thisModule.Requested.get(savedRequested._id).then(defer.resolve, defer.reject);
-                } else {
-                    defer.reject(err);
-                }
-            });
-        } else {
-            defer.reject(err);
-        }
-    });
-    return defer.promise;
-}
-
 function Requested_setUserInterested(requestedClassId, userId, interested) {
-    console.log('1111 ', requestedClassId, '  ', userId);
     var defer = Q.defer();
-    
     var findRequested = models.RequestedClass.findOne({ _id: requestedClassId }).exec();
-    
-    console.log('2222 ', findRequested);
-    
     findRequested.then(function (requestedClass,a,b,c) {
-        console.log('3333 ', requestedClass, "|",a, "|",b,"|",c);
         
         if (interested) {
             addUserToInterested(requestedClass);
         } else {
             removeUserFromInterested(requestedClass);
         }
-
-        console.log('777 ', requestedClass);
-        
         requestedClass.save(function (err, savedRequested) {
             if (!err) {
                 thisModule.Requested.get(requestedClass._id).then(defer.resolve, defer.reject);
@@ -283,21 +247,15 @@ function Requested_setUserInterested(requestedClassId, userId, interested) {
     function addUserToInterested(requestedClass) {
         if (requestedClass.interestedUsers.indexOf(userId) === -1) {
             requestedClass.interestedUsers.push(userId);
-            console.log('4444 add user');
         }
-        
-        console.log('666 ', requestedClass);
     }
     
     function removeUserFromInterested(requestedClass) {
         var existingUserIndex = requestedClass.interestedUsers.indexOf(userId);
         if (existingUserIndex !== -1) {
             requestedClass.interestedUsers.splice(existingUserIndex, 1);
-            console.log('5555 removed user');
         }
-        console.log(requestedClass);
     }
-    
     return defer.promise;
 }
 
