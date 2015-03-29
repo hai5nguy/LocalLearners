@@ -12,7 +12,7 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
             })
             .state('upcoming', {
                 url: '/upcoming',
-                templateUrl: '/components/classes/upcoming.html'
+                templateUrl: '/components/classes/upcoming/index.html'
             })
             .state('createupcoming', {
                 url: '/createupcoming',
@@ -36,7 +36,7 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
                 templateUrl: '/components/classes/createrequest.html'
             })
             .state('teach', {
-                //url: '/teach',
+                url: '/teach',
                 templateUrl: '/components/teach/teach.html',
                 controller: 'TeachController',
                 params: { classDetails: null }

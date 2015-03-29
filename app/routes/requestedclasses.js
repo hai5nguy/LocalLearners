@@ -64,15 +64,6 @@ module.exports = function (app) {
             serverError(res, { error: 'Upcoming Class invalid' });
         }
     });
-    
-    app.post('/api/requested/:id/addinteresteduser', function (req, res) {
-        var addUser = db.Requested.addInterestedUser(req.params.id, req.user._id);
-        addUser.then(function(requestedClass) {
-            res.json({ status: 'success', requestedClass: requestedClass })
-        }, function (err) {
-            serverError(res, err);
-        });
-    });
 
     app.post('/api/requested/:id/setuserinterested', function (req, res) {
         var setInterested = db.Requested.setUserInterested(req.params.id, req.user._id, req.body.interested);

@@ -20,7 +20,8 @@ localLearnersApp.controller('Requested.DetailController', function($scope, $root
         
         //pass state params
         
-        var classDetails = { 
+        var classDetails = {
+            associatedRequestedClassId: $scope.requestedClasses._id,
             name: $scope.requestedClass.name,
             category: $scope.requestedClass.category
         };
