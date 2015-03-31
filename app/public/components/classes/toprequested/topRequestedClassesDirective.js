@@ -4,7 +4,7 @@ localLearnersApp.directive('llTopRequestedClasses', function() {
         replace: true,
         scope: {},
         templateUrl: 'components/classes/toprequested/topRequestedClassesTemplate.html',
-        controller: function($scope, $rootScope, ClassesService, EVENTS, CategoryService) {
+        controller: function($scope, $rootScope, ClassesService, EVENTS, CategoryService, RequestedClassesService) {
 
             $scope.search = {
                 name: ''
@@ -18,7 +18,7 @@ localLearnersApp.directive('llTopRequestedClasses', function() {
                 $scope.categories = [ { name: 'Error loading categories', value: '' }];
             });
 
-            ClassesService.getRequestedClasses().then(function(requestedClasses) {
+            RequestedClassesService.getClasses().then(function(requestedClasses) {
                 $scope.requestedClasses = requestedClasses;
             }, function (err) {
                 console.log('toprequestedclasses error', err);

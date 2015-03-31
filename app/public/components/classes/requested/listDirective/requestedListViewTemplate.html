@@ -1,0 +1,24 @@
+<section id="requested-list-view">
+    <style>
+        #requested-list-view {
+            min-height: 170px;
+        }
+    </style>
+    <div class="col-md-6 col-sm-6">
+        <h3 class="text-center">Top Requested Classes</h3>
+        <input type="hidden" ng-model="search.name"></input>
+        <div class="col-md-4 col-md-offset-8 col-sm-7 col-sm-offset-5">
+            <form class="form">
+                <div class="form-group">
+                    <label for="filterCategory">Filter by Category:</label>
+                    <select class="form-control" name="filterCategory" ng-options="c.name for c in categories" ng-model="selectedCategory"></select>
+                </div>
+            </form>
+        </div>
+        <div>
+            <ol class="clearfix" ng-repeat="requestedClass in requestedClasses | filter:selectedCategory.value | filter:search">
+                <li>{{requestedClass.name}}<span class="badge">{{requestedClass.interestedUsers.length}}</span></li>
+            </ol>
+        </div>
+    </div>
+</section>

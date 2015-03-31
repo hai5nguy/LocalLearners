@@ -9,54 +9,16 @@ localLearnersApp.directive('llMainSearch', function() {
             };
 
             $rootScope.$on(EVENTS.searchCommencing, function () {
-                updateSearchDate();
+                updateSearchData();
             });
 
             $rootScope.$on(EVENTS.searchFilterUpdated, function (event, searchText) {
                 $scope.search.name = searchText;
             });
 
-            function updateSearchDate() {
+            function updateSearchData() {
                 
-                //var searchData = [];
-                //
-                //ClassesService.getUpcomingClasses().then(function (upcomingClasses) {
-                //
-                //    var trimmedUpcomingClasses = _.map(upcomingClasses, function (u) {
-                //        return {
-                //            type: 'upcomingClass',
-                //            id: u.eventId, 
-                //            name: u.name
-                //        }
-                //    });
-                //    
-                //    searchData.push(trimmedUpcomingClasses);
-                //    
-                //    ClassesService.getRequestedClasses().then(function (requestedClasses) {
-                //        var trimmedRequestedClasses = _.map(requestedClasses, function (r) {
-                //            return {
-                //                type: 'requestedClass',
-                //                name: r.name,
-                //                id: r._id
-                //            }
-                //        });
-                //        
-                //        searchData.push(trimmedRequestedClasses);
-                //        
-                //        console.log('11 ', searchData);
-                //        $scope.searchData = searchData;
-                //    }, function (err) {
-                //        console.log('mainsearch error getting requested classes: ', err);
-                //    });
-                //}, function (err) {
-                //    console.log('mainsearch error getting upcoming classes: ', err);
-                //});
-                //
-
-
-                //var searchData = [];
-                
-                ClassesService.getUpcomingClasses().then(function (upcomingClasses) {
+                UpcomingClassesService.getClasses().then(function (upcomingClasses) {
                 
                     var trimmedUpcomingClasses = _.map(upcomingClasses, function (u) {
                         return {
@@ -71,7 +33,7 @@ localLearnersApp.directive('llMainSearch', function() {
                     console.log('mainsearch error getting upcoming classes: ', err);
                 });
 
-                ClassesService.getRequestedClasses().then(function (requestedClasses) {
+                RequestedClassesService.getClasses().then(function (requestedClasses) {
                     var trimmedRequestedClasses = _.map(requestedClasses, function (r) {
                         return {
                             type: 'Requested',
@@ -79,10 +41,6 @@ localLearnersApp.directive('llMainSearch', function() {
                             id: r._id
                         }
                     });
-
-                    //searchData.push(trimmedRequestedClasses);
-
-                    //console.log('11 ', searchData);
 
                     $scope.searchData = _.union($scope.searchData, trimmedRequestedClasses);
 
