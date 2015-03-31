@@ -21,19 +21,19 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
             .state('requested', {
                 abstract: true,
                 url: '/requested',
-                templateUrl: '/components/classes/requested/requested.html'
+                templateUrl: '/components/classes/requested/index.html'
             })
             .state('requested.list', {
                 url: '',
                 templateUrl: '/components/classes/requested/list.html'
             })
+            .state('requested.create', {
+                url: '/create',
+                templateUrl: '/components/classes/requested/create.html'
+            })
             .state('requested.detail', {
                 url: '/:id',
                 templateUrl: '/components/classes/requested/detail.html'
-            })
-            .state('createrequest', {
-                url: '/createrequest',
-                templateUrl: '/components/classes/createrequest.html'
             })
             .state('teach', {
                 url: '/teach',

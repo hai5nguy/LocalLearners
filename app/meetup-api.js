@@ -103,7 +103,7 @@ function postEvent(req, res, event) {
 
         },
         function() {
-            defer.reject('Error making user id: ', req.session.profile.mid, ' an event organizer');
+            defer.reject('Error making user id: ', req.user.meetupId, ' an event organizer');
         }
     );
 
@@ -117,7 +117,7 @@ function ensureUserIsEventOrganizer(req, res) {
             Authorization: 'Bearer ' + req.session.accessToken
         }
     };
-    var url = 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.session.profile.mid;
+    var url = 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.user.meetupId;
 
     restClient.get(url, args, function(meetupProfile) {
 
@@ -142,7 +142,7 @@ function promoteUserToEventOrganizer(req, res) {
                     Authorization: 'Bearer ' + token
                 }
             };
-            var url = 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.session.profile.mid;
+            var url = 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.user.meetupId;
             restClient.post(url, args, defer.resolve)
                 .on('error', defer.reject);
         });

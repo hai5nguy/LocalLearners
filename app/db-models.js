@@ -11,20 +11,12 @@ module.exports = function (mongoose) {
 
     var UpcomingClassSchema = new Schema({
         eventId: String,
-        category: {
-            name: String,
-            value: String,
-            imageUrl: String
-        }
+        category: { type: Schema.Types.ObjectId, ref: 'Category' }
     });
     
     var RequestedClassSchema = new Schema({
         name: String,
-        category: {
-            name: String,
-            value: String,
-            imageUrl: String
-        },
+        category: { type: Schema.Types.ObjectId, ref: 'Category' },
         requester: { type: Schema.Types.ObjectId, ref: 'User' },
         interestedUsers: [{ type: Schema.Types.ObjectId, ref: 'User' }]
     });

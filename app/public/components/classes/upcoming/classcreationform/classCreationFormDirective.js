@@ -7,7 +7,7 @@ localLearnersApp.directive('llClassCreationForm', function() {
         controller: controller
     }
 
-    function controller ($scope, $rootScope, ClassesService, EVENTS, $stateParams, $q) {
+    function controller ($scope, $rootScope, CategoryService, EVENTS, $stateParams, $q, UpcomingClassesService) {
         $scope.loading = false;
         $scope.newClass = {};
 
@@ -19,7 +19,7 @@ localLearnersApp.directive('llClassCreationForm', function() {
 
         function loadCategories() {
             var defer = $q.defer();
-            ClassesService.getCategories().then(function (categories) {
+            CategoryService.getAll().then(function (categories) {
                 categories.unshift({ name: '(Select a category)', value: '' });
                 $scope.categories = categories;
                 $scope.newClass.category = $scope.categories[0];
@@ -34,11 +34,7 @@ localLearnersApp.directive('llClassCreationForm', function() {
         function handlePassedInClassDetails() {
             if ($stateParams.classDetails) {
                 $scope.newClass.name = $stateParams.classDetails.name;
-
-
-                $scope.newClass.category = _.findWhere($scope.categories, { value: $stateParams.classDetails.category.value });
-
-
+                $scope.newClass.category = _.findWhere($scope.categories, { _id: $stateParams.classDetails.category });
             }
         }
 
@@ -48,35 +44,24 @@ localLearnersApp.directive('llClassCreationForm', function() {
                 //todo: validation
                 $scope.loading = true;
                 
-                console.log('111 ', $stateParams.classDetails);
-                
-                console.log('222 ', Boolean($stateParams.classDetails));
-                
-
                 var now = new Date(2015,3,20);
                 var associatedRequestedClassId = $stateParams.classDetails ? $stateParams.classDetails.associatedRequestedClassId : null;
                 
                 var classToPost = {
                     name: $scope.newClass.name,
-                    categoryName: $scope.newClass.category.name,
+                    category: $scope.newClass.category._id,
                     time: now,
                     associatedRequestedClassId: associatedRequestedClassId
                 };
                 
                 console.log(classToPost);
-                //
-                //ClassesService.postClass(classToPost).then(function (response) {
-                //    $scope.loading = false;
-                //    $scope.message = response.data;
-                //}, function (error) {
-                //    $scope.loading = false;
-                //    $scope.message = error;
-                //});
-
 
                 UpcomingClassesService.postClass(classToPost).then(function (response) {
                     $scope.loading = false;
                     $scope.message = response.data;
+                    
+                    //createdUpcomingClass
+                    
                 }, function (error) {
                     $scope.loading = false;
                     $scope.message = error;

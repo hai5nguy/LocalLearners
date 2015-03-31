@@ -18,25 +18,41 @@ module.exports = function(app) {
     thisModule = {
 
         /* categories */
-        getCategories: getCategories,
-        getCategory: getCategory,
-        insertCategories: insertCategories,
+        //getCategories: getCategories,
+        //getCategory: getCategory,
+        //insertCategories: insertCategories,
+        
+        Category: {
+            get: Category_get,
+            getAll: Category_getAll,
+            add: Category_add
+        },
 
         /* upcoming classes */
-        addUpcomingClass: addUpcomingClass,
+        
+        Upcoming: {
+            add: Upcoming_add,
+            get: Upcoming_get,
+            getAll: Upcoming_getAll
+        },
+        
+        //addUpcomingClass: addUpcomingClass,
         removeUpcomingClasses: removeUpcomingClasses,
-        getUpcomingClasses: getUpcomingClasses,
         upsertUpcomingClasses: upsertUpcomingClasses,
+        
+        /* special stuff */
         addCategoriesToEvents: addCategoriesToEvents,
 
         /* requested classes */
-        addRequestedClass: addRequestedClass,
         getRequestedClass: getRequestedClass,
         getRequestedClasses: getRequestedClasses,
         
         Requested: {
             get: Requested_get,
+            add: Requested_add,
+            remove: Requested_remove,
             setUserInterested: Requested_setUserInterested
+            
         },
 
         /* users */
@@ -58,7 +74,19 @@ module.exports = function(app) {
 // Public Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getCategories(callback) {
+function Category_get(query) {
+    var defer = Q.defer();
+    models.Category.findOne(query, function (err, category) {
+        if (err) {
+            defer.reject(err);
+        } else {
+            defer.resolve(category);
+        }
+    });
+    return defer.promise;
+}
+
+function Category_getAll() {
     var defer = Q.defer();
     models.Category.find({}, function(err, categories) {
         if (err) { defer.reject(err) }
@@ -67,45 +95,31 @@ function getCategories(callback) {
     return defer.promise;
 }
 
-function getCategory(query) {
+
+function Category_add(category) {
     var defer = Q.defer();
-    models.Category.find(query, function (err, data) {
-        if (err) {
-            defer.reject(err);
+    
+    var newCategory = new models.Category(category);
+    newCategory.save(function (err, c, numberAffected) {
+        if (!err) {
+            defer.resolve();
         } else {
-            var firstCategory = {
-                name: data[0].name,
-                value: data[0].value,
-                imageUrl: data[0].imageUrl
-            }
-//            console.log('category ', firstCategory);
-            defer.resolve(firstCategory);
+            defer.reject(err);
         }
     });
+
     return defer.promise;
 }
 
-function insertCategories(categories) {
-    for (var i = 0; i < categories.length; i++) {
-        var newCategory = new models.Category(categories[i]);
-        newCategory.save(function (err, category, numberAffected) {
-            if (err) {
-                //TODO: handle errors
-                return;
-            }
+function Upcoming_add(upcomingClass) {
+    return Q.Promise(function(resolve, reject, notify) {
+        var u = new models.UpcomingClass(upcomingClass);
+        u.save(function(err, u, numberAffected) {
+            console.log('db.Upcoming_add ', JSON.stringify(u));
+            if (err) { reject(err) }
+            else { resolve(u) }
         });
-    }
-}
-
-function addUpcomingClass(upcomingClass) {
-    var defer = Q.defer();
-    var u = new models.UpcomingClass(upcomingClass);
-    u.save(function(err, u, numberAffected) {
-//        console.log('db.addUpcomingClass ', JSON.stringify(u));
-        if (err) { defer.reject(err) }
-        else { defer.resolve(u) }
     });
-    return defer.promise;
 }
 function removeUpcomingClasses(upcomingClasses) {
     var defer = Q.defer();
@@ -117,14 +131,24 @@ function removeUpcomingClasses(upcomingClasses) {
     return defer.promise;
 }
 
-function getUpcomingClasses(filter) {
-    var defer = Q.defer();
-    var q = (filter && filter.eventId) ? { eventId: filter.eventId } : {};
-    models.UpcomingClass.find(q, function(err, upcomingClasses) {
-        if (err) { defer.reject(err) }
-        else { defer.resolve(upcomingClasses) }
+function Upcoming_get(id) {
+    return Q.Promise(function (resolve, reject, notify) {
+        var query = models.UpcomingClass.find({ _id: id });
+        query.populate('category');
+        query.exec(function (err, upcomingClasses) {
+            err ? reject(err) : resolve(upcomingClasses[0]);
+        });
     });
-    return defer.promise;
+}
+
+function Upcoming_getAll() {
+    return Q.Promise(function (resolve, reject, notify) {
+        var query = models.UpcomingClass.find({});
+        query.populate('category');
+        query.exec(function (err, upcomingClasses) {
+            err ? reject(err) : resolve(upcomingClasses); 
+        });
+    });
 }
 
 function upsertUpcomingClasses(upcomingClass) {
@@ -153,12 +177,18 @@ function upsertUpcomingClasses(upcomingClass) {
 }
 
 function addCategoriesToEvents(events) {
+    
+    
     var defer = Q.defer();
 
     var eventIds = _.pluck(events, 'eventId');
 
     models.UpcomingClass.find({ eventId: { $in: eventIds }}, function(err, upcomingClasses) {
+        
+        
         var eventsWithCategory =  _.map(events, function (e) {
+            
+            
             var matchingClass = _.findWhere(upcomingClasses, { eventId: e.eventId});
             e.category = matchingClass ? matchingClass.category : 'Unknown';
             return e;
@@ -170,11 +200,11 @@ function addCategoriesToEvents(events) {
     return defer.promise;
 }
 
-function addRequestedClass(requested) {
+function Requested_add(requested) {
     var defer = Q.defer();
     var r = new models.RequestedClass(requested);
     r.save(function(err, r, numberAffected) {
-        console.log('db.addRequestedClass ', JSON.stringify(r));
+        console.log('db.Requested_add ', JSON.stringify(r));
         if (err) { defer.reject(err) }
         else { defer.resolve(r) }
     });
@@ -216,6 +246,19 @@ function Requested_get(id) {
             defer.resolve(requestClasses[0]);
         } else {
             defer.reject(err);
+        }
+    });
+    return defer.promise;
+}
+
+function Requested_remove(query) {
+    var defer = Q.defer();
+    models.RequestedClass.remove(query, function (err, b, c) {
+        console.log('db.Requested.remove: ', err, '| ', b, '| ', c);
+        if (!err) {
+            defer.resolve();
+        } else {
+            defer.reject("Unable to remove Requested Class, query: ", JSON.stringify(query));
         }
     });
     return defer.promise;

@@ -3,16 +3,12 @@ var Q = require('../../node_modules/q');
 var db = require('../db.js')(THE_APP);
 
 module.exports = function (app) {
-    app.get('/categories', function (req, res) {
-        db.getCategories()
-        .then(
-            function(categories) {
-                res.json(categories);
-            },
-            function (err) {
-                serverError(res, err)
-            }
-        );
+    app.get('/api/category/all', function (req, res) {
+        db.Category.getAll().then(function(categories) {
+            res.json(categories);
+        }, function (err) {
+            serverError(res, err)
+        });
     });
 }
 

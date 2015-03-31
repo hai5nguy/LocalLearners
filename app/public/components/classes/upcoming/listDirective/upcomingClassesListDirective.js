@@ -22,21 +22,17 @@ localLearnersApp.directive('llUpcomingClassesList', function() {
         }
     }
     
-    function controller($scope, $rootScope, ClassesService) {
+    function controller($scope, UpcomingClassesService, CategoryService) {
 
-        ClassesService.getCategories()
-        .then(
-            function (cats) {
+        CategoryService.getAll().then(function (cats) {
                 cats.unshift({ name: 'All Categories', value: '' });
                 $scope.categories = cats;
                 $scope.selectedCategory = $scope.categories[0];
-            },
-            function () {
+        },function () {
                 $scope.categories = [{ name: 'Error loading categories', value: '' }];
-            }
-        );
-    
-        ClassesService.getUpcomingClasses().then(function(upcomingClasses) {
+        });
+
+        UpcomingClassesService.getClasses().then(function(upcomingClasses) {
             $scope.availClasses = upcomingClasses;
         });
         

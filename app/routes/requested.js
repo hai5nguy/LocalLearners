@@ -1,5 +1,5 @@
 var Q = require('../../node_modules/q');
-var meetupApi = require('../meetup-api.js')(THE_APP);
+//var meetupApi = require('../meetup-api.js')(THE_APP);
 var db = require('../db.js')(THE_APP);
 var authentication = require('../authentication.js')(THE_APP);
 
@@ -27,7 +27,7 @@ module.exports = function (app) {
         
     });
 
-    app.post('/requestedclasses', function (req, res, next) {
+    app.post('/api/requested', function (req, res, next) {
         
         //todo: authentication
         //if (!req.isAuthenticated()) {
@@ -36,33 +36,21 @@ module.exports = function (app) {
         
         var requestedClass = {
             name: req.body.name,
-            categoryName: req.body.categoryName,
-            category: {},
+            category: req.body.category,
             requester: req.user._id,
             interestedUsers: [ req.user._id ]
         };
 
-        if (isRequestedClassValid(requestedClass)) {
-
-            db.getCategory({ name: requestedClass.categoryName }).then(function (category) {
-
-                delete requestedClass.categoryName;
-                requestedClass.category = category;
-
-                db.addRequestedClass(requestedClass).then(function (savedRequested) {
-                    //console.log('/requestedclasses savedrequested ', JSON.stringify(savedRequested));
-                    res.json({ status: 'success', savedRequested: savedRequested });
-                }, function (err) {
-                    serverError(res, err);
-                });
-
-            }, function (err) {
-                serverError(res, err);
-            });
-
-        } else {
-            serverError(res, { error: 'Upcoming Class invalid' });
-        }
+        Q.fcall(validateRequestedClass(requestedClass))
+            .then(saveRequestedClass(requestedClass))
+            .then(function (savedRequested) {
+                res.json({ status: 'success', savedRequested: savedRequested });
+            })
+            .catch(function (error) {
+                res.status(500).send({ error: error });
+            })
+            .done();
+        
     });
 
     app.post('/api/requested/:id/setuserinterested', function (req, res) {
@@ -76,11 +64,32 @@ module.exports = function (app) {
     
 }
 
-function isRequestedClassValid(requestedClass) {
-    return (
-        IsPopulatedString(requestedClass.name) &&
-        IsPopulatedString(requestedClass.categoryName)
-    )
+function validateRequestedClass(requestedClass) {
+    return function() {
+        return Q.Promise(function(resolve, reject, notify) {
+            if (IsPopulatedString(requestedClass.name) &&
+                IsPopulatedString(requestedClass.category)) {
+                
+                resolve(true);
+            } else {
+                reject('Invalid requested class');
+            }
+        });
+    }
+}
+
+function saveRequestedClass(requestedClass) {
+    return function() {
+        return Q.Promise(function(resolve, reject, notify) {
+            
+            db.Requested.add(requestedClass).then(function (savedRequested) {
+                resolve(savedRequested);
+            }, function (error) {
+                reject(error);
+            });
+
+        });
+    }
 }
 
 function serverError(res, err) {

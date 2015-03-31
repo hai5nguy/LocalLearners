@@ -13,9 +13,8 @@ module.exports = function (app) {
     });
 
     app.get('/seedfakeupcomingclasses', function (req, res) {
-        db.getCategories(function (categories) {
-
-
+        
+        db.Category.getAll().then(function (categories) {
             for (var i = 0; i < 100; i++) {
 
                 var categoryIndex = i % categories.length;
@@ -53,8 +52,14 @@ module.exports = function (app) {
             { name: 'Sports', value: 'sports', imageUrl: imgUrlRoot + 'sports.png' },
             { name: 'Visual Arts', value: 'visual-arts', imageUrl: imgUrlRoot + 'visual-arts.png' }
         ];
-        db.insertCategories(defaultCategories);
-        res.send('categories seeded');
+        
+        //db.insertCategories(defaultCategories);
+        
+        for (var i = 0; i < defaultCategories.length; i++ ) {
+            db.Category.add(defaultCategories[i]);
+        }
+        
+        res.send('categories seeded');;
     });
 
 

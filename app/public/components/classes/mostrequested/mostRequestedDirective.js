@@ -4,9 +4,9 @@ localLearnersApp.directive('llMostRequested', function() {
         replace: true,
         scope: {},
         templateUrl: 'components/classes/mostrequested/mostRequestedDirective.html',
-        controller: function($scope, ClassesService) {
+        controller: function($scope, CategoryService) {
 
-            ClassesService.getCategories(function(categories) {
+            CategoryService.getAll(function(categories) {
                 $scope.categories = categories;
                 $scope.selectedCategory = $scope.categories[0];
             });

@@ -4,13 +4,13 @@ localLearnersApp.directive('llTopRequestedClasses', function() {
         replace: true,
         scope: {},
         templateUrl: 'components/classes/toprequested/topRequestedClassesTemplate.html',
-        controller: function($scope, $rootScope, ClassesService, EVENTS) {
+        controller: function($scope, $rootScope, ClassesService, EVENTS, CategoryService) {
 
             $scope.search = {
                 name: ''
             };
-            
-            ClassesService.getCategories().then(function (categories) {
+
+            CategoryService.getAll().then(function (categories) {
                 categories.unshift({ name: 'All Categories', value: '' });
                 $scope.categories = categories;
                 $scope.selectedCategory = $scope.categories[0];
