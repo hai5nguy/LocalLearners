@@ -1,3 +1,6 @@
+﻿#Minimal Viable Product
+* Google form for students to fill out for feed back after a class finishes.
+
 #Need to do:
 * Auto Scrolling to top when clicking on a new page. Can be done in Angular. Home FAQ link takes you to bottom of FAQ page. (HMN)
 * WIP - Categories lists need to all be pulled from the same place (in database). (HMN)
@@ -30,6 +33,7 @@
 * Have an administration page to make updates to site remotely without having to re-deploy code.
 * Investigate custom @locallearners.net email (HMN)
 * Send alert emails when requested class is being taught. "A class you requested will be taught!"
+* Create custom post-class feedback form for students to fill out rather than a google form.
 
 #Nice to have:
 * Modals should appear at ~33% from the top of page (currently too close to top) (AR)
