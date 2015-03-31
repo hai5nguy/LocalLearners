@@ -1,8 +1,9 @@
 localLearnersApp.factory('RequestedClassesService', function ($http, $q) {
 
     return {
-        setUserInterested: setUserInterested,
-        postClass: postClass
+        getClasses: getClasses,
+        postClass: postClass,
+        setUserInterested: setUserInterested
     }
 
 
@@ -10,6 +11,17 @@ localLearnersApp.factory('RequestedClassesService', function ($http, $q) {
     // Public Functions
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    function getClasses() {
+        var defer = $q.defer();
+        $http.get('/api/requested').then(function (response) {
+            defer.resolve(response.data);
+        }, function (err) {
+            defer.reject(err);
+        });
+        return defer.promise;
+    }
+
+    
     function setUserInterested(requestedClassId, interested) {
         var defer = $q.defer();
 

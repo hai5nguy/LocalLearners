@@ -5,9 +5,8 @@ var authentication = require('../authentication.js')(THE_APP);
 
 module.exports = function (app) {
 
-    app.get('/requestedclasses', function (req, res) {
-
-        db.getRequestedClasses().then(function (requestedClasses) {
+    app.get('/api/requested', function (req, res) {
+        db.Requested.getAll().then(function (requestedClasses) {
             //console.log('/requestedclasses requestedClasses ', JSON.stringify(requestedClasses));
             res.json(requestedClasses);
         }, function (err) {

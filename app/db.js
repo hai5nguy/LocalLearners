@@ -48,8 +48,9 @@ module.exports = function(app) {
         getRequestedClasses: getRequestedClasses,
         
         Requested: {
-            get: Requested_get,
             add: Requested_add,
+            get: Requested_get,
+            getAll: Requested_getAll,
             remove: Requested_remove,
             setUserInterested: Requested_setUserInterested
             
@@ -250,6 +251,17 @@ function Requested_get(id) {
     });
     return defer.promise;
 }
+
+function Requested_getAll() {
+    return Q.Promise(function (resolve, reject, notify) {
+        var query = models.RequestedClass.find({});
+        query.populate('category');
+        query.exec(function (err, requestedClasses) {
+            err ? reject(err) : resolve(requestedClasses);
+        });
+    });
+}
+
 
 function Requested_remove(query) {
     var defer = Q.defer();
