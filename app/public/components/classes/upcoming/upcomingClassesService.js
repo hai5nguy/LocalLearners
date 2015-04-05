@@ -1,6 +1,7 @@
 localLearnersApp.factory('UpcomingClassesService', function ($http, $q) {
 
     return {
+        getClass: getClass,
         getClasses: getClasses,
         postClass: postClass
 
@@ -11,15 +12,23 @@ localLearnersApp.factory('UpcomingClassesService', function ($http, $q) {
     // Public Functions
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    function getClass(id) {
+        return $q(function (resolve, reject) {
+            $http.get('/api/upcoming/' + id).then(function (response) {
+                resolve(response.data);
+            }, function (error) {
+                reject(error);
+            });
+        });
+    }
     function getClasses() {
-        var defer = $q.defer();
-        $http.get('/api/upcoming').then(function (response) {
-            console.log('555 ', response.data);
-            defer.resolve(response.data);
-        }, function (error) {
-            defer.reject(error);
-        })
-        return defer.promise;
+        return $q(function (resolve, reject) {
+            $http.get('/api/upcoming').then(function (response) {
+                resolve(response.data);
+            }, function (error) {
+                reject(error);
+            })
+        });
     }
     
     function postClass(classToPost) {

@@ -10,14 +10,26 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
                 url: '/',
                 templateUrl: '/components/home/home.html'
             })
+            
+            
             .state('upcoming', {
+                abstract: true,
                 url: '/upcoming',
                 templateUrl: '/components/classes/upcoming/index.html'
             })
-            .state('createupcoming', {
-                url: '/createupcoming',
-                templateUrl: '/components/classes/createupcoming.html'
+            .state('upcoming.list', {
+                url: '',
+                templateUrl: '/components/classes/upcoming/list.html'
             })
+            .state('upcoming.create', {
+                url: '/create',
+                templateUrl: '/components/classes/upcoming/create.html'
+            })
+            .state('upcoming.detail', {
+                url: '/:id',
+                templateUrl: '/components/classes/upcoming/detail.html'
+            })
+            
             .state('requested', {
                 abstract: true,
                 url: '/requested',

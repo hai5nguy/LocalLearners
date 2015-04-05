@@ -9,11 +9,11 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="availClass in availClasses | filter: selectedCategory.value | limitTo:6" ng-click="getClassInfo(availClass)">
+        <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="upcomingClass in upcomingClasses | filter: selectedCategory.value | limitTo:6" ui-sref="upcoming.detail({ id: upcomingClass._id })">
             <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
-                <span class="upcomingCategory"><a href="{{ availClass.catlink }}">{{ availClass.category.name }}</a></span>
-                <img src="{{ availClass.category.imageUrl }}" class="img-responsive upcomingImage" alt="Class Title - Category" />
-                <span class="upcomingTitle truncate col-md-12 col-sm-12 col-xs-12">{{ availClass.name }}</span>
+                <span class="upcomingCategory"><a href="{{ upcomingClass.catlink }}">{{ upcomingClass.category.name }}</a></span>
+                <img src="{{ upcomingClass.category.imageUrl }}" class="img-responsive upcomingImage" alt="Class Title - Category" />
+                <span class="upcomingTitle truncate col-md-12 col-sm-12 col-xs-12">{{ upcomingClass.name }}</span>
                 <div class="panel-body text-right">
                     <div class="row">
                         <div class="text-left col-md-4 col-sm-6 hidden-xs">
@@ -21,8 +21,8 @@
                             <p>RSVP</p>
                         </div>
                         <div class="col-md-8 col-sm-6">
-                            <h5>{{ availClass.date }}</h5>
-                            <p class="small">{{ availClass.location }}</p>
+                            <h5>{{ upcomingClass.date }}</h5>
+                            <p class="small">{{ upcomingClass.location }}</p>
                             <span class="small badge glyphicon glyphicon-user">14</span>
                         </div>
                     </div>

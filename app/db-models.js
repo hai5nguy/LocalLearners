@@ -10,8 +10,9 @@ module.exports = function (mongoose) {
     });
 
     var UpcomingClassSchema = new Schema({
-        eventId: String,
-        category: { type: Schema.Types.ObjectId, ref: 'Category' }
+        //eventId: String,
+        category: { type: Schema.Types.ObjectId, ref: 'Category' },
+        meetupEvent: 
     });
     
     var RequestedClassSchema = new Schema({
@@ -28,8 +29,7 @@ module.exports = function (mongoose) {
         thumbLink: String
     });
     
-    //<editor-fold desc="Development ////////////////////////////////////////////////////////////////////////////////////////////////">
-    var FakeEventSchema = new Schema({
+    var meetupEventSchemaDefinition = {
         visibility: String,
         status: String,
         maybe_rsvp_count: Number,
@@ -55,7 +55,14 @@ module.exports = function (mongoose) {
             urlname: String,
             who: String
         }
-    });
+    };
+    
+    var MeetupEventSchema = new Schema(meetupEventSchemaDefinition);
+    
+    //<editor-fold desc="Development ////////////////////////////////////////////////////////////////////////////////////////////////">
+    
+    var FakeEventSchema = new Schema(meetupEventSchemaDefinition);
+    
     //</editor-fold>
 
     return {

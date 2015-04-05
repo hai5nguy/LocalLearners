@@ -1,4 +1,4 @@
-//var Q = require('../../node_modules/q');
+var Q = require('../../node_modules/q');
 //var meetupApi = require('../meetup-api.js');
 var db = require('../db.js')(THE_APP);
 
@@ -58,4 +58,15 @@ module.exports = function (app) {
             //TODO: error handling
         });
     });
+    
+    app.get('/fakemeetupapi/event/:id', function (req, res) {
+        db.FakeEvent.get(req.params.id)
+            .then(function (fakeEvent) {
+                res.json(fakeEvent);
+            }, function (error) {
+                res.status(500).send({error: error});
+            });
+    });
+    
+    
 }

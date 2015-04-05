@@ -1,0 +1,34 @@
+<div ng-controller="Upcoming.DetailController">
+    <ul>
+        <li>id: {{upcomingClass._id}}</li>
+        <li>name: {{upcomingClass.name}}</li>
+        <li>category: {{upcomingClass.category.name}}</li>
+        <li>requester: {{upcomingClass.requester.name}}
+            <img style="width: 36px; height: 36px;" ng-src="{{upcomingClass.requester.thumbLink}}" />
+        </li>
+        <li>interested users:
+            <ul>
+                <li ng-repeat="user in upcomingClass.interestedUsers">
+                    {{user.name}} <img style="width: 36px; height: 36px;" ng-src="{{user.thumbLink}}" />
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!---->
+    <!--<div ng-click="login()" ng-show="action === 'login'">-->
+        <!--<img src="http://placehold.it/40x40" />  Login to vote!-->
+    <!--</div>-->
+    <!--<div ng-click="setInterested(true)" ng-show="action === 'addInterested'">-->
+        <!--<img src="http://placehold.it/40x40" />  I'm interested in learning this class!-->
+    <!--</div>-->
+    <!--<div ng-click="setInterested(false)" ng-show="action === 'removeInterested'">-->
+        <!--<img src="http://placehold.it/40x40" />  I'm not interested in this class (sad face)!-->
+    <!--</div>-->
+    <!--<br />-->
+    <!--<div ng-click="teach(requestedClass._id)">-->
+        <!--<img src="http://placehold.it/40x40" />  I can teach this class!"-->
+    <!--</div>-->
+
+</div>
+
+<a ui-sref="upcoming.list">Back to List</a> 

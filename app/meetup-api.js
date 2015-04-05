@@ -4,15 +4,17 @@ var restClient = new NodeRestClient();
 
 var meetupAdministrator = require('./meetup-administrator.js')(THE_APP);
 
-var LOCAL_LEARNERS_GROUP_ID = 18049722;
-var LOCAL_LEARNERS_GROUP_URLNAME = 'locallearners';
-var LOCAL_LEARNERS_ADMINISTRATOR_API_KEY = '7d156b614b6d5c5e7d357e18151568';
+var _localLearnersGroupId = 18049722;  //todo: move to environmentals, maybe not??
+var _localLearnersGroupUrlName = 'locallearners';
 
 module.exports = function (app) {
     return {
         getProfile: getProfile,
         getEvents: getEvents,
-        postEvent: postEvent
+        postEvent: postEvent,
+        Event: {
+            get: Event_get
+        }
     }
 }
 
@@ -43,7 +45,7 @@ function getProfile(accessToken, callback) {
 function getEvents() {
     var defer = Q.defer();
 
-    restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&fields=event_hosts&group_id=' + LOCAL_LEARNERS_GROUP_ID + '&page=20&key=' + LOCAL_LEARNERS_ADMINISTRATOR_API_KEY,
+    restClient.get(MEETUP_API_ENDPOINT + '/events?&sign=true&photo-host=public&fields=event_hosts&group_id=' + _localLearnersGroupId + '&page=20&key=' + LL_ADMINISTRATOR_API_KEY,
         function(data) {
             var rawEvents = data.results;
             var events = [];
@@ -64,6 +66,8 @@ function getEvents() {
     return defer.promise;
 }
 
+
+//todo: this needs to be rewritten to use Promises
 function postEvent(req, res, event) {
     var defer = Q.defer();
 
@@ -73,8 +77,8 @@ function postEvent(req, res, event) {
         function() {
             var args = {
                 parameters: {
-                    group_id: LOCAL_LEARNERS_GROUP_ID,
-                    group_urlname: LOCAL_LEARNERS_GROUP_URLNAME,
+                    group_id: _localLearnersGroupId,
+                    group_urlname: _localLearnersGroupUrlName,
                     name: event.name,
                     time: event.time
                 },
@@ -117,7 +121,7 @@ function ensureUserIsEventOrganizer(req, res) {
             Authorization: 'Bearer ' + req.session.accessToken
         }
     };
-    var url = 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.user.meetupId;
+    var url = 'https://api.meetup.com/2/profile/' + _localLearnersGroupId + '/' + req.user.meetupId;
 
     restClient.get(url, args, function(meetupProfile) {
 
@@ -142,11 +146,56 @@ function promoteUserToEventOrganizer(req, res) {
                     Authorization: 'Bearer ' + token
                 }
             };
-            var url = 'https://api.meetup.com/2/profile/' + LOCAL_LEARNERS_GROUP_ID + '/' + req.user.meetupId;
+            var url = 'https://api.meetup.com/2/profile/' + _localLearnersGroupId + '/' + req.user.meetupId;
             restClient.post(url, args, defer.resolve)
                 .on('error', defer.reject);
         });
     return defer.promise;
+}
+
+function Event_get(id) {
+    
+    return Q.Promise(function (resolve, reject, notify) {
+        restClient.get(MEETUP_API_ENDPOINT + '/event/' + id + '?&sign=true&photo-host=public&page=20&key=' + LL_ADMINISTRATOR_API_KEY,
+            function(event) {
+                resolve(event);
+            }).on('error', function (error) {
+                reject(error);
+            });
+    });
+    
+    /*
+     {
+     "utc_offset": -14400000,
+     "headcount": 0,
+     "visibility": "public",
+     "waitlist_count": 0,
+     "created": 1427846828000,
+     "maybe_rsvp_count": 0,
+     "event_url": "http://www.meetup.com/LocalLearners/events/221536470/",
+     "yes_rsvp_count": 1,
+     "announced": false,
+     "name": "test class DO NOT RSVP",
+     "id": "221536470",
+     "time": 1430521200000,
+     "updated": 1427846828000,
+     "group": {
+         "join_mode": "open",
+         "created": 1415053890000,
+         "name": "Local Learners",
+         "group_lon": -86.16000366210938,
+         "id": 18049722,
+         "urlname": "LocalLearners",
+         "group_lat": 39.77000045776367,
+         "who": "Learners"
+     },
+     "status": "upcoming"
+     }
+     */
+    
+    
+    
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,31 +210,3 @@ function isEventValid(event) {
     )
 }
 
-//function doGet(options) {
-//    var defer = Q.defer();
-//
-//
-//
-//    var args = {
-//        parameters: {}
-//    }
-//    var args = {
-//        parameters: {
-//            add_role: role
-//        },
-//        headers: {
-//            Authorization: 'Bearer ' + token
-//            //'Content-Type': 'APPlication/x-www-form-urlencoded'
-//        }
-//    };
-//
-//    if (!options.url || options.url === '') throw 'doGet url invalid';
-//
-//    if (options.parameters) args.parameters = options.parameters;
-//    if (options.headers) args.headers = options.headers;
-//
-//    if (!options.excludeAccessToken) {
-//        args.headers.Authorization = 'Bearer '
-//    }
-//    restClient.get(options.url, )
-//}

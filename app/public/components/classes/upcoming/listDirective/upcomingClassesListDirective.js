@@ -33,7 +33,8 @@ localLearnersApp.directive('llUpcomingClassesList', function() {
         });
 
         UpcomingClassesService.getClasses().then(function(upcomingClasses) {
-            $scope.availClasses = upcomingClasses;
+            console.log('333 ', upcomingClasses);
+            $scope.upcomingClasses = upcomingClasses;
         });
         
     }

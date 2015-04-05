@@ -64,7 +64,10 @@ module.exports = function(app) {
         /* fakes - development purpose */
         insertFakeEvents: insertFakeEvents,
         getFakeEvents: getFakeEvents,
-        addFakeEvent: addFakeEvent
+        addFakeEvent: addFakeEvent,
+        FakeEvent: {
+            get: FakeEvent_get
+        }
     }
     
     return thisModule;
@@ -423,6 +426,14 @@ function addFakeEvent(fakeEvent) {
     });
 
     return defer.promise;
+}
+
+function FakeEvent_get(id) {
+    return Q.Promise(function (resolve, reject, notify) {
+        models.FakeEvent.findOne({ id: id }, function (err, fakeEvent) {
+            err ? reject(err) : resolve(fakeEvent); 
+        });
+    });
 }
 
 function isValidFakeEvent(fakeEvent) {

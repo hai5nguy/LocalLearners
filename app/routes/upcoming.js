@@ -10,7 +10,6 @@ module.exports = function (app) {
         Q.fcall(getMeetupEvents(req, res))
             .then(mergeWithUpcomingClasses())
             .then(function (upcomingClasses) {
-                console.log('yoooo');
                 res.json(upcomingClasses);
             })
             .catch(function (error) {
@@ -18,10 +17,26 @@ module.exports = function (app) {
             });
     });
 
-    app.get('/upcomingclasses/:id', function (req, res) {
-        //TODO: implement this
-        res.json({upcomingclass: 'upcoming class with id ' + req.params.id});
-
+    app.get('/api/upcoming/:id', function (req, res) {
+        
+        Q.fcall(getMeetupEvent(req, res))
+            .then(mergeWithUpcomingClass())
+            .then(function (upcomingClass) {
+                res.json(upcomingClass);
+            })
+            .catch(function (error) {
+                res.status(500).send({error: error});  
+            });
+        
+        
+        //
+        //db.getRequestedClass(req.params.id).then(function(requestedClass) {
+        //    //console.log('api/requested/:id requestedClass', JSON.stringify(requestedClass));
+        //    res.json(requestedClass);
+        //}, function (err) {
+        //    serverError(res, err);
+        //});
+        
     });
 
     app.post('/api/upcoming', function (req, res) {
