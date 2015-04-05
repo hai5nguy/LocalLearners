@@ -33,7 +33,8 @@ module.exports = function(app) {
         Upcoming: {
             add: Upcoming_add,
             get: Upcoming_get,
-            getAll: Upcoming_getAll
+            getAll: Upcoming_getAll,
+            updateAll: Upcoming_updateAll
         },
         
         //addUpcomingClass: addUpcomingClass,
@@ -155,6 +156,12 @@ function Upcoming_getAll() {
     });
 }
 
+function Upcoming_updateAll(upcomingClasses) {
+    return Q.Promise(function (resolve, reject, notify) {
+        models.UpcomingClass.update({}, upcomingClasses)
+    })
+    
+}
 function upsertUpcomingClasses(upcomingClass) {
     var defer = Q.defer();
 

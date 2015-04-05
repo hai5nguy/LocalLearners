@@ -10,9 +10,8 @@ module.exports = function (mongoose) {
     });
 
     var UpcomingClassSchema = new Schema({
-        //eventId: String,
         category: { type: Schema.Types.ObjectId, ref: 'Category' },
-        meetupEvent: 
+        meetupEvent: Object
     });
     
     var RequestedClassSchema = new Schema({
@@ -23,13 +22,17 @@ module.exports = function (mongoose) {
     });
 
     var UserSchema = new Schema({
-        meetupId: Number,
+        accessToken: String,
         name: String,
-		accessToken: String,
-        thumbLink: String
+        meetupId: Number,
+        meetupRole: String,
+        thumbLink: String,
+        meetupProfile: Object
     });
     
-    var meetupEventSchemaDefinition = {
+    //<editor-fold desc="Development ////////////////////////////////////////////////////////////////////////////////////////////////">
+    
+    var FakeEventSchema = new Schema({
         visibility: String,
         status: String,
         maybe_rsvp_count: Number,
@@ -55,21 +58,16 @@ module.exports = function (mongoose) {
             urlname: String,
             who: String
         }
-    };
-    
-    var MeetupEventSchema = new Schema(meetupEventSchemaDefinition);
-    
-    //<editor-fold desc="Development ////////////////////////////////////////////////////////////////////////////////////////////////">
-    
-    var FakeEventSchema = new Schema(meetupEventSchemaDefinition);
+    });
     
     //</editor-fold>
 
     return {
         Category: mongoose.model('Category', CategorySchema),
-        UpcomingClass: mongoose.model('UpcomingClass', UpcomingClassSchema),
         FakeEvent: mongoose.model('FakeEvent', FakeEventSchema),
-        User: mongoose.model('User', UserSchema),
-        RequestedClass: mongoose.model('RequestedClass', RequestedClassSchema)
+        RequestedClass: mongoose.model('RequestedClass', RequestedClassSchema),
+        UpcomingClass: mongoose.model('UpcomingClass', UpcomingClassSchema),
+        User: mongoose.model('User', UserSchema)
     }
+    
 }

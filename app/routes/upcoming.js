@@ -6,15 +6,13 @@ var db = require('../db.js')(THE_APP);
 module.exports = function (app) {
 
     app.get('/api/upcoming', function (req, res) {
-
-        Q.fcall(getMeetupEvents(req, res))
-            .then(mergeWithUpcomingClasses())
-            .then(function (upcomingClasses) {
-                res.json(upcomingClasses);
-            })
-            .catch(function (error) {
-                res.status(500).send({error: error});
-            });
+        
+        db.Upcoming.getAll().then(function (upcomingClasses) {
+            res.json(upcomingClasses);
+        }, function (error) {
+            res.status(500).send({ error: error });
+        });
+        
     });
 
     app.get('/api/upcoming/:id', function (req, res) {
@@ -27,19 +25,10 @@ module.exports = function (app) {
             .catch(function (error) {
                 res.status(500).send({error: error});  
             });
-        
-        
-        //
-        //db.getRequestedClass(req.params.id).then(function(requestedClass) {
-        //    //console.log('api/requested/:id requestedClass', JSON.stringify(requestedClass));
-        //    res.json(requestedClass);
-        //}, function (err) {
-        //    serverError(res, err);
-        //});
-        
     });
 
     app.post('/api/upcoming', function (req, res) {
+        
         var upcomingClass = {
             name: req.body.name,
             category: req.body.category,
@@ -56,7 +45,7 @@ module.exports = function (app) {
                 res.json({status: 'success', createdUpcomingClass: createdUpcomingClass});
             })
             .catch(function (error) {
-                console.log('errror : ', error);
+                console.log('error : ', error);
                 res.status(500).send({error: error});
             })
             .done();
@@ -81,35 +70,34 @@ function validateUpcomingClass(upcomingClass) {
 
 function postToMeetup(req, res, upcomingClass) {
     return function() {
-        var defer = Q.defer();
+        return Q.Promise(function (notify, reject, notify) {
+            var eventToPost = {
+                name: upcomingClass.name,
+                time: upcomingClass.time
+            };
 
-        var eventToPost = {
-            name: upcomingClass.name,
-            time: upcomingClass.time
-        };
-
-        meetupApi.postEvent(req, res, eventToPost).then(function (r) {
-            var response = JSON.parse(r);
-            if (response && response.status === 'success') {
-                defer.resolve(response.createdEvent)
-            } else {
-                defer.reject("Unable to post class to Meetup");
-            }
-        }, function (err) {
-            defer.reject(err);
+            meetupApi.postEvent(req, res, eventToPost).then(function (r) {
+                var response = JSON.parse(r);
+                if (response && response.status === 'success') {
+                    resolve(response.createdEvent)
+                } else {
+                    reject("Unable to post class to Meetup");
+                }
+            }, function (err) {
+                reject(err);
+            });
         });
-        return defer.promise;
     }
 }
 
 function savePostedClassToDB(upcomingClass) {
     return function (createdEvent) {
         return Q.Promise(function (resolve, reject, notify) {
-            var eventToSave = {
-                eventId: createdEvent.id,
-                category: upcomingClass.category
+            var classToSave = {
+                category: upcomingClass.category,
+                meetupEvent: createdEvent
             };
-            db.Upcoming.add(eventToSave).then(function (savedClass) {
+            db.Upcoming.add(classToSave).then(function (savedClass) {
                 resolve(savedClass)
             }, function (err) {
                 reject(err);
@@ -135,29 +123,37 @@ function deleteAssocatedRequestedClass(upcomingClass) {
     }
 }
 
-function getMeetupEvents(req, res) {
+function getUpcomingClasses() {
     return function () {
         return Q.Promise(function (resolve, reject, notify) {
-            meetupApi.getEvents(req, res).then(resolve, reject);
+            db.Upcoming.getAll().then(resolve, reject);
         });
     }
 }
 
-function mergeWithUpcomingClasses() {
-    return function (events) {
+
+
+function mergeWithMeetupEvents() {
+    return function (upcomingClasses) {
         return Q.Promise(function (resolve, reject, notify) {
-
-            db.Upcoming.getAll().then(function (upcomingClasses) {
-
-                _.map(events, function (e) {
-                    var matchingClass = _.findWhere(upcomingClasses, { eventId: e.eventId });
-                    e.category = matchingClass ? matchingClass.category : 'Unknown';
+            
+            meetupApi.Event.getAll().then(function (events) {
+                
+                _.each(upcomingClasses, function(upcomingClass) {
+                    var matchingEvent = _.findWhere(events, { id: upcomingClass.meetupEvent.id });
+                    
+                    if (matchingEvent) {
+                        matchingEvent.meetupEvent = matchingEvent;
+                    }
                 });
                 
-                resolve(events);
+                db.Upcoming.updateAll(upcomingClasses).then(function(a) {
+                    console.log('111 ', a)
+                    resolve(a);
+                }, function (err) {
+                    reject(err);
+                });
                 
-            }, function (error) {
-                reject(error);
             });
         });
     }
