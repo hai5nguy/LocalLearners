@@ -60,7 +60,7 @@ function Event_post(req, res, event) {
         
         Q.fcall(checkEventValid(event))
             .then(ensureUserIsEventOrganizer(req, res))
-            .then(postEventToMeetup(event))
+            .then(postEventToMeetup(req, res, event))
             .then(function (postedEvent) {
                 resolve(postedEvent);
             })
@@ -129,6 +129,7 @@ function promoteUserToEventOrganizer(req, res) {
                     Authorization: 'Bearer ' + token
                 }
             };
+            
             var url = 'https://api.meetup.com/2/profile/' + _localLearnersGroupId + '/' + req.user.meetupProfile.id;
             restClient.post(url, args, resolve)
                 .on('error', reject);

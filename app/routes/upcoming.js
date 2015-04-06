@@ -41,7 +41,7 @@ module.exports = function (app) {
             .then(savePostedClassToDB(upcomingClass))
             .then(deleteAssocatedRequestedClass(upcomingClass))
             .then(function (createdUpcomingClass) {
-                console.log('createdupcomingclass: ', JSON.stringify(createdUpcomingClass));
+                //console.log('createdupcomingclass: ', JSON.stringify(createdUpcomingClass));
                 res.json({status: 'success', createdUpcomingClass: createdUpcomingClass});
             })
             .catch(function (error) {
@@ -108,18 +108,15 @@ function savePostedClassToDB(upcomingClass) {
 
 function deleteAssocatedRequestedClass(upcomingClass) {
     return function(savedClass) {
-        var defer = Q.defer();
-        
-        if (!upcomingClass.associatedRequestedClassId) defer.resolve();
-        
-        db.Requested.remove({ _id: upcomingClass.associatedRequestedClassId }).then(function () {
+        return Q.Promise(function (resolve, reject, notify) {
+            if (!upcomingClass.associatedRequestedClassId) resolve(savedClass);
             
-            defer.resolve(savedClass);
-        }, function (err) {
-            defer.reject(err);
+            db.Requested.remove({ _id: upcomingClass.associatedRequestedClassId }).then(function () {
+                resolve(savedClass);
+            }, function (err) {
+                reject(err);
+            });
         });
-        
-        return defer.promise;
     }
 }
 
