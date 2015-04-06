@@ -23,10 +23,6 @@ module.exports = function (mongoose) {
 
     var UserSchema = new Schema({
         accessToken: String,
-        name: String,
-        meetupId: Number,
-        meetupRole: String,
-        thumbLink: String,
         meetupProfile: Object
     });
     

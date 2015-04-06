@@ -70,16 +70,16 @@ function validateUpcomingClass(upcomingClass) {
 
 function postToMeetup(req, res, upcomingClass) {
     return function() {
-        return Q.Promise(function (notify, reject, notify) {
+        return Q.Promise(function (resolve, reject, notify) {
             var eventToPost = {
                 name: upcomingClass.name,
                 time: upcomingClass.time
             };
 
-            meetupApi.postEvent(req, res, eventToPost).then(function (r) {
+            meetupApi.Event.post(req, res, eventToPost).then(function (r) {
                 var response = JSON.parse(r);
                 if (response && response.status === 'success') {
-                    resolve(response.createdEvent)
+                    resolve(response.createdEvent);
                 } else {
                     reject("Unable to post class to Meetup");
                 }

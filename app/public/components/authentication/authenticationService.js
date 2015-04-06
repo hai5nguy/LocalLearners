@@ -29,7 +29,7 @@ localLearnersApp.factory('AuthenticationService', function($http, $q, $rootScope
     function checkAuthenticated() {
         var getProfile = $http.get('/profile');
         getProfile.then(function (response) {
-            if (response.data && response.data.meetupId) {
+            if (response.data && response.data._id) {
                 CurrentUser.create(response.data);
                 $rootScope.$emit(EVENTS.authUserLoggedIn);
             }

@@ -9,11 +9,13 @@ var _localLearnersGroupUrlName = 'locallearners';
 
 module.exports = function (app) {
     return {
-        getProfile: getProfile,
         Event: {
             get: Event_get,
             getAll: Event_getAll,
             post: Event_post
+        },
+        Profile: {
+            get: Profile_get
         }
     }
 }
@@ -22,24 +24,19 @@ module.exports = function (app) {
 // Public Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function getProfile(accessToken, callback) {
-
-    var args = {
-        headers: { Authorization: 'Bearer ' + accessToken }
-    };
-
-    restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args,
-        function (data) {
-
-            console.log('member/self name: ', data.name, '|', data.id);
-            var profile = {
-                meetupId: data.id,
-                name: data.name,
-                thumbLink: data.photo ? data.photo.thumb_link : 'http://photos4.meetupstatic.com/img/noPhoto_50.png'
-            };
-            callback(profile);
-        }
-    );
+function Profile_get(accessToken) {
+    return Q.Promise(function (resolve, reject, notify) {
+        var args = {
+            headers: { Authorization: 'Bearer ' + accessToken }
+        };
+        restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args, function (meetupProfile) {
+            console.log('Profile_get name: ', meetupProfile.name, '|', meetupProfile.id);
+            resolve(meetupProfile);
+        }).on('error', function (error) {
+            console.log('Profile_get error ', error);
+            reject(error);
+        });
+    });
 }
 
 function Event_getAll() {
@@ -60,6 +57,7 @@ function Event_getAll() {
 
 function Event_post(req, res, event) {
     return Q.Promise(function (resolve, reject, notify) {
+        
         Q.fcall(checkEventValid(event))
             .then(ensureUserIsEventOrganizer(req, res))
             .then(postEventToMeetup(event))
@@ -70,49 +68,6 @@ function Event_post(req, res, event) {
             .done();
     });
     
-// 
-//
-//    if (!isEventValid(event)) defer.reject('Invalid event: ' + JSON.stringify(event))
-//
-//    ensureUserIsEventOrganizer(req, res).then(
-//        function() {
-//            var args = {
-//                parameters: {
-//                    group_id: _localLearnersGroupId,
-//                    group_urlname: _localLearnersGroupUrlName,
-//                    name: event.name,
-//                    time: event.time
-//                },
-//                headers: {
-//                    Authorization: 'Bearer ' + req.session.accessToken
-//                }
-//            }
-//
-//            var url = MEETUP_API_ENDPOINT + '/event';
-//
-////            var url = 'https://api.meetup.com/2/event';
-//
-//                restClient.post(url, args,
-//                function(createdEvent) {
-////                    console.log('createdEVent ', createdEvent);
-//
-//                    if (createdEvent.problem) {
-//                        defer.reject(createdEvent);
-//                    } else {
-//                        defer.resolve(createdEvent);
-//                    }
-//                })
-//                .on('error', function(err) {
-//                    defer.reject('Error posting event: ', err);
-//                });
-//
-//        },
-//        function() {
-//            defer.reject('Error making user id: ', req.user.meetupId, ' an event organizer');
-//        }
-//    );
-//
-//    return defer.promise;
 }
 
 function checkEventValid(event) {
@@ -130,42 +85,89 @@ function checkEventValid(event) {
     }
 }
 
-
 function ensureUserIsEventOrganizer(req, res) {
-    
     return function() {
         return Q.Promise(function (resolve, reject, notify) {
-            
             if (!req.user) reject('User not logged in.');
             
-            if (req.user.role == 'Event Organizer') {
-                resolve()
-            } else {
-                promoteUserToEventOrganizer().then(resolve, reject);
-            }
-        });
-    }
-
-    function promoteUserToEventOrganizer() {
-        return Q.Promise(function (resolve, reject, notify) {
-            meetupAdministrator.getAdministratorAccessToken()
-                .then(function (token) {
-                    var args = {
-                        parameters: {
-                            add_role: 'event_organizer'
-                        },
-                        headers: {
-                            Authorization: 'Bearer ' + token
-                        }
-                    };
-                    var url = 'https://api.meetup.com/2/profile/' + _localLearnersGroupId + '/' + req.user.meetupId;
-                    restClient.post(url, args, resolve)
-                        .on('error', reject);
-                });
+            getUserMeetupRole(req, res).then(function (role) {
+                if (role == 'Event Organizer') {
+                    resolve();
+                } else {
+                    promoteUserToEventOrganizer(req, res).then(resolve, reject);
+                }
+            });
         });
     }
 }
 
+function getUserMeetupRole(req, res) {
+    return Q.Promise(function (resolve, reject, notify) {
+        var args = {
+            headers: {
+                Authorization: 'Bearer ' + req.user.accessToken
+            }
+        };
+        var url = 'https://api.meetup.com/2/profile/' + _localLearnersGroupId + '/' + req.user.meetupProfile.id;
+
+        restClient.get(url, args, function(meetupProfile) {
+            resolve(meetupProfile.role);
+        }).on('error', function (error) {
+            reject(error);
+        });
+    });
+}
+
+function promoteUserToEventOrganizer(req, res) {
+    return Q.Promise(function (resolve, reject, notify) {
+        meetupAdministrator.getAdministratorAccessToken().then(function (token) {
+            var args = {
+                parameters: {
+                    add_role: 'event_organizer'
+                },
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            };
+            var url = 'https://api.meetup.com/2/profile/' + _localLearnersGroupId + '/' + req.user.meetupProfile.id;
+            restClient.post(url, args, resolve)
+                .on('error', reject);
+        });
+    });
+}
+
+function postEventToMeetup(req, res, event) {
+    return function() {
+        return Q.Promise(function (resolve, reject, notify) {
+
+            var args = {
+                parameters: {
+                    group_id: _localLearnersGroupId,
+                    group_urlname: _localLearnersGroupUrlName,
+                    name: event.name,
+                    time: event.time
+                },
+                headers: {
+                    Authorization: 'Bearer ' + req.user.accessToken
+                }
+            }
+
+            
+            var url = MEETUP_API_ENDPOINT + '/event';
+            restClient.post(url, args,
+                function(createdEvent) {
+                    if (createdEvent.problem) {
+                        reject(createdEvent);
+                    } else {
+                        resolve(createdEvent);
+                    }
+                })
+                .on('error', function(err) {
+                    reject('Error posting event: ', err);
+                });
+        });
+    }
+}
 
 function Event_get(id) {
     
@@ -206,9 +208,6 @@ function Event_get(id) {
      "status": "upcoming"
      }
      */
-    
-    
-    
     
 }
 

@@ -11,15 +11,11 @@ localLearnersApp.factory('CurrentUser', function() {
 
     function create(profile) {
         this._id = profile._id;
-        this.meetupId = profile.meetupId;
-        this.name = profile.name;
-        this.thumbLink = profile.thumbLink;
+        this.meetupProfile = profile.meetupProfile;
     }
     function destroy() {
         this._id = null;
-        this.meetupId = null;
-        this.name = null;
-        this.thumb_link = null;
+        this.meetupProfile = null;
     }
     
 });

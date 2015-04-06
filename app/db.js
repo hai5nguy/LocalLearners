@@ -58,9 +58,10 @@ module.exports = function(app) {
         },
 
         /* users */
-        getUser: getUser,
-		//addUser: addUser,
-        upsertUser: upsertUser,
+        User: {
+            get: User_get,
+            upsert: User_upsert
+        },
 
         /* fakes - development purpose */
         insertFakeEvents: insertFakeEvents,
@@ -324,25 +325,25 @@ function Requested_setUserInterested(requestedClassId, userId, interested) {
     return defer.promise;
 }
 
-function getUser(query) {
-	var defer = Q.defer();
-	models.User.findOne(query, function(err, user) {
-		if (err) { defer.reject(user) }
-		else { defer.resolve(user) }
-	});
-	return defer.promise;
+function User_get(query) {
+    return Q.Promise(function (resolve, reject, notify) {
+        models.User.findOne(query, function(err, user) {
+            if (err) { reject(user) }
+            else { resolve(user) }
+        });
+    });
 }
 
-function upsertUser(query, user) {
-    var defer = Q.defer();
-    models.User.findOne(query, function (err, foundUser) {
-        if (foundUser) {
-            updateUser(query, user).then(defer.resolve, defer.reject);
-        } else {
-            addUser(user).then(defer.resolve, defer.reject);
-        }
+function User_upsert(query, user) {
+    return Q.Promise(function (resolve, reject, notify) {
+        models.User.findOne(query, function (err, foundUser) {
+            if (foundUser) {
+                updateUser(query, user).then(resolve, reject);
+            } else {
+                addUser(user).then(resolve, reject);
+            }
+        });
     });
-	return defer.promise;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -371,27 +372,27 @@ function updateUpcomingClass(upcomingClass) {
 }
 
 function addUser(user) {
-    var defer = Q.defer();
-    var u = new models.User(user);
-    u.save(function(err, u, numberAffected) {
-        console.log('db.adduser ', JSON.stringify(u));
-        if (err) { defer.reject(err) }
-        else { defer.resolve(u) }
+    return Q.Promise(function (resolve, reject, notify) {
+        var u = new models.User(user);
+        u.save(function(err, u, numberAffected) {
+            console.log('db.adduser ', JSON.stringify(u));
+            if (err) { reject(err) }
+            else { resolve(u) }
+        });
     });
-    return defer.promise;
 }
 
 function updateUser(query, user) {
-    var defer = Q.defer();
-    models.User.update(query, { $set: user }, function (err, numberAffected) {
-        console.log('db.updateuser |',err,'|',numberAffected);
-        if (err) {
-            defer.reject(err);
-        } else {
-            getUser(query).then(defer.resolve, defer.reject);
-        }
+    return Q.Promise(function (resolve, reject, notify) {
+        models.User.update(query, { $set: user }, function (err, numberAffected) {
+            console.log('db.updateUser |',err,'|',numberAffected);
+            if (err) {
+                reject(err);
+            } else {
+                getUser(query).then(resolve, reject);
+            }
+        });
     });
-    return defer.promise;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
