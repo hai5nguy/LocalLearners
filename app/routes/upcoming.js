@@ -17,8 +17,8 @@ module.exports = function (app) {
 
     app.get('/api/upcoming/:id', function (req, res) {
         
-        Q.fcall(getMeetupEvent(req, res))
-            .then(mergeWithUpcomingClass())
+        
+        Q.fcall(getUpcomingClass(req.params.id))
             .then(function (upcomingClass) {
                 res.json(upcomingClass);
             })
@@ -152,6 +152,15 @@ function mergeWithMeetupEvents() {
                 });
                 
             });
+        });
+    }
+}
+
+
+function getUpcomingClass(id) {
+    return function() {
+        return Q.Promise(function (resolve, reject, notify) {
+            db.Upcoming.get(id).then(resolve, reject);
         });
     }
 }

@@ -1,11 +1,11 @@
 <div ng-controller="Upcoming.DetailController">
     <ul>
         <li>id: {{upcomingClass._id}}</li>
-        <li>name: {{upcomingClass.name}}</li>
+        <li>name: {{upcomingClass.meetupEvent.name}}</li>
         <li>category: {{upcomingClass.category.name}}</li>
         <li>requester: {{upcomingClass.requester.name}}
             <img style="width: 36px; height: 36px;" ng-src="{{upcomingClass.requester.thumbLink}}" />
-        </li>
+        </li>   
         <li>interested users:
             <ul>
                 <li ng-repeat="user in upcomingClass.interestedUsers">
