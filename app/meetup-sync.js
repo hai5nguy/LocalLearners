@@ -1,4 +1,6 @@
 var _ = require('underscore');
+var Q = require('q');
+
 
 var meetupApi = require('./meetup-api.js')(THE_APP);
 var db = require('./db.js')(THE_APP);
@@ -16,25 +18,34 @@ function startSync() {
 }
 function doSync() {
     
-    //todo: redo sync with promises
+    db.Upcoming.getAll().then(function (upcomingClasses) {
+        
+        meetupApi.Event.getAll().then(function (events) {
+                updateUpcomingClassesWithEvents(upcomingClasses, events);
+        }, function (error) {
+                syncError(error);
+        });
+        
+    }, function (error) {
+        syncError(error);
+    });
     
-    //meetupApi.Event.getAll().then(function(events) {
-    //
-    //    db.getUpcomingClasses().then(function(upcommingClasses) {
-    //
-    //        var classesNotOnMeetup = _.filter(upcommingClasses, function (u) {
-    //            return !_.some(events, function (e) {
-    //                return e.eventId === u.eventId;
-    //            });
-    //        });
-    //
-    //        db.removeUpcomingClasses(classesNotOnMeetup).fail(syncError);
-    //
-    //    }, syncError );
-    //
-    //}, syncError );
-    //
-    //function syncError(err) {
-    //    console.log('meetup sync error: ', err);
-    //}
+}
+
+function syncError(error) {
+    console.log('meetup sync error: ', JSON.stringify(error));
+}
+
+function updateUpcomingClassesWithEvents(upcomingClasses, events) {
+    _.each(upcomingClasses, function (u) {
+        var matchingEvent = _.findWhere(events, { id: u.meetupEvent.id });
+        if (!matchingEvent) {
+            console.error('meetup sync possible class cancel on meetup.com detected: ', JSON.stringify(u));
+            return;
+        }
+        if (!_.isEqual(matchingEvent, u.meetupEvent)) {
+            u.meetupEvent = matchingEvent;
+            db.Upcoming.update({ _id: u._id }, u);
+        }
+    });
 }

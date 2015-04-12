@@ -34,7 +34,11 @@ module.exports = function(app) {
             add: Upcoming_add,
             get: Upcoming_get,
             getAll: Upcoming_getAll,
-            updateAll: Upcoming_updateAll
+            RSVP: {
+                syncWithEvent: Upcoming_RSVP_syncWithEvent
+            },
+            update: Upcoming_update,
+            updateAll: Upcoming_updateAll,
         },
         
         //addUpcomingClass: addUpcomingClass,
@@ -154,6 +158,18 @@ function Upcoming_getAll() {
         query.exec(function (err, upcomingClasses) {
             err ? reject(err) : resolve(upcomingClasses); 
         });
+    });
+}
+
+function Upcoming_RSVP_syncWithEvent(event) {
+    
+}
+
+function Upcoming_update(query, upcomingClass) {
+    return Q.Promise(function (resolve, reject, notify) {
+         models.UpcomingClass.update(query, upcomingClass, function (err, a, b, c) {
+             console.log('upcoming_update ', err, ' | ', a, ' | ')
+         });
     });
 }
 

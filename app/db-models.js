@@ -1,7 +1,7 @@
 module.exports = function (mongoose) {
     
     var Schema = mongoose.Schema;
-    //var ObjectId = Schema.ObjectId;
+    var ObjectId = Schema.Types.ObjectId;
 
     var CategorySchema = new Schema({
         name: String,
@@ -10,15 +10,17 @@ module.exports = function (mongoose) {
     });
 
     var UpcomingClassSchema = new Schema({
-        category: { type: Schema.Types.ObjectId, ref: 'Category' },
-        meetupEvent: Object
+        category: { type: ObjectId, ref: 'Category' },
+        meetupEvent: Object,
+        teachers: [{ type: ObjectId, ref: 'User' }],
+        students: [{ type: ObjectId, ref: 'User' }]
     });
     
     var RequestedClassSchema = new Schema({
         name: String,
-        category: { type: Schema.Types.ObjectId, ref: 'Category' },
-        requester: { type: Schema.Types.ObjectId, ref: 'User' },
-        interestedUsers: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+        category: { type: ObjectId, ref: 'Category' },
+        requester: { type: ObjectId, ref: 'User' },
+        interestedUsers: [{ type: ObjectId, ref: 'User' }]
     });
 
     var UserSchema = new Schema({

@@ -50,11 +50,39 @@ module.exports = function (app) {
             })
             .done();
     });
+
+    app.post('/api/upcoming/:classId/setrsvp', function (req, res) {
+        
+        var c = req.params.classId;
+        var a = req.body.isAttending;
+        
+        Q.fcall(rsvpOnMeetup(req, { classId: c, isAttending: a }))
+            .then(updateStudentsAttending(req, res))
+            .then(function (upcomingClass) {
+                res.json({ status: 'success', upcomingClass: upcomingClass });
+            })
+            .catch(function (error) {
+                res.status(500).send({ error: error });
+            })
+            .done();
+        
+        /*
+        var setRSVP = db.Upcoming.RSVP.set(req.params.id, req.user._id, req.body.isAttending);
+        setRSVP.then(function(upcomingClass) {
+            res.json({ status: 'success', requestedClass: upcomingClass })
+        }, function (error) {
+            res.status(500).send({ error: error });
+        });
+        
+        */
+    });
     
 }
 
 function validateUpcomingClass(upcomingClass) {
     return function() {
+        
+        
         var defer = Q.defer();
         if ( IsPopulatedString(upcomingClass.name) &&
             IsPopulatedString(upcomingClass.category) &&
@@ -120,43 +148,6 @@ function deleteAssocatedRequestedClass(upcomingClass) {
     }
 }
 
-function getUpcomingClasses() {
-    return function () {
-        return Q.Promise(function (resolve, reject, notify) {
-            db.Upcoming.getAll().then(resolve, reject);
-        });
-    }
-}
-
-
-
-function mergeWithMeetupEvents() {
-    return function (upcomingClasses) {
-        return Q.Promise(function (resolve, reject, notify) {
-            
-            meetupApi.Event.getAll().then(function (events) {
-                
-                _.each(upcomingClasses, function(upcomingClass) {
-                    var matchingEvent = _.findWhere(events, { id: upcomingClass.meetupEvent.id });
-                    
-                    if (matchingEvent) {
-                        matchingEvent.meetupEvent = matchingEvent;
-                    }
-                });
-                
-                db.Upcoming.updateAll(upcomingClasses).then(function(a) {
-                    console.log('111 ', a)
-                    resolve(a);
-                }, function (err) {
-                    reject(err);
-                });
-                
-            });
-        });
-    }
-}
-
-
 function getUpcomingClass(id) {
     return function() {
         return Q.Promise(function (resolve, reject, notify) {
@@ -164,3 +155,31 @@ function getUpcomingClass(id) {
         });
     }
 }
+
+///////////////////////////////////
+
+function rsvpOnMeetup(req, args) {
+    return function() {
+        return Q.Promise(function (resolve, reject, notify) {
+            db.Upcoming.get(args.classId).then(function(upcomingClass) {
+                
+                var e = upcomingClass.meetupEvent.id, e = args.isAttending;
+                meetupApi.RSVP.update(req, { eventId: e, isAttending: a }).then(function () {
+                    reject('testing');
+                }, reject);
+                
+            }, reject);
+        });
+    }
+}
+
+function updateStudentsAttending() {
+    return function() {
+        return Q.Promise(function (resolve, reject, notify) {
+            reject("testing from updatestudentsattending");
+        });
+    }
+}
+///////////////////////////////////
+
+

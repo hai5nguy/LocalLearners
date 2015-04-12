@@ -3,21 +3,25 @@
         <li>id: {{upcomingClass._id}}</li>
         <li>name: {{upcomingClass.meetupEvent.name}}</li>
         <li>category: {{upcomingClass.category.name}}</li>
-        <li>requester: {{upcomingClass.requester.name}}
-            <img style="width: 36px; height: 36px;" ng-src="{{upcomingClass.requester.thumbLink}}" />
-        </li>   
-        <li>interested users:
+        <li>the pros: {{upcomingClass.requester.name}}
             <ul>
-                <li ng-repeat="user in upcomingClass.interestedUsers">
-                    {{user.name}} <img style="width: 36px; height: 36px;" ng-src="{{user.thumbLink}}" />
+                <li ng-repeat="t in upcomingClass.teachers">
+                    {{t.name}} <img style="width: 36px; height: 36px;" ng-src="{{t.meetupProfile.photo.thumb_link}}" />
+                </li>
+            </ul>
+        </li>   
+        <li>the chumps:
+            <ul>
+                <li ng-repeat="s in upcomingClass.students">
+                    {{s.name}} <img style="width: 36px; height: 36px;" ng-src="{{s.meetupProfile.photo.thumb_link}}" />
                 </li>
             </ul>
         </li>
     </ul>
     <!---->
-    <!--<div ng-click="login()" ng-show="action === 'login'">-->
-        <!--<img src="http://placehold.it/40x40" />  Login to vote!-->
-    <!--</div>-->
+    <div ng-click="setRSVP(true)" ng-show="action === 'add_rsvp'">
+        <img src="http://placehold.it/40x40" />RSVP the hell out of me man!
+    </div>
     <!--<div ng-click="setInterested(true)" ng-show="action === 'addInterested'">-->
         <!--<img src="http://placehold.it/40x40" />  I'm interested in learning this class!-->
     <!--</div>-->

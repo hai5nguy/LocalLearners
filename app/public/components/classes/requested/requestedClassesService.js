@@ -22,10 +22,10 @@ localLearnersApp.factory('RequestedClassesService', function ($http, $q) {
     }
 
     
-    function setUserInterested(requestedClassId, interested) {
+    function setUserInterested(classId, interested) {
         var defer = $q.defer();
 
-        $http.post('/api/requested/' + requestedClassId + '/setuserinterested', { interested: interested }).then(function (response) {
+        $http.post('/api/requested/' + classId + '/setuserinterested', { interested: interested }).then(function (response) {
             console.log('1111 ', response);
             if (response && response.data && response.data.status === 'success') {
                 defer.resolve(response.data.requestedClass);

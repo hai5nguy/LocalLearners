@@ -16,6 +16,9 @@ module.exports = function (app) {
         },
         Profile: {
             get: Profile_get
+        },
+        RSVP: {
+            update: RSVP_update
         }
     }
 }
@@ -35,6 +38,29 @@ function Profile_get(accessToken) {
         }).on('error', function (error) {
             console.log('Profile_get error ', error);
             reject(error);
+        });
+    });
+}
+
+function RSVP_update(req, args) {
+    return Q.Promise(function (resolve, reject, notify) {
+        
+        var url = MEETUP_API_ENDPOINT + '/rsvp';
+        var postData = {
+            parameters: {
+                event_id: args.eventId ,
+                rsvp: args.isAttending ? 'yes' : 'no'
+            },
+            headers: {
+                Authorization: 'Bearer ' + req.user.accessToken
+            }
+        };
+
+        restClient.post(url, postData, function (rsvpResult) {
+            console.log('11111111 rsvp result =============================');
+            console.log(rsvpResult);
+            
+            resolve();
         });
     });
 }
@@ -90,7 +116,7 @@ function ensureUserIsEventOrganizer(req, res) {
         return Q.Promise(function (resolve, reject, notify) {
             if (!req.user) reject('User not logged in.');
             
-            getUserMeetupRole(req, res).then(function (role) {
+            getUserMeetupRole(req).then(function (role) {
                 if (role == 'Event Organizer') {
                     resolve();
                 } else {
@@ -101,7 +127,7 @@ function ensureUserIsEventOrganizer(req, res) {
     }
 }
 
-function getUserMeetupRole(req, res) {
+function getUserMeetupRole(req) {
     return Q.Promise(function (resolve, reject, notify) {
         var args = {
             headers: {
@@ -118,7 +144,7 @@ function getUserMeetupRole(req, res) {
     });
 }
 
-function promoteUserToEventOrganizer(req, res) {
+function promoteUserToEventOrganizer(req) {
     return Q.Promise(function (resolve, reject, notify) {
         meetupAdministrator.getAdministratorAccessToken().then(function (token) {
             var args = {
