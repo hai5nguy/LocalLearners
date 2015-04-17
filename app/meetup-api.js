@@ -33,7 +33,7 @@ function Profile_get(accessToken) {
             headers: { Authorization: 'Bearer ' + accessToken }
         };
         restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args, function (meetupProfile) {
-            console.log('Profile_get name: ', meetupProfile.name, '|', meetupProfile.id);
+            debug(FUNCTIONALITY.meetup_api_profile_get, 'meetup api Profile_get', meetupProfile)
             resolve(meetupProfile);
         }).on('error', function (error) {
             console.log('Profile_get error ', error);
@@ -82,6 +82,7 @@ function Event_getAll() {
 }
 
 function Event_post(req, res, event) {
+    debug(FUNCTIONALITY.meetup_api_Event_post, 'event arg', event);
     return Q.Promise(function (resolve, reject, notify) {
         
         Q.fcall(checkEventValid(event))
@@ -117,7 +118,8 @@ function ensureUserIsEventOrganizer(req, res) {
             if (!req.user) reject('User not logged in.');
             
             getUserMeetupRole(req).then(function (role) {
-                if (role == 'Event Organizer') {
+                debug(FUNCTIONALITY.meetup_api_Event_post, 'ensureUserIsEventOrganizer role return', role)
+                if (role === 'Event Organizer' || role === 'Organizer') {
                     resolve();
                 } else {
                     promoteUserToEventOrganizer(req, res).then(resolve, reject);
@@ -137,6 +139,7 @@ function getUserMeetupRole(req) {
         var url = 'https://api.meetup.com/2/profile/' + _localLearnersGroupId + '/' + req.user.meetupProfile.id;
 
         restClient.get(url, args, function(meetupProfile) {
+            debug(FUNCTIONALITY.meetup_api_Event_post, 'getUserMeetupRole meetupProfile return', meetupProfile);
             resolve(meetupProfile.role);
         }).on('error', function (error) {
             reject(error);
@@ -157,8 +160,14 @@ function promoteUserToEventOrganizer(req) {
             };
             
             var url = 'https://api.meetup.com/2/profile/' + _localLearnersGroupId + '/' + req.user.meetupProfile.id;
-            restClient.post(url, args, resolve)
-                .on('error', reject);
+            restClient.post(url, args, function(response) {
+                debug(FUNCTIONALITY.meetup_api_Event_post, 'promoteUserToEventOrganizer response return', response);
+                //todo: handle response.problem
+                resolve(response);
+            }).on('error', function (error) {
+                debug(FUNCTIONALITY.meetup_api_Event_post, 'promoteUserToEventOrganizer error return', error);
+                reject(error);   
+            });
         });
     });
 }
@@ -181,17 +190,17 @@ function postEventToMeetup(req, res, event) {
 
             
             var url = MEETUP_API_ENDPOINT + '/event';
-            restClient.post(url, args,
-                function(createdEvent) {
-                    if (createdEvent.problem) {
-                        reject(createdEvent);
-                    } else {
-                        resolve(createdEvent);
-                    }
-                })
-                .on('error', function(err) {
-                    reject('Error posting event: ', err);
-                });
+            restClient.post(url, args, function(createdEvent) {
+                debug(FUNCTIONALITY.meetup_api_Event_post, 'postEventToMeetup createdEvent', createdEvent);
+                if (createdEvent.problem) {
+                    reject(createdEvent);
+                } else {
+                    resolve(createdEvent);
+                }
+            }).on('error', function(error) {
+                debug(FUNCTIONALITY.meetup_api_Event_post, 'postEventToMeetup error', error);
+                reject('Error posting event: ', error);
+            });
         });
     }
 }

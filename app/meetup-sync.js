@@ -40,10 +40,13 @@ function updateUpcomingClassesWithEvents(upcomingClasses, events) {
     _.each(upcomingClasses, function (u) {
         var matchingEvent = _.findWhere(events, { id: u.meetupEvent.id });
         if (!matchingEvent) {
-            console.error('meetup sync possible class cancel on meetup.com detected: ', JSON.stringify(u));
+            debug(FUNCTIONALITY.meetup_sync, 'updateUpcomingClassesWithEvents','meetup sync possible class cancel on meetup.com detected', u );
+            db.Upcoming.remove({ _id: u._id });
             return;
         }
         if (!_.isEqual(matchingEvent, u.meetupEvent)) {
+            debug(FUNCTIONALITY.meetup_sync, 'updateUpcomingClassesWithEvents','sync needed', 'upcomingclass', u, 'matchingEvent', matchingEvent);
+
             u.meetupEvent = matchingEvent;
             db.Upcoming.update({ _id: u._id }, u);
         }

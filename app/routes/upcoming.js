@@ -35,6 +35,8 @@ module.exports = function (app) {
             time: new Date(req.body.time).getTime(),
             associatedRequestedClassId: req.body.associatedRequestedClassId
         };
+        
+        debug(FUNCTIONALITY.api_post_upcoming, 'incoming upcomingClass', upcomingClass);
 
         Q.fcall(validateUpcomingClass(upcomingClass))
             .then(postToMeetup(req, res, upcomingClass))
@@ -104,15 +106,12 @@ function postToMeetup(req, res, upcomingClass) {
                 time: upcomingClass.time
             };
 
-            meetupApi.Event.post(req, res, eventToPost).then(function (r) {
-                var response = JSON.parse(r);
-                if (response && response.status === 'success') {
-                    resolve(response.createdEvent);
-                } else {
-                    reject("Unable to post class to Meetup");
-                }
-            }, function (err) {
-                reject(err);
+            meetupApi.Event.post(req, res, eventToPost).then(function (createdEvent) {
+                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup createdEvent', createdEvent);
+                resolve(createdEvent);
+            }, function (error) {
+                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup error', error);
+                reject(error);
             });
         });
     }

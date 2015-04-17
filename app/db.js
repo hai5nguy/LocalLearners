@@ -34,11 +34,12 @@ module.exports = function(app) {
             add: Upcoming_add,
             get: Upcoming_get,
             getAll: Upcoming_getAll,
+            remove: Upcoming_remove,
             RSVP: {
                 syncWithEvent: Upcoming_RSVP_syncWithEvent
             },
             update: Upcoming_update,
-            updateAll: Upcoming_updateAll,
+            updateAll: Upcoming_updateAll
         },
         
         //addUpcomingClass: addUpcomingClass,
@@ -161,6 +162,15 @@ function Upcoming_getAll() {
     });
 }
 
+function Upcoming_remove(query) {
+    return Q.Promise(function (resolve, reject, notify) {
+        models.UpcomingClass.remove(query, function (a,b,c) {
+            debug(FUNCTIONALITY.db_Upcoming_remove, a,b,c );
+            promise();
+        });
+    });
+}
+
 function Upcoming_RSVP_syncWithEvent(event) {
     
 }
@@ -168,7 +178,8 @@ function Upcoming_RSVP_syncWithEvent(event) {
 function Upcoming_update(query, upcomingClass) {
     return Q.Promise(function (resolve, reject, notify) {
          models.UpcomingClass.update(query, upcomingClass, function (err, a, b, c) {
-             console.log('upcoming_update ', err, ' | ', a, ' | ')
+             debug(FUNCTIONALITY.db_Upcoming_update, 'err', err, 'a', a, 'b', b, 'c', c);
+             resolve();
          });
     });
 }
@@ -388,11 +399,12 @@ function updateUpcomingClass(upcomingClass) {
 }
 
 function addUser(user) {
+    debug(FUNCTIONALITY.db_addUser, 'incoming user', user);
     return Q.Promise(function (resolve, reject, notify) {
         var u = new models.User(user);
-        u.save(function(err, u, numberAffected) {
-            console.log('db.adduser ', JSON.stringify(u));
-            if (err) { reject(err) }
+        u.save(function(error, u, numberAffected) {
+            debug(FUNCTIONALITY.db_addUser, 'error', error, 'u', u, 'numberAfftected', numberAffected);
+            if (error) { reject(error) }
             else { resolve(u) }
         });
     });
