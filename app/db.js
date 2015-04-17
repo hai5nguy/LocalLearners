@@ -162,11 +162,11 @@ function Upcoming_getAll() {
     });
 }
 
-function Upcoming_remove(query) {
+function Upcoming_remove(query) {  
     return Q.Promise(function (resolve, reject, notify) {
-        models.UpcomingClass.remove(query, function (a,b,c) {
-            debug(FUNCTIONALITY.db_Upcoming_remove, a,b,c );
-            promise();
+        models.UpcomingClass.remove(query, function (error, numberAffected, result) {
+            debug(FUNCTIONALITY.db_Upcoming_remove, 'error', error, 'numberAffected', numberAffected, 'result', result);
+            error ? reject(error) : resolve();
         });
     });
 }
@@ -175,11 +175,12 @@ function Upcoming_RSVP_syncWithEvent(event) {
     
 }
 
-function Upcoming_update(query, upcomingClass) {
+function Upcoming_update(query, newClass) {
+    debug(FUNCTIONALITY.db_Upcoming_update, 'query', query, 'upcomingClass', upcomingClass);
     return Q.Promise(function (resolve, reject, notify) {
-         models.UpcomingClass.update(query, upcomingClass, function (err, a, b, c) {
-             debug(FUNCTIONALITY.db_Upcoming_update, 'err', err, 'a', a, 'b', b, 'c', c);
-             resolve();
+         models.UpcomingClass.findOneAndUpdate(query, newClass, function (error, updatedClass) {
+             debug(FUNCTIONALITY.db_Upcoming_update, 'error', error, 'updatedClass', updatedClass);
+             error ? reject(error) : resolve(updatedClass);
          });
     });
 }

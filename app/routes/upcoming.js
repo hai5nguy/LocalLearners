@@ -43,11 +43,11 @@ module.exports = function (app) {
             .then(savePostedClassToDB(upcomingClass))
             .then(deleteAssocatedRequestedClass(upcomingClass))
             .then(function (createdUpcomingClass) {
-                //console.log('createdupcomingclass: ', JSON.stringify(createdUpcomingClass));
+                debug(FUNCTIONALITY.api_post_upcoming, 'createdUpcomingClass', createdUpcomingClass);
                 res.json({status: 'success', createdUpcomingClass: createdUpcomingClass});
             })
             .catch(function (error) {
-                console.log('error : ', error);
+                debug(FUNCTIONALITY.api_post_upcoming, 'error', error);
                 res.status(500).send({error: error});
             })
             .done();

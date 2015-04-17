@@ -30,7 +30,7 @@ var tracks = {
         functionalities: [
             FUNCTIONALITY.meetup_sync,
             FUNCTIONALITY.db_Upcoming_remove,
-            FUCNTIONALITY.db_Upcoming_update
+            FUNCTIONALITY.db_Upcoming_update
         ]
     }
 }
@@ -46,7 +46,7 @@ global.debug = function(functionality) {
         console.log('========================================================================================================');
         var message = functionality;
         for (var i = 1; i < arguments.length; i++) {
-            message += ' | ' + i + '. ' + JSON.stringify(arguments[i]);
+            message += ' ______ ' + JSON.stringify(arguments[i]);
         }
         console.log(message);
     }
