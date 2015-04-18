@@ -118,7 +118,7 @@ function Upcoming_add(upcomingClass) {
     return Q.Promise(function(resolve, reject, notify) {
         var u = new models.UpcomingClass(upcomingClass);
         u.save(function(error, u, numberAffected) {
-            debug(FUNCTIONALITY.db_Upcoming_add, 'error', error, 'saved upcoming class', u, 'numberAffected', numberAffected );
+            debug(FUNCTIONALITY.db_Upcoming_add, { error: error, u: u.toObject(), numberAffected: numberAffected } );
             error ? reject(error) : resolve(u);
         });
     });
@@ -156,7 +156,7 @@ function Upcoming_getAll() {
 function Upcoming_remove(query) {  
     return Q.Promise(function (resolve, reject, notify) {
         models.UpcomingClass.remove(query, function (error, numberAffected, result) {
-            debug(FUNCTIONALITY.db_Upcoming_remove, 'error', error, 'numberAffected', numberAffected, 'result', result);
+            debug(FUNCTIONALITY.db_Upcoming_remove, { error: error, numberAffected: numberAffected, result: result });
             error ? reject(error) : resolve();
         });
     });
@@ -167,10 +167,10 @@ function Upcoming_RSVP_syncWithEvent(event) {
 }
 
 function Upcoming_update(query, newClass) {
-    debug(FUNCTIONALITY.db_Upcoming_update, 'query', query, 'newClass', newClass);
+    debug(FUNCTIONALITY.db_Upcoming_update, { query: query, newClass: newClass });
     return Q.Promise(function (resolve, reject, notify) {
          models.UpcomingClass.findOneAndUpdate(query, newClass, function (error, updatedClass) {
-             debug(FUNCTIONALITY.db_Upcoming_update, 'error', error, 'updatedClass', updatedClass);
+             debug(FUNCTIONALITY.db_Upcoming_update, { error: error, updatedClass: updatedClass });
              error ? reject(error) : resolve(updatedClass);
          });
     });

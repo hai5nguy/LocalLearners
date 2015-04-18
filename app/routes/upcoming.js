@@ -31,19 +31,20 @@ module.exports = function (app) {
         
         var upcomingClass = {
             name: req.body.name,
-            category: req.body.category,
+            category_id: req.body.category_id,
             time: new Date(req.body.time).getTime(),
-            associatedRequestedClassId: req.body.associatedRequestedClassId
+            associatedRequestedClassId: req.body.associatedRequestedClassId,
+            teachers: [ req.user._id ]
         };
         
-        debug(FUNCTIONALITY.api_post_upcoming, 'incoming upcomingClass', upcomingClass);
+        debug(FUNCTIONALITY.api_post_upcoming, { upcomingClass_to_post: upcomingClass });
 
         Q.fcall(validateUpcomingClass(upcomingClass))
             .then(postToMeetup(req, res, upcomingClass))
             .then(savePostedClassToDB(upcomingClass))
             .then(deleteAssocatedRequestedClass(upcomingClass))
             .then(function (createdUpcomingClass) {
-                debug(FUNCTIONALITY.api_post_upcoming, 'createdUpcomingClass', createdUpcomingClass);
+                debug(FUNCTIONALITY.api_post_upcoming, { createdUpcomingClass: createdUpcomingClass.toObject() } );
                 res.json({status: 'success', createdUpcomingClass: createdUpcomingClass});
             })
             .catch(function (error) {
@@ -86,7 +87,7 @@ function validateUpcomingClass(upcomingClass) {
         
         var defer = Q.defer();
         if ( IsPopulatedString(upcomingClass.name) &&
-            IsPopulatedString(upcomingClass.category) &&
+            IsPopulatedString(upcomingClass.category_id) &&
             IsPopulatedNumber(upcomingClass.time)
         ) {
             defer.resolve(true);
@@ -106,10 +107,10 @@ function postToMeetup(req, res, upcomingClass) {
             };
 
             meetupApi.Event.post(req, res, eventToPost).then(function (createdEvent) {
-                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup createdEvent', createdEvent);
+                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup', { createdEvent: createdEvent } );
                 resolve(createdEvent);
             }, function (error) {
-                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup error', error);
+                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup', { error: error } );
                 reject(error);
             });
         });
@@ -120,9 +121,11 @@ function savePostedClassToDB(upcomingClass) {
     return function (createdEvent) {
         return Q.Promise(function (resolve, reject, notify) {
             var classToSave = {
-                category: upcomingClass.category,
-                meetupEvent: createdEvent
+                category: upcomingClass.category_id,
+                meetupEvent: createdEvent,
+                teachers: upcomingClass.teachers
             };
+            
             db.Upcoming.add(classToSave).then(function (savedClass) {
                 resolve(savedClass)
             }, function (err) {

@@ -12,8 +12,7 @@ module.exports = function (mongoose) {
     var UpcomingClassSchema = new Schema({
         category: { type: ObjectId, ref: 'Category' },
         meetupEvent: Object,
-        teachers: [{ type: ObjectId, ref: 'User' }],
-        students: [{ type: ObjectId, ref: 'User' }]
+        teachers: [{ type: ObjectId, ref: 'User' }]
     });
     
     var RequestedClassSchema = new Schema({

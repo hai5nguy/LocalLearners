@@ -13,18 +13,19 @@ module.exports = function (app) {
     });
 
     app.post('/fakemeetupapi/event', function (req, res) {
+        debug(FUNCTIONALITY.fakemeetupapi, 'post event', { reqbody: req.body, reqparms: req.params, reqquery: req.query });
 
         var id = getRandomInt(1e3, 1e4).toString();
-
-        console.log()
+        
+        var user = req.body.user;
 
         var fakeEvent = {
             visibility: 'public',
             status: 'upcoming',
             maybe_rsvp_count: 0,
             event_hosts: [{
-                member_name: 'fake user',
-                member_id: 'fake mid'
+                member_name: user.meetupProfile.name,
+                member_id: user.meetupProfile.id
             }],
             utc_offset: -14400000,
             id: id,

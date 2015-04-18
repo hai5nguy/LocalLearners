@@ -1,5 +1,7 @@
 //hide this better
 
+global.LL_ENVIRONMENT                       = process.env.LL_ENVIRONMENT                    || 'development';
+
 global.LL_MONGODB_CONNECTION_STRING         = process.env.LL_MONGODB_CONNECTION_STRING      || 'mongodb://locallearnersqa:thirstyscholar1@ds043200.mongolab.com:43200/locallearnersqa'
 
 global.LL_MEETUP_OAUTH2_CLIENTID            = process.env.LL_MEETUP_OAUTH2_CLIENTID         || 'h0dl8qkd82gbjan5cpr8plb4jq';
@@ -14,4 +16,4 @@ global.LL_ADMINISTRATOR_REDIRECT_URL        = process.env.LL_ADMINISTRATOR_REDIR
 
 global.LL_ADMINISTRATOR_API_KEY             = process.env.LL_ADMINISTRATOR_API_KEY          || '7d156b614b6d5c5e7d357e18151568';
 
-global.MEETUP_SYNC_INTERVAL_IN_MILLISECONDS = 30000;
+global.MEETUP_SYNC_INTERVAL_IN_MILLISECONDS = 60000;
