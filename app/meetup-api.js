@@ -188,11 +188,9 @@ function postEventToMeetup(req, res, event) {
                 }
             }
 
-            
             var url = MEETUP_API_ENDPOINT + '/event';
-            restClient.post(url, args, function(r) {
-                var createdEvent = JSON.parse(r);
-                debug(FUNCTIONALITY.meetup_api_Event_post, 'postEventToMeetup createdEvent', createdEvent, typeof createdEvent);
+            restClient.post(url, args, function(createdEvent) {
+                debug(FUNCTIONALITY.meetup_api_Event_post, 'postEventToMeetup', 'createdEvent', createdEvent);
                 if (createdEvent.problem) {
                     reject(createdEvent);
                 } else {
@@ -202,6 +200,7 @@ function postEventToMeetup(req, res, event) {
                 debug(FUNCTIONALITY.meetup_api_Event_post, 'postEventToMeetup error', error);
                 reject('Error posting event: ', error);
             });
+            
         });
     }
 }

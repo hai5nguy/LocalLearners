@@ -294,16 +294,12 @@ function Requested_getAll() {
 
 
 function Requested_remove(query) {
-    var defer = Q.defer();
-    models.RequestedClass.remove(query, function (err, b, c) {
-        console.log('db.Requested.remove: ', err, '| ', b, '| ', c);
-        if (!err) {
-            defer.resolve();
-        } else {
-            defer.reject("Unable to remove Requested Class, query: ", JSON.stringify(query));
-        }
+    return Q.Promise(function (resolve, reject, notify) {
+        models.RequestedClass.remove(query, function (error, numberRemoved, result) {
+            debug(FUNCTIONALITY.db_Requested_remove, 'error', error, 'numberRemoved', numberRemoved, 'result', result);
+            error ? reject(error) : resolve(result);
+        });
     });
-    return defer.promise;
 }
 
 function Requested_setUserInterested(requestedClassId, userId, interested) {

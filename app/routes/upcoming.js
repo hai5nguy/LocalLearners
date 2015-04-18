@@ -84,7 +84,6 @@ module.exports = function (app) {
 function validateUpcomingClass(upcomingClass) {
     return function() {
         
-        
         var defer = Q.defer();
         if ( IsPopulatedString(upcomingClass.name) &&
             IsPopulatedString(upcomingClass.category) &&
@@ -107,7 +106,7 @@ function postToMeetup(req, res, upcomingClass) {
             };
 
             meetupApi.Event.post(req, res, eventToPost).then(function (createdEvent) {
-                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup createdEvent', createdEvent, typeof createdEvent);
+                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup createdEvent', createdEvent);
                 resolve(createdEvent);
             }, function (error) {
                 debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup error', error);
@@ -136,13 +135,11 @@ function savePostedClassToDB(upcomingClass) {
 function deleteAssocatedRequestedClass(upcomingClass) {
     return function(savedClass) {
         return Q.Promise(function (resolve, reject, notify) {
-            if (!upcomingClass.associatedRequestedClassId) resolve(savedClass);
-            
-            db.Requested.remove({ _id: upcomingClass.associatedRequestedClassId }).then(function () {
+            if (!upcomingClass.associatedRequestedClassId) {
                 resolve(savedClass);
-            }, function (err) {
-                reject(err);
-            });
+            } else {
+                db.Requested.remove({ _id: upcomingClass.associatedRequestedClassId }).then(resolve, reject);
+            }
         });
     }
 }

@@ -1,14 +1,17 @@
 var _ = require('../node_modules/underscore');
+var prettyjson = require('../node_modules/prettyjson');
 
 global.FUNCTIONALITY = {
-    meetup_api_profile_get  : 'meetup_api_profile_get',
-    meetup_api_Event_post   : 'meetup_api_Event_post',
-    meetup_sync             : 'meetup_sync',
-    db_addUser              : 'db_addUser',
-    db_Upcoming_add         : 'db_Upcoming_add',
-    db_Upcoming_remove      : 'db_Upcoming_remove',
-    db_Upcoming_update      : 'db_Upcoming_update',
-    api_post_upcoming       : 'api_post_upcoming'
+    meetup_api_profile_get      : 'meetup_api_profile_get',
+    meetup_api_Event_post       : 'meetup_api_Event_post',
+    meetup_sync_show_events     : 'meetup_sync_show_events',
+    meetup_sync_show_updates    : 'meetup_sync_show_updates',
+    db_addUser                  : 'db_addUser',
+    db_Requested_remove         : 'db_Requested_remove',
+    db_Upcoming_add             : 'db_Upcoming_add',
+    db_Upcoming_remove          : 'db_Upcoming_remove',
+    db_Upcoming_update          : 'db_Upcoming_update',
+    api_post_upcoming           : 'api_post_upcoming'
 };
 
 var tracks = {
@@ -24,18 +27,31 @@ var tracks = {
         functionalities: [
             FUNCTIONALITY.api_post_upcoming,
             FUNCTIONALITY.meetup_api_Event_post,
-            FUNCTIONALITY.db_Upcoming_add
+            FUNCTIONALITY.db_Upcoming_add,
+            FUNCTIONALITY.db_Requested_remove
         ]
     },
-    meetupSync: {
-        active: true,  //always true for long term debugging -hmn
+    meetupSyncHighVerbose: {
+        active: false,
         functionalities: [
-            FUNCTIONALITY.meetup_sync,
+            FUNCTIONALITY.meetup_sync_show_events,
+            FUNCTIONALITY.meetup_sync_show_updates,
+            FUNCTIONALITY.db_Upcoming_remove,
+            FUNCTIONALITY.db_Upcoming_update
+        ]
+    },
+    meetupSyncLowVerbose: {
+        active: false,
+        functionalities: [
+            FUNCTIONALITY.meetup_sync_show_updates,
             FUNCTIONALITY.db_Upcoming_remove,
             FUNCTIONALITY.db_Upcoming_update
         ]
     }
 }
+
+tracks.meetupSyncLowVerbose.active = true;
+tracks.meetupSyncHighVerbose.active = false;
 
 tracks.userAuthentication.active    = false;
 tracks.postingUpcomingClass.active  = true;
@@ -45,13 +61,14 @@ tracks.postingUpcomingClass.active  = true;
 
 global.debug = function(functionality) {
     if (isTrackingFunctionality(functionality)) {
-        console.log('========================================================================================================');
-        var message = functionality;
+        console.log('');
+        console.log('=== ' + functionality + ' ===========================================================');
+        var message = '';
         for (var i = 1; i < arguments.length; i++) {
-            message += ' ______ ' + JSON.stringify(arguments[i]);
-            //message += ' ______ ' + arguments[i];
+            console.log(prettyjson.render(arguments[i]));
+            //message += JSON.stringify(arguments[i]) + ' _____ ';
         }
-        console.log(message);
+        //console.log(message);
     }
 }
 

@@ -50,10 +50,8 @@ module.exports = function (app) {
         }
 
         db.addFakeEvent(fakeEvent).then(function(createdEvent) {
-            res.json({
-                status: 'success',
-                createdEvent: createdEvent
-            });
+            res.writeHead(200, {"Content-Type": "application/json"});
+            res.end(JSON.stringify(createdEvent));
         }, function (err) {
             //TODO: error handling
         });

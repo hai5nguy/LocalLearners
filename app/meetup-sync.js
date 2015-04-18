@@ -14,14 +14,14 @@ module.exports = function (app) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function startSync() {
-    //setInterval(doSync, MEETUP_SYNC_INTERVAL_IN_MILLISECONDS);
+    setInterval(doSync, MEETUP_SYNC_INTERVAL_IN_MILLISECONDS);
 }
 function doSync() {
     
     db.Upcoming.getAll().then(function (upcomingClasses) {
         //debug(FUNCTIONALITY.meetup_sync, 'doSync','upcomingClasses', upcomingClasses );
         meetupApi.Event.getAll().then(function (events) {
-            debug(FUNCTIONALITY.meetup_sync, 'doSync','events', events );
+            debug(FUNCTIONALITY.meetup_sync_show_events, 'doSync','events', events );
             updateUpcomingClassesWithEvents(upcomingClasses, events);
         }, function (error) {
                 syncError(error);
@@ -41,12 +41,12 @@ function updateUpcomingClassesWithEvents(upcomingClasses, events) {
     _.each(upcomingClasses, function (u) {
         var matchingEvent = _.findWhere(events, { id: u.meetupEvent.id });
         if (!matchingEvent) {
-            debug(FUNCTIONALITY.meetup_sync, 'updateUpcomingClassesWithEvents','meetup sync possible class cancel on meetup.com detected', 'upcomingClass', u );
+            debug(FUNCTIONALITY.meetup_sync_show_updates, 'updateUpcomingClassesWithEvents','meetup sync possible class cancel on meetup.com detected', 'upcomingClass', typeof u, {u: u.toObject() } );
             db.Upcoming.remove({ _id: u._id });
             return;
         }
         if (!_.isEqual(matchingEvent, u.meetupEvent)) {
-            debug(FUNCTIONALITY.meetup_sync, 'updateUpcomingClassesWithEvents','sync needed', 'upcomingclass', u, 'matchingEvent', matchingEvent);
+            debug(FUNCTIONALITY.meetup_sync_show_updates, 'updateUpcomingClassesWithEvents','sync needed', 'upcomingclass', u, 'matchingEvent', matchingEvent);
             u.meetupEvent = matchingEvent;
             db.Upcoming.update({ _id: u._id }, u);
             
