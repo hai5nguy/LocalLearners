@@ -1,5 +1,5 @@
-//global.MEETUP_API_ENDPOINT = 'http://localhost:5000/fakemeetupapi';
-global.MEETUP_API_ENDPOINT = 'https://api.meetup.com/2';
+global.MEETUP_API_ENDPOINT = 'http://localhost:5000/fakemeetupapi';
+//global.MEETUP_API_ENDPOINT = 'https://api.meetup.com/2';
 
 require('./debug.js');
 require('./core.js');

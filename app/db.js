@@ -16,20 +16,12 @@ var thisModule;
 module.exports = function(app) {
 
     thisModule = {
-
-        /* categories */
-        //getCategories: getCategories,
-        //getCategory: getCategory,
-        //insertCategories: insertCategories,
-        
         Category: {
             get: Category_get,
             getAll: Category_getAll,
             add: Category_add
         },
 
-        /* upcoming classes */
-        
         Upcoming: {
             add: Upcoming_add,
             get: Upcoming_get,
@@ -125,10 +117,9 @@ function Category_add(category) {
 function Upcoming_add(upcomingClass) {
     return Q.Promise(function(resolve, reject, notify) {
         var u = new models.UpcomingClass(upcomingClass);
-        u.save(function(err, u, numberAffected) {
-            console.log('db.Upcoming_add ', JSON.stringify(u));
-            if (err) { reject(err) }
-            else { resolve(u) }
+        u.save(function(error, u, numberAffected) {
+            debug(FUNCTIONALITY.db_Upcoming_add, 'error', error, 'saved upcoming class', u, 'numberAffected', numberAffected );
+            error ? reject(error) : resolve(u);
         });
     });
 }
@@ -176,7 +167,7 @@ function Upcoming_RSVP_syncWithEvent(event) {
 }
 
 function Upcoming_update(query, newClass) {
-    debug(FUNCTIONALITY.db_Upcoming_update, 'query', query, 'upcomingClass', upcomingClass);
+    debug(FUNCTIONALITY.db_Upcoming_update, 'query', query, 'newClass', newClass);
     return Q.Promise(function (resolve, reject, notify) {
          models.UpcomingClass.findOneAndUpdate(query, newClass, function (error, updatedClass) {
              debug(FUNCTIONALITY.db_Upcoming_update, 'error', error, 'updatedClass', updatedClass);

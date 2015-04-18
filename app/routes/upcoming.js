@@ -107,7 +107,7 @@ function postToMeetup(req, res, upcomingClass) {
             };
 
             meetupApi.Event.post(req, res, eventToPost).then(function (createdEvent) {
-                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup createdEvent', createdEvent);
+                debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup createdEvent', createdEvent, typeof createdEvent);
                 resolve(createdEvent);
             }, function (error) {
                 debug(FUNCTIONALITY.api_post_upcoming, 'postToMeetup error', error);

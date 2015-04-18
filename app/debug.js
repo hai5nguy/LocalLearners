@@ -5,6 +5,7 @@ global.FUNCTIONALITY = {
     meetup_api_Event_post   : 'meetup_api_Event_post',
     meetup_sync             : 'meetup_sync',
     db_addUser              : 'db_addUser',
+    db_Upcoming_add         : 'db_Upcoming_add',
     db_Upcoming_remove      : 'db_Upcoming_remove',
     db_Upcoming_update      : 'db_Upcoming_update',
     api_post_upcoming       : 'api_post_upcoming'
@@ -22,7 +23,8 @@ var tracks = {
         active: false,
         functionalities: [
             FUNCTIONALITY.api_post_upcoming,
-            FUNCTIONALITY.meetup_api_Event_post
+            FUNCTIONALITY.meetup_api_Event_post,
+            FUNCTIONALITY.db_Upcoming_add
         ]
     },
     meetupSync: {
@@ -47,6 +49,7 @@ global.debug = function(functionality) {
         var message = functionality;
         for (var i = 1; i < arguments.length; i++) {
             message += ' ______ ' + JSON.stringify(arguments[i]);
+            //message += ' ______ ' + arguments[i];
         }
         console.log(message);
     }
