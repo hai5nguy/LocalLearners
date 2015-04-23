@@ -18,6 +18,7 @@ module.exports = function (app) {
             get: Profile_get
         },
         RSVP: {
+            get: RSVP_get,
             update: RSVP_update
         }
     }
@@ -33,13 +34,32 @@ function Profile_get(accessToken) {
             headers: { Authorization: 'Bearer ' + accessToken }
         };
         restClient.get('https://api.meetup.com/2/member/self?&sign=true&photo-host=public&page=20', args, function (meetupProfile) {
-            debug(FUNCTIONALITY.meetup_api_profile_get, 'meetup api Profile_get', meetupProfile)
+            debug(FUNCTIONALITY.meetup_api_profile_get, 'meetup api Profile_get', meetupProfile);
+            if (!meetupProfile.photo) { 
+                meetupProfile.photo = {};
+                meetupProfile.photo.thumb_link = 'http://photos4.meetupstatic.com/img/noPhoto_50.png'
+            }
             resolve(meetupProfile);
         }).on('error', function (error) {
             console.log('Profile_get error ', error);
             reject(error);
         });
     });
+}
+//https://api.meetup.com/2/rsvps?&sign=true&photo-host=public&event_id=222028697&page=20
+function RSVP_get(eventId) {
+    return Q.Promise(function (resolve, reject, notify) {
+        
+        var url = MEETUP_API_ENDPOINT + '/rsvps?&sign=true&photo-host=public&event_id=' + eventId + '&page=20&key=' + LL_ADMINISTRATOR_API_KEY;
+        restClient.get(url, function (response) {
+            debug(FUNCTIONALITY.meetup_api_RSVP_get, 'RSVP_get', { eventId: eventId, response: response });
+            resolve({});
+        }).on('error', function (error) {
+            debug(FUNCTIONALITY.meetup_api_RSVP_get, 'RSVP_get error', { eventId: eventId, error: error });
+            reject(error);
+        });
+        
+    });  
 }
 
 function RSVP_update(req, args) {
@@ -220,12 +240,13 @@ function _postViaRestClient(req, res, event) {
 function Event_get(id) {
     
     return Q.Promise(function (resolve, reject, notify) {
-        restClient.get(MEETUP_API_ENDPOINT + '/event/' + id + '?&sign=true&photo-host=public&page=20&key=' + LL_ADMINISTRATOR_API_KEY,
-            function(event) {
-                resolve(event);
-            }).on('error', function (error) {
-                reject(error);
-            });
+        restClient.get(MEETUP_API_ENDPOINT + '/event/' + id + '?&sign=true&photo-host=public&page=20&key=' + LL_ADMINISTRATOR_API_KEY, function(event) {
+            debug(FUNCTIONALITY.meetup_api_Event_get, 'Event_get', { id: id, event: event });
+            resolve(event);
+        }).on('error', function (error) {
+            debug(FUNCTIONALITY.meetup_api_Event_get, 'Event_get error', { id: id, error: error });
+            reject(error);
+        });
     });
     
     /*

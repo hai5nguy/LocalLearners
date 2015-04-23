@@ -18,6 +18,8 @@ function startSync() {
 }
 function doSync() {
     
+    /*
+    
     db.Upcoming.getAll().then(function (upcomingClasses) {
         //debug(FUNCTIONALITY.meetup_sync, 'doSync','upcomingClasses', upcomingClasses );
         meetupApi.Event.getAll().then(function (events) {
@@ -31,11 +33,83 @@ function doSync() {
         syncError(error);
     });
     
+    */
+    
+    
+    
+    Q.fcall(getAllUpcomingClasses())
+        .then(syncEvents())
+        //.then(syncRSVPs())
+        .catch(function (error) {
+            debug(FUNCTIONALITY.meetup_sync, 'doSync', { error: error });
+        })
+        .done();
 }
 
-function syncError(error) {
-    console.log('meetup sync error: ', JSON.stringify(error));
+/////////////////////////////////////////////////////////////////////////////////////
+
+function getAllUpcomingClasses() {
+    return function () {
+        return Q.Promise(function (resolve, reject, notify) {
+            db.Upcoming.getAll().then(resolve, reject);
+        });
+    }
 }
+
+function syncEvents() {
+    return function () {
+        return Q.Promise(function (resolve, reject, notify) {
+            db.Upcoming.getAll().then(function (upcomingClasses) {
+                meetupApi.Event.getAll().then(function (events) {
+                    var eventUpdatingPromises = generateEventUpdatingPromises(upcomingClasses, events);
+                    Q.all(eventUpdatingPromises).then(resolve, reject);
+                }, reject);
+            }, reject);
+        });
+    };
+
+    function generateEventUpdatingPromises(upcomingClasses, events) {
+        var promises = [];
+
+        for (var i = 0; i < upcomingClasses.length; i++) {
+            promises.push(Q.Promise(function (resolve, reject, notify) {
+
+                var upcomingClass = upcomingClasses[i];
+                var matchingEvent = _.findWhere(events, { id: upcomingClass.meetupEvent.id });
+                if (!matchingEvent) {
+                    debug(FUNCTIONALITY.meetup_sync_show_event_updates, 'syncEvents','meetup sync possible class cancel on meetup.com detected', { upcomingClass: upcomingClass.toObject() });
+                    db.Upcoming.remove({ _id: upcomingClass._id }).then(resolve, reject);
+                }
+                if (_.isEqual(matchingEvent, upcomingClass.meetupEvent)) {
+                    //debug(FUNCTIONALITY.meetup_sync_show_event_updates, 'syncEvents','sync NOT needed', { upcomingClass: upcomingClass.toObject(), matchingEvent: matchingEvent });
+                    resolve();
+                } else {
+                    debug(FUNCTIONALITY.meetup_sync_show_event_updates, 'syncEvents','sync needed', { upcomingClass: upcomingClass.toObject(), matchingEvent: matchingEvent });
+                    upcomingClass.meetupEvent = matchingEvent;
+                    db.Upcoming.update({ _id: upcomingClass._id }, upcomingClass).then(resolve, reject);
+                }
+
+            }));
+        }
+
+        return promises;
+    }
+    
+}
+
+//
+//function syncRSVPs() {
+//    return function () {
+//        return Q.Promise(function (resolve, reject, notify) {
+//            db.Upcoming.getAll().then(function (upcomingClasses) {
+//                meetupApi.RSVP.getAll().then(function (listOfRSVPs) {
+//                    
+//                }, reject);
+//            }, reject);
+//        });
+//    }
+//}
+/*
 
 function updateUpcomingClassesWithEvents(upcomingClasses, events) {
     _.each(upcomingClasses, function (u) {
@@ -53,3 +127,5 @@ function updateUpcomingClassesWithEvents(upcomingClasses, events) {
         }
     });
 };
+    
+    */

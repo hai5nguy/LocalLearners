@@ -387,11 +387,11 @@ function updateUpcomingClass(upcomingClass) {
 }
 
 function addUser(user) {
-    debug(FUNCTIONALITY.db_addUser, 'incoming user', user);
+    //debug(FUNCTIONALITY.db_addUser, 'incoming user', user);
     return Q.Promise(function (resolve, reject, notify) {
         var u = new models.User(user);
         u.save(function(error, u, numberAffected) {
-            debug(FUNCTIONALITY.db_addUser, 'error', error, 'u', u, 'numberAfftected', numberAffected);
+            debug(FUNCTIONALITY.db_addUser, 'db_addUser', { error: error, u: u.toObject(), numberAfftected: numberAffected });
             if (error) { reject(error) }
             else { resolve(u) }
         });

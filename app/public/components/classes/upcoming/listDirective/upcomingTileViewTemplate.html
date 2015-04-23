@@ -10,10 +10,10 @@
 
     <div class="row">
         <div class="col-md-4 col-sm-6 col-xs-6" ng-repeat="upcomingClass in upcomingClasses | filter: selectedCategory.value | limitTo:6" ui-sref="upcoming.detail({ id: upcomingClass._id })">
-            <div class="panel panel-default" role="button" data-toggle="modal" data-target="#classModal" data-classInfo="">
+            <div class="panel">
                 <span class="upcomingCategory"><a href="{{ upcomingClass.catlink }}">{{ upcomingClass.category.name }}</a></span>
                 <img src="{{ upcomingClass.category.imageUrl }}" class="img-responsive upcomingImage" alt="Class Title - Category" />
-                <span class="upcomingTitle truncate col-md-12 col-sm-12 col-xs-12">{{ upcomingClass.meetupEvent.name }}</span>
+                <span class="upcomingTitle truncate col-md-12 col-sm-12 col-xs-12">{{ upcomingClass.meetup.event.name }}</span>
                 <div class="panel-body text-right">
                     <div class="row">
                         <div class="text-left col-md-4 col-sm-6 hidden-xs">

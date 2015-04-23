@@ -17,14 +17,16 @@ module.exports = function (app) {
 
     app.get('/api/upcoming/:id', function (req, res) {
         
-        
         Q.fcall(getUpcomingClass(req.params.id))
+            .then(populateMeetupEvent())
+            .then(populateRSVPs())
             .then(function (upcomingClass) {
                 res.json(upcomingClass);
             })
             .catch(function (error) {
                 res.status(500).send({error: error});  
             });
+        
     });
 
     app.post('/api/upcoming', function (req, res) {
@@ -122,7 +124,11 @@ function savePostedClassToDB(upcomingClass) {
         return Q.Promise(function (resolve, reject, notify) {
             var classToSave = {
                 category: upcomingClass.category_id,
-                meetupEvent: createdEvent,
+                meetup: {
+                    event: {
+                        id: createdEvent.id
+                    }
+                },
                 teachers: upcomingClass.teachers
             };
             
@@ -147,15 +153,39 @@ function deleteAssocatedRequestedClass(upcomingClass) {
     }
 }
 
+/////////////////////////////////////////////////////////////////////
+
 function getUpcomingClass(id) {
     return function() {
+        return db.Upcoming.get(id);
+    }
+}
+
+function populateMeetupEvent() {
+    return function(upcomingClass) {
+        debug(FUNCTIONALITY.api_get_upcoming_by_id, 'populateMeetupEvent', { upcomingClass: upcomingClass });
         return Q.Promise(function (resolve, reject, notify) {
-            db.Upcoming.get(id).then(resolve, reject);
+            meetupApi.Event.get(upcomingClass.meetup.event.id).then(function (event) {
+                upcomingClass.meetup.event = event;
+                resolve(upcomingClass)
+            }, reject)
         });
     }
 }
 
-///////////////////////////////////
+function populateRSVPs() {
+    return function (upcomingClass) {
+        debug(FUNCTIONALITY.api_get_upcoming_by_id, 'populateRSVPs', { upcomingClass: upcomingClass });
+        return Q.Promise(function (resolve, reject, notify) {
+            meetupApi.RSVP.get(upcomingClass.meetup.event.id).then(function (rsvps) {
+                upcomingClass.meetup.rsvpList = rsvps;
+            }, reject)
+        });
+
+    }
+}
+
+/////////////////////////////////////////////////////////////////////
 
 function rsvpOnMeetup(req, args) {
     return function() {
