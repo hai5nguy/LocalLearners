@@ -1,13 +1,22 @@
-var Q = require('../../node_modules/q');
-var _ = require('../../node_modules/underscore');
-var meetupApi = require('../meetup-api.js')(THE_APP);
-var db = require('../db.js')(THE_APP);
+var Q       = require(LL_NODE_MODULES_DIR + 'q');
+var _       = require(LL_NODE_MODULES_DIR + 'underscore');
+var uuid    = require(LL_NODE_MODULES_DIR + 'node-uuid');
+
+//var Database = require('../Database.js');
+var MeetupApi       = require(LL_MODULES_DIR + 'MeetupApi.js');
+var UpcomingClass   = require(LL_MODULES_DIR + 'UpcomingClass.js');
+
 
 module.exports = function (app) {
+    
 
     app.get('/api/upcoming', function (req, res) {
         
-        db.Upcoming.getAll().then(function (upcomingClasses) {
+        var args = { session: req.session };
+        
+        var Database = Database(args);
+        
+        Database.Upcoming.getAll().then(function (upcomingClasses) {
             res.json(upcomingClasses);
         }, function (error) {
             res.status(500).send({ error: error });
@@ -31,17 +40,44 @@ module.exports = function (app) {
 
     app.post('/api/upcoming', function (req, res) {
         
-        var upcomingClass = {
-            name: req.body.name,
-            category_id: req.body.category_id,
-            time: new Date(req.body.time).getTime(),
-            associatedRequestedClassId: req.body.associatedRequestedClassId,
-            teachers: [ req.user._id ]
+        var context = {
+            error: null,
+            upcomingClass: {
+                name: req.body.name,
+                category: req.body.category,
+                time: req.body.time,
+                valid: undefined,
+                invalidReason: '',
+                error: undefined
+            },
+            user: req.user
         };
         
-        debug(FUNCTIONALITY.api_post_upcoming, { upcomingClass_to_post: upcomingClass });
-
-        Q.fcall(validateUpcomingClass(upcomingClass))
+        debug(FUNCTIONALITY.api_post_upcoming, { context: context });
+        
+        
+        Q.fcall(UpcomingClass.invoke('allocateNew', context))
+            .then(function (context) {
+                res.json({ upcomingClass: context.upcomingClass });
+                UpcomingClass.invoke('buildNew', context)();
+            })
+            .catch(function (context) {
+                res.status(500).send({ context: context });
+            })
+            .done();
+        
+        
+        
+        //
+        //newClass.validate().then(function () {
+        //    res.json({ status: 'initialzing', postingId: newClass.postingId })
+        //}, function (error) {
+        //    debug(FUNCTIONALITY.api_post_upcoming, 'error', error);
+        //    res.status(500).send({ error: error });
+        //});
+        
+        /*
+        Q.fcall(validateUpcomingClass(newClass))
             .then(postToMeetup(req, res, upcomingClass))
             .then(savePostedClassToDB(upcomingClass))
             .then(deleteAssocatedRequestedClass(upcomingClass))
@@ -54,6 +90,7 @@ module.exports = function (app) {
                 res.status(500).send({error: error});
             })
             .done();
+            */
     });
 
     app.post('/api/upcoming/:classId/setrsvp', function (req, res) {
@@ -72,7 +109,7 @@ module.exports = function (app) {
             .done();
         
         /*
-        var setRSVP = db.Upcoming.RSVP.set(req.params.id, req.user._id, req.body.isAttending);
+        var setRSVP = Database.Upcoming.RSVP.set(req.params.id, req.user._id, req.body.isAttending);
         setRSVP.then(function(upcomingClass) {
             res.json({ status: 'success', requestedClass: upcomingClass })
         }, function (error) {
@@ -84,6 +121,15 @@ module.exports = function (app) {
     
 }
 
+
+function beginClassCreation(newClass, req) {
+    var args = { session: req.session, user: req.user };
+    var meetupApi = new MeetupApi(args);
+    
+    //meetupApi.post(newClass).then() {
+    //    Database.Upcoming.
+    //}
+}
 function validateUpcomingClass(upcomingClass) {
     return function() {
         
@@ -126,13 +172,14 @@ function savePostedClassToDB(upcomingClass) {
                 category: upcomingClass.category_id,
                 meetup: {
                     event: {
-                        id: createdEvent.id
+                        id: createdEvent.id,
+                        name: createdEvent.name
                     }
                 },
                 teachers: upcomingClass.teachers
             };
             
-            db.Upcoming.add(classToSave).then(function (savedClass) {
+            Database.Upcoming.add(classToSave).then(function (savedClass) {
                 resolve(savedClass)
             }, function (err) {
                 reject(err);
@@ -147,7 +194,7 @@ function deleteAssocatedRequestedClass(upcomingClass) {
             if (!upcomingClass.associatedRequestedClassId) {
                 resolve(savedClass);
             } else {
-                db.Requested.remove({ _id: upcomingClass.associatedRequestedClassId }).then(resolve, reject);
+                Database.Requested.remove({ _id: upcomingClass.associatedRequestedClassId }).then(resolve, reject);
             }
         });
     }
@@ -157,7 +204,7 @@ function deleteAssocatedRequestedClass(upcomingClass) {
 
 function getUpcomingClass(id) {
     return function() {
-        return db.Upcoming.get(id);
+        return Database.Upcoming.get(id);
     }
 }
 
@@ -190,7 +237,7 @@ function populateRSVPs() {
 function rsvpOnMeetup(req, args) {
     return function() {
         return Q.Promise(function (resolve, reject, notify) {
-            db.Upcoming.get(args.classId).then(function(upcomingClass) {
+            Database.Upcoming.get(args.classId).then(function(upcomingClass) {
                 
                 var e = upcomingClass.meetupEvent.id, e = args.isAttending;
                 meetupApi.RSVP.update(req, { eventId: e, isAttending: a }).then(function () {
@@ -210,5 +257,6 @@ function updateStudentsAttending() {
     }
 }
 ///////////////////////////////////
+
 
 

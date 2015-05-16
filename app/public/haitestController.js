@@ -1,15 +1,12 @@
-localLearnersApp
-    .controller('HaiTestController', function($scope, ClassesService) {
-        $scope.loading = false;
-        $scope.result = {};
+localLearnersApp.controller('HaiTestController', function($scope, UpcomingClassesService) {
 
         $scope.blah = function() {
-
-            ClassesService.getRequestedClasses().then(function(response) {
-                console.log('aaa ', response.data);
+            
+            UpcomingClassesService.postClass({
+                name: 'test1',
+                category: 'categoryid',
+                time: new Date()
             });
-
-
         }
 
     });

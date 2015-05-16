@@ -1,18 +1,20 @@
-var Q = require('../../node_modules/q');
+//var Q               = require(LL_NODE_MODULES + 'q');
+
 //var meetupApi = require('../meetup-api.js')(THE_APP);
-var db = require('../db.js')(THE_APP);
-var authentication = require('../authentication.js')(THE_APP);
+//var Database        = require(LL_MODULES_DIR + 'Database.js');
+var Authentication  = require(LL_MODULES_DIR + 'Authentication.js');
+var RequestedClass  = require(LL_MODULES_DIR + 'RequestedClass.js');
 
-module.exports = function (app) {
-
+module.exports = function () {
+    var app = THE_APP;
+    
     app.get('/api/requested', function (req, res) {
-        db.Requested.getAll().then(function (requestedClasses) {
-            //console.log('/requestedclasses requestedClasses ', JSON.stringify(requestedClasses));
-            res.json(requestedClasses);
-        }, function (err) {
-            serverError(res, err);
+        var context = {};
+        RequestedClass.getAll(context)().then(function () {
+            res.json(context.requested);
+        }, function () {
+            res.status(500).send(context);
         });
-
     });
     
     app.get('/api/requested/:id', function (req, res) {

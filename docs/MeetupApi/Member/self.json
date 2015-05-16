@@ -1,0 +1,29 @@
+{
+    "country": "us",
+    "city": "Indianapolis",
+    "topics": [{
+        "urlkey": "movies",
+        "name": "Watching Movies",
+        "id": 1201
+    }],
+    "joined": 1363530155000,
+    "link": "http://www.meetup.com/members/85189222",
+    "photo": {
+        "highres_link": "http://photos3.meetupstatic.com/photos/member/2/c/3/c/highres_241631324.jpeg",
+        "photo_id": 241631324,
+        "photo_link": "http://photos1.meetupstatic.com/photos/member/2/c/3/c/member_241631324.jpeg",
+        "thumb_link": "http://photos3.meetupstatic.com/photos/member/2/c/3/c/thumb_241631324.jpeg"
+    },
+    "lon": -86.2699966430664,
+    "other_services": {},
+    "name": "Hai Nguyen",
+    "visited": 1428281697000,
+    "self": {
+        "common": {}
+    },
+    "id": 85189222,
+    "state": "IN",
+    "lang": "en_US",
+    "lat": 39.84000015258789,
+    "status": "active"
+}

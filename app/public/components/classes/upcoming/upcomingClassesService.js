@@ -5,7 +5,7 @@ localLearnersApp.factory('UpcomingClassesService', function ($http, $q) {
         getClasses: getClasses,
         postClass: postClass,
         RSVP: {
-            set: RSVP_set,
+            set: RSVP_set
         }
 
     }

@@ -2,10 +2,10 @@ var _ = require('underscore');
 var Q = require('q');
 
 
-var meetupApi = require('./meetup-api.js')(THE_APP);
-var db = require('./db.js')(THE_APP);
+var MeetupApi   = require(LL_MODULES_DIR + 'MeetupApi.js');
+var Database    = require(LL_MODULES_DIR + 'Database.js');
 
-module.exports = function (app) {
+module.exports = function () {
     startSync();
 }
 
@@ -14,7 +14,7 @@ module.exports = function (app) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function startSync() {
-    setInterval(doSync, MEETUP_SYNC_INTERVAL_IN_MILLISECONDS);
+    //setInterval(doSync, MEETUP_SYNC_INTERVAL_IN_MILLISECONDS);
 }
 function doSync() {
     

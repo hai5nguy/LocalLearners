@@ -1,17 +1,15 @@
-var Q = require('../../node_modules/q');
-//var meetupApi = require('../meetup-api.js');
-var db = require('../db.js')(THE_APP);
+var Q           = require(LL_NODE_MODULES_DIR + 'q');
 
-module.exports = function (app) {
+var Database    = require(LL_MODULES_DIR + 'Database.js');
+
+module.exports = function () {
+    var app = THE_APP;
     app.get('/api/category/all', function (req, res) {
-        db.Category.getAll().then(function(categories) {
-            res.json(categories);
-        }, function (err) {
-            serverError(res, err)
+        var context = {};
+        Database.Category.getAll(context)().then(function() {
+            res.json(context.categories);
+        }, function () {
+            res.status(500).send(context);
         });
     });
-}
-
-function serverError(res, err) {
-    res.send(500, { error: err });
-}
+};

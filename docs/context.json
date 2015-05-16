@@ -1,0 +1,32 @@
+/**
+ * THE GOD OBJECT: context
+ * 
+ * This is ALL the possible properties of the context object which is used EVERYWHERE.  All properties should be documented here to avoid conflict.
+ *
+ */
+
+{
+    categories: Object,             //categories
+    error: Object,                  // (default: null) master error object, null when no error, else contains message property with error message                                              
+    requested: {
+        allClasses: [],
+        query: {}
+    },
+    upcomingClass: {
+        _id: ObjectId,              
+        status: String,             //UPCOMING_CLASS_STATUS.NEW: just created
+            
+        valid: undefined,           //undefined = unknown, or has not yet been checked
+        invalidReason: ''           //why class is not valid
+        
+        error: undefined            //undefined = no errors, else error is error message, error object, or meetup 'problem' property
+    },
+    
+    user: {
+        accessToken: String,
+        meetupProfile: {
+            id: Number              //e.g. 85189222 (default: undefined)
+            role: String            //possible roles: 'Event Organizer', 'Organizer' (default: '')
+        }
+    }
+}

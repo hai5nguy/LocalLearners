@@ -1,14 +1,14 @@
-var Q = require('../../node_modules/q');
-var db = require('../db.js')(THE_APP);
-var meetupApi = require('../meetup-api.js')(THE_APP);
-var authentication = require('../authentication.js')(THE_APP);
-var meetupAdministrator;
+var Q               = require(LL_NODE_MODULES_DIR + 'q');
+var Database        = require(LL_MODULES_DIR + 'Database.js');
+var MeetupApi       = require(LL_MODULES_DIR + 'MeetupApi.js');
+var Authentication  = require(LL_MODULES_DIR + 'Authentication.js');
 
-module.exports = function (app) {
+var meetupAdministrator = require('../meetup-administrator.js');
 
-    meetupAdministrator = require('../meetup-administrator.js')(app);
 
-    app.get('/echo', authentication.ensureAuthenticated, function (req, res, next) {
+module.exports = function () {
+	var app = THE_APP;
+    app.get('/echo', Authentication.ensureAuthenticated, function (req, res, next) {
         res.json(req.session);
     });
 

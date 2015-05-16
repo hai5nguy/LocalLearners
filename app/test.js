@@ -6,7 +6,7 @@ function step1() {
 
     setTimeout(function() {
         console.log('step 1');
-        defer.reject("validation faile");
+        defer.resolve("validation faile");
     }, 1000);
 
     return defer.promise;
@@ -16,7 +16,7 @@ function step2() {
         var defer = Q.defer();
         setTimeout(function() {
             console.log('step2 ');
-            defer.resolve()
+            defer.reject()
         }, 3000);
         return defer.promise;
 }
@@ -45,9 +45,14 @@ function error(errorArg) {
 
 Q.fcall(step1)
     .then(step2)
+    .then(function () {
+        console.log('success');
+    }, function () {
+        console.log('error');
+    })
     .then(step3)
     .catch(function (error) {
-        console.log('error ', error);
+        console.log('error bottom ', error);
         // Handle any error from all above steps
     })
     .done();

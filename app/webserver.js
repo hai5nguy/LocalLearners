@@ -5,10 +5,10 @@ require('./core.js');
 var express = require('express');
 global.THE_APP = express();
 
-require('./db.js')(THE_APP);
-require('./meetup-api.js')(THE_APP);
+require(LL_MODULES_DIR + '/Database.js');
+//require('./modules/MeetupApi.js');
 require('./meetup-sync.js')(THE_APP);
-require('./authentication.js')(THE_APP);
+require(LL_MODULES_DIR + 'Authentication.js');
 require('./routes/routes.js')(THE_APP);
 
 THE_APP.use(express.static(__dirname + '/public'));

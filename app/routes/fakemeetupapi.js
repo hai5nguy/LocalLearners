@@ -1,6 +1,6 @@
 var Q = require('../../node_modules/q');
 //var meetupApi = require('../meetup-api.js');
-var db = require('../db.js')(THE_APP);
+//var db = require('../db.js')(THE_APP);
 
 
 module.exports = function (app) {

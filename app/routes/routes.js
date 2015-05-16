@@ -5,8 +5,8 @@ module.exports = function (app) {
     
     require('./profile.js')(app);
     require('./upcoming.js')(app);
-    require('./requested.js')(app);
-    require('./categories.js')(app);
+    require('./requested.js');
+    require('./categories.js');
     require('./testing.js')(app);
     require('./fakemeetupapi.js')(app);
 

@@ -56,6 +56,12 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
             .state('host', {
                 url: '/host',
                 templateUrl: 'components/host/host.html'
+            })
+            
+            .state('haitest', {
+                url: '/haitest',
+                templateUrl: 'haitest.html',
+                controller: 'HaiTestController'
             });
 
 //            .when('/about', {
@@ -123,10 +129,7 @@ var localLearnersApp = angular.module('localLearnersApp',['ngResource', 'ui.rout
 //                templateUrl: 'components/terms/terms.html',
 ////                controller: 'TermsCtrl'
 //            })
-//            .when('/haitest', {
-//                templateUrl: 'haitest.html',
-//                controller: 'HaiTestController'
-//            });
+
 //
 //        $locationProvider.html5Mode(true);
 

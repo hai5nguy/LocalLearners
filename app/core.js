@@ -1,3 +1,7 @@
+require('./environmentals.js');
+
+var Q = require(LL_NODE_MODULES_DIR + 'q');
+
 var EventEmitter = require('events').EventEmitter;
 global.globalEventEmitter = new EventEmitter();
 global.EMITTEREVENTS = {
@@ -5,6 +9,10 @@ global.EMITTEREVENTS = {
     AdministratorAccessTokenFailed: 'AdministratorAccessTokenFailed'
 }
 
+global.UPCOMING_CLASS_STATUS = {
+    NEW: 'new',             
+    NOT_POSTED: 'upcoming_class_status_not_posted'
+}
 
 
 global.IsEmptyNullUndefined = function(obj) {
@@ -22,3 +30,20 @@ global.getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+global.CONTEXTPROMISE = function (contextCapablePromiseFunction) {
+    return function(context) {
+        return function() {
+            return Q.Promise(function (resolve, reject, notify) {
+                contextCapablePromiseFunction(context, resolve, reject, notify);
+            });
+        };
+    };
+};
+
+global.FCALLWRAPPER = function (promiseFunction) {
+    return function() {
+        return Q.Promise(function (resolve, reject, notify) {
+            promiseFunction(resolve, reject, notify);
+        });
+    };
+};
