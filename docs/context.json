@@ -6,22 +6,61 @@
  */
 
 {
-    categories: Object,             //categories
-    error: Object,                  // (default: null) master error object, null when no error, else contains message property with error message                                              
+    category: {
+        all: []                     //all categories from DB
+        query: {}
+    },
+    
+    db: {                           //all database operations
+        query: {}
+        update: {}                  //object for update operation
+    }
+    
+    error: Object,                  //master error object, null when no error, else contains message property with error message    
+    
+    MeetupApi: {
+        Event: {
+            postedEvent: {}         //represent the posted event 	       
+        }
+    },
+                                              
     requested: {
         allClasses: [],
         query: {}
     },
-    upcomingClass: {
+    
+    UpcomingClass: {
+        newClass: {
+            
+        },
+        savedClass: {
+            _id: ObjectId
+        }
         _id: ObjectId,              
         status: String,             //UPCOMING_CLASS_STATUS.NEW: just created
             
         valid: undefined,           //undefined = unknown, or has not yet been checked
         invalidReason: ''           //why class is not valid
         
-        error: undefined            //undefined = no errors, else error is error message, error object, or meetup 'problem' property
+        error: undefined,           //undefined = no errors, else error is error message, error object, or meetup 'problem' property
+                                    //this should be moved to the root error object, remove when this is done
+                                    
+        query: {}                   //query to pass to Database for any Upcoming class operations
     },
     
+    RestService: {
+        url: String
+        args: {},
+        result: {}
+    }
+    
+    session: {
+        db_user: {                     //represent the user                              
+            
+        }
+        accessToken: String
+        
+    }
     user: {
         accessToken: String,
         meetupProfile: {

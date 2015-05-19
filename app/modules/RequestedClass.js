@@ -1,4 +1,4 @@
-var Q               = require(LL_NODE_MODULES + 'q');
+var Q               = require(LL_NODE_MODULES_DIR + 'q');
 
 //var meetupApi = require('../meetup-api.js')(THE_APP);
 var Database        = require(LL_MODULES_DIR + 'Database.js');

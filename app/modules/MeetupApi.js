@@ -1,6 +1,7 @@
 var Q               = require(LL_NODE_MODULES_DIR + 'q');
 var restClient  	= new (require(LL_NODE_MODULES_DIR + 'node-rest-client').Client)();
 
+var RestService             = require(LL_MODULES_DIR + 'RestService.js');
 var MeetupAdministrator     = require(LL_MODULES_DIR + 'MeetupAdministrator.js');
 
 var _localLearnersGroupId = 18049722;  //todo: move to environmentals, maybe not??
@@ -19,10 +20,10 @@ function Event() {
     }
     
     function post(context, resolve, reject, notify) {
-        debug(FUNCTIONALITY.MeetupApi_Event_post, 'post', { context: context });
+        debug(FUNCTIONALITY.MeetupApi_Event_post, 'Event.post', { context: context });
         
         Q.fcall(ensureUserIsEventOrganizer(context))
-            .then(postViaRestClient)
+            .then(postViaRestClient(context))
             .then(resolve)
             .catch(reject)
             .done();
@@ -87,11 +88,11 @@ function getUserMeetupRole(context) {
             }
         };
         
-        var url = _meetupApiProfileUrl + '/' + _localLearnersGroupId + '/' + context.user.id;
+        var url = MEETUP_API_URL.PROFILE + '/' + _localLearnersGroupId + '/' + context.user.meetupProfile.id;
 
         restClient.get(url, getArgs, function(meetupProfile) {
             debug(FUNCTIONALITY.MeetupApi_Event_post, 'getUserMeetupRole', { meetupProfile: meetupProfile });
-            context.user.meetupProfile.role = meetupProfile.role; 
+            context.user.meetupProfile.role = meetupProfile.role;
             resolve(context);
         }).on('error', function (error) {
             context.error = {
@@ -135,44 +136,42 @@ function promoteUserToEventOrganizer(context) {
 
 function postViaRestClient(context) {
     return Q.Promise(function (resolve, reject, notify) {
-        var postArgs = {
-            data: {},
-            parameters: {
-                group_id: _localLearnersGroupId,
-                group_urlname: _localLearnersGroupUrlName,
-                name: context.upcomingClass.name,
-                time: context.upcomingClass.time
-            },
-            headers: {
-                Authorization: 'Bearer ' + context.user.accessToken,
-                'Content-Type': 'application/json'
+        context.RestService = {
+            url: MEETUP_API_ENDPOINT + '/event',
+            args: {
+                data: (LL_ENVIRONMENT === 'development') ? context.user : {},
+                parameters: {
+                    group_id: _localLearnersGroupId,
+                    group_urlname: _localLearnersGroupUrlName,
+                    name: context.upcomingClass.name,
+                    time: context.upcomingClass.time
+                },
+                headers: {
+                    Authorization: 'Bearer ' + context.user.accessToken,
+                    'Content-Type': 'application/json'
+                }
             }
         }
 
-        if (LL_ENVIRONMENT === 'development') { postArgs.data.user = context.user; }
-
-        var url = MEETUP_API_ENDPOINT + '/event';
-        restClient.post(url, postArgs, function(createdEvent) {
-            debug(FUNCTIONALITY.MeetupApi_Event_post, 'postViaRestClient', { createdEvent: createdEvent });
+        //context.RestService.args
+        //context.RestService.result || context.error
+        RestService.post(context)().then(function () {
+            
+            var createdEvent = context.result;
             if (createdEvent.problem) {
                 context.error = {
                     message: 'Error create event on meetup',
                     createdEvent: createdEvent
                 };
-                reject(context);
+                reject();
             } else {
-                context.upcomingClass.event = createdEvent;
-                resolve(context);
+                context.MeetupApi.Event.posted = createdEvent;
+                resolve();
             }
-        }).on('error', function(error) {
-            debug(FUNCTIONALITY.MeetupApi_Event_post, 'postViaRestClient', { error: error });
-            context.error = {
-                message: 'Unable to post event to meetup',
-                innerError: error
-            };
-            reject(context);
-        });
-
+            debug(FUNCTIONALITY.MeetupApi_Event_post, 'postViaRestClient', { context: context, createdEvent: createdEvent });
+            
+        }, reject);
+        
     });
 }
 

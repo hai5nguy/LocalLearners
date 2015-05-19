@@ -49,7 +49,7 @@ localLearnersApp.directive('llClassCreationForm', function() {
                 
                 var classToPost = {
                     name: $scope.newClass.name,
-                    category_id: $scope.newClass.category._id,
+                    category: $scope.newClass.category._id,
                     time: now,
                     associatedRequestedClassId: associatedRequestedClassId
                 };

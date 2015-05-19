@@ -27,7 +27,7 @@ function ensureAuthenticated(req, res, next) {
         return next();
     } else {
         debug(FUNCTIONALITY.Authentication_ensureAuthenticated, { req: req, res: res, next: next });
-        return res.sendStatus(401);
+        return res.status(401).send({ message: 'Not Authorized'});
     }
 }
 

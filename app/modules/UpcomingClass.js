@@ -1,29 +1,91 @@
-var Q = require('../../node_modules/q');
+var Q           = require(LL_NODE_MODULES_DIR + 'q');
 //var uuid = require('../../node_modules/node-uuid');
-var Database = require(LL_MODULES_DIR + 'Database.js');
-var MeetupApi = require(LL_MODULES_DIR + 'MeetupApi.js');
 
-
-
+var Database    = require(LL_MODULES_DIR + 'Database.js');
+var MeetupApi   = require(LL_MODULES_DIR + 'MeetupApi.js');
 
 var UpcomingClass = (function () {
     
-    var promiseFunctions = {
-        'allocateNew': allocateNew,
-        'buildNew': buildNew,
-        'validate': validate
-    };
-    
     return {
-        invoke: function(name, context) {
-            return function() {
-                return Q.Promise(function (resolve, reject, notify) {
-                    promiseFunctions[name](context, resolve, reject, notify);
-                });
-            };    
-        }
+        allocateNew: CONTEXTPROMISE(allocateNew),
+        buildNew: CONTEXTPROMISE(buildNew),
+        getAll: CONTEXTPROMISE(getAll),
+        RSVP: RSVP(),
+        validate: CONTEXTPROMISE(validate)
     };
     
+    function getAll(context, resolve, reject, notify) {
+        context.upcomingClass.query = {};
+        Database.Upcoming.getAll(context)().then(resolve, reject);
+    }
+    
+    function allocateNew(context, resolve, reject, notify) {
+        Q.fcall(UpcomingClass.validate(context))
+            .then(Database.Upcoming.allocateNew(context))
+            .then(resolve)
+            .catch(reject)
+            .done();
+    }
+    
+    function buildNew(context, resolve, reject, notify) {
+        Q.fcall(MeetupApi.Event.post(context))
+            .then(function() {
+                context.db = {
+                    query: { _id: context.upcoming.db_class._id },
+                    updateArg: { $set: context.upcoming.db_class }  
+                };
+            })
+            .then(Database.Upcoming.update(context))
+            .catch(function () {
+                //debug
+            })
+            .done();
+    }
+    
+    function validate(context, resolve, reject, notify) {
+        var newClass = context.UpcomingClass.newClass;
+        if (!IsPopulatedString(newClass.name)) {
+            context.error = {
+                message: 'Invalid class name'
+            };
+            reject(); return;
+        }
+        if (!IsPopulatedString(newClass.category)) {
+            context.error = {
+                message: 'Invalid class category'
+            }
+            reject(); return;
+        }
+        //if (!IsPopulatedString(classToValidate.time)) {
+        //    classToValidate.valid = false;
+        //    classToValidate.invalidReason = 'Invalid class time';
+        //    resolve(context); return;
+        //}
+        resolve();
+    }
+    
+})();
+
+
+function RSVP() {
+    
+}
+//    var promiseFunctions = {
+//        'allocateNew': allocateNew,
+//        'buildNew': buildNew,
+//        'validate': validate
+//    };
+//    
+//    return {
+//        invoke: function(name, context) {
+//            return function() {
+//                return Q.Promise(function (resolve, reject, notify) {
+//                    promiseFunctions[name](context, resolve, reject, notify);
+//                });
+//            };    
+//        }
+//    };
+//    
 
     //return {
     //    session: args.session,
@@ -55,14 +117,7 @@ var UpcomingClass = (function () {
     //}
     //
     ////private
-    //function buildNewClass(context) {
-    //    Q.fcall(meetupApi.Event.post(context))
-    //        .then(db.Upcoming.update(context))
-    //        .catch(function () {
-    //            //debug
-    //        })
-    //        .done();
-    //}
+
     //var _this = this;
     //_this._id = null;
     //_this._category = {};
@@ -197,38 +252,8 @@ var UpcomingClass = (function () {
 
     //    })
     //}
-})();
 
-function allocateNew(context, resolve, reject, notify) {
-    Q.fcall(UpcomingClass('validate', context))
-        .then(Database.Upcoming.allocateNew(context))
-        .then(resolve)
-        .catch(reject)
-        .done();
-}
 
-function validate(context, resolve, reject, notify) {
-    var classToValidate = context.upcomingClass;
-    if (!IsPopulatedString(classToValidate.name)) {
-        classToValidate.valid = false;
-        classToValidate.invalidReason = 'Invalid class name';
-        reject(context); return;
-    }
-    if (!IsPopulatedString(classToValidate.category)) {
-        classToValidate.valid = false;
-        classToValidate.invalidReason = 'Invalid class category';
-        reject(context); return;
-    }
-    //if (!IsPopulatedString(classToValidate.time)) {
-    //    classToValidate.valid = false;
-    //    classToValidate.invalidReason = 'Invalid class time';
-    //    resolve(context); return;
-    //}
-    
-    classToValidate.valid = true;
-    classToValidate.invalidReason = '';
-    resolve(context);
-}
 
 function buildNew(context, resolve, reject, notify) {
     Q.fcall(MeetupApi('Event.post', context))

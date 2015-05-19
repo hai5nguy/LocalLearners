@@ -1,15 +1,15 @@
 var Q           = require(LL_NODE_MODULES_DIR + 'q');
 
-var Database    = require(LL_MODULES_DIR + 'Database.js');
+//var Database    = require(LL_MODULES_DIR + 'Database.js');
+var Category    = require(LL_MODULES_DIR + 'Category.js');
 
-module.exports = function () {
-    var app = THE_APP;
-    app.get('/api/category/all', function (req, res) {
-        var context = {};
-        Database.Category.getAll(context)().then(function() {
-            res.json(context.categories);
+module.exports = (function () {
+    THE_APP.get('/api/category/all', function (req, res) {
+        var context = { category: {} };
+        Category.getAll(context)().then(function() {
+            res.json(context.category.all);
         }, function () {
-            res.status(500).send(context);
+            res.status(500).send(context.error);
         });
     });
-};
+})();

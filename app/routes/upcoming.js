@@ -1,25 +1,22 @@
-var Q       = require(LL_NODE_MODULES_DIR + 'q');
-var _       = require(LL_NODE_MODULES_DIR + 'underscore');
-var uuid    = require(LL_NODE_MODULES_DIR + 'node-uuid');
+var Q               = require(LL_NODE_MODULES_DIR + 'q');
+var _               = require(LL_NODE_MODULES_DIR + 'underscore');
+var uuid            = require(LL_NODE_MODULES_DIR + 'node-uuid');
 
-//var Database = require('../Database.js');
+//var Database        = require(LL_MODULES_DIR + 'Database.js');
+var Authentication  = require(LL_MODULES_DIR + 'Authentication.js');
 var MeetupApi       = require(LL_MODULES_DIR + 'MeetupApi.js');
 var UpcomingClass   = require(LL_MODULES_DIR + 'UpcomingClass.js');
 
 
-module.exports = function (app) {
-    
+module.exports = (function () {
+    var app = THE_APP;
 
     app.get('/api/upcoming', function (req, res) {
-        
-        var args = { session: req.session };
-        
-        var Database = Database(args);
-        
-        Database.Upcoming.getAll().then(function (upcomingClasses) {
-            res.json(upcomingClasses);
-        }, function (error) {
-            res.status(500).send({ error: error });
+        var context = {};
+        UpcomingClass.getAll(context)().then(function () {
+            res.json(context.upcomingClasses);
+        }, function () {
+            res.status(500).send(context.error);
         });
         
     });
@@ -38,31 +35,30 @@ module.exports = function (app) {
         
     });
 
-    app.post('/api/upcoming', function (req, res) {
+    app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
         
         var context = {
-            error: null,
-            upcomingClass: {
-                name: req.body.name,
-                category: req.body.category,
-                time: req.body.time,
-                valid: undefined,
-                invalidReason: '',
-                error: undefined
+            UpcomingClass: {
+                newClass: {
+                    name: req.body.name,
+                    category: req.body.category,
+                    time: req.body.time
+                }
             },
             user: req.user
         };
         
-        debug(FUNCTIONALITY.api_post_upcoming, { context: context });
+        debug(FUNCTIONALITY.api_post_upcoming, '/api/upcoming', { context: context });
         
-        
-        Q.fcall(UpcomingClass.invoke('allocateNew', context))
-            .then(function (context) {
-                res.json({ upcomingClass: context.upcomingClass });
-                UpcomingClass.invoke('buildNew', context)();
+        Q.fcall(UpcomingClass.allocateNew(context))
+            .then(function () {
+                res.json({
+                    _id: context.UpcomingClass.savedClass._id
+                });
+                UpcomingClass.buildNew(context)();
             })
-            .catch(function (context) {
-                res.status(500).send({ context: context });
+            .catch(function () {
+                res.status(500).send(context.error);
             })
             .done();
         
@@ -119,7 +115,7 @@ module.exports = function (app) {
         */
     });
     
-}
+})();
 
 
 function beginClassCreation(newClass, req) {
@@ -135,7 +131,7 @@ function validateUpcomingClass(upcomingClass) {
         
         var defer = Q.defer();
         if ( IsPopulatedString(upcomingClass.name) &&
-            IsPopulatedString(upcomingClass.category_id) &&
+            IsPopulatedString(upcomingClass.category) &&
             IsPopulatedNumber(upcomingClass.time)
         ) {
             defer.resolve(true);
@@ -169,7 +165,7 @@ function savePostedClassToDB(upcomingClass) {
     return function (createdEvent) {
         return Q.Promise(function (resolve, reject, notify) {
             var classToSave = {
-                category: upcomingClass.category_id,
+                category: upcomingClass.category,
                 meetup: {
                     event: {
                         id: createdEvent.id,

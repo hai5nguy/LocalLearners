@@ -21,7 +21,7 @@ global.FUNCTIONALITY = {
     db_Upcoming_add                     : 'db_Upcoming_add',
     Database_Upcoming_allocateNew       : 'Database_Upcoming_allocateNew',
     db_Upcoming_remove                  : 'db_Upcoming_remove',
-    db_Upcoming_update                  : 'db_Upcoming_update',
+    Database_Upcoming_update            : 'Database_Upcoming_update',
     UpcomingClass_initialize            : 'UpcomingClass_initialize'
 };
 
@@ -44,7 +44,7 @@ var tracks = {
         ]
     },
     postingUpcomingClass: {
-        active: false,
+        active: true,
         functionalities: [
             FUNCTIONALITY.api_post_upcoming,
             FUNCTIONALITY.MeetupApi_Event_post,
@@ -60,7 +60,7 @@ var tracks = {
             FUNCTIONALITY.meetup_sync_show_events,
             FUNCTIONALITY.meetup_sync_show_event_updates,
             FUNCTIONALITY.db_Upcoming_remove,
-            FUNCTIONALITY.db_Upcoming_update
+            FUNCTIONALITY.Database_Upcoming_update
         ]
     },
     meetupSyncLowVerbose: {
@@ -68,7 +68,7 @@ var tracks = {
         functionalities: [
             FUNCTIONALITY.meetup_sync_show_event_updates,
             FUNCTIONALITY.db_Upcoming_remove,
-            FUNCTIONALITY.db_Upcoming_update
+            FUNCTIONALITY.Database_Upcoming_update
         ]
     }
 }

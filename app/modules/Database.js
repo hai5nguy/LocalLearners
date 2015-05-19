@@ -35,7 +35,7 @@ function Category() {
                 };
                 reject();
             } else { 
-                context.categories = categories;
+                context.category.all = categories;
                 resolve();
             }
         });
@@ -53,7 +53,7 @@ function Requested() {
         query.populate('category');
         query.exec(function (error, requestedClasses) {
             if (!error) {
-                context.requested.allClasses = requestedClass; 
+                context.requested.allClasses = requestedClasses; 
                 resolve();
             } else {
                 context.error = {
@@ -69,20 +69,59 @@ function Requested() {
 
 function Upcoming() {
     return {
-        allocateNew: CONTEXTPROMISE(allocateNew)
+        allocateNew: CONTEXTPROMISE(allocateNew),
+        getAll: CONTEXTPROMISE(getAll),
+        update: CONTEXTPROMISE(update)
     }
     
     function allocateNew(context, resolve, reject, notify) {
-        var newUpcomingClass = new Models.UpcomingClass({ status: UPCOMING_CLASS_STATUS.NEW });
-        newUpcomingClass.save(function(error, newUpcomingClass, numberAffected) {
-            debug(FUNCTIONALITY.Database_Upcoming_allocateNew, { error: error, newUpcomingClass: newUpcomingClass.toObject(), numberAffected: numberAffected } );
-            if (error) {
-                context.creationError = error; reject(context);
+        var newClass = new Models.UpcomingClass(context.UpcomingClass.newClass);
+        newClass.save(function(error, newClass, numberAffected) {
+            if (!error) {
+                context.UpcomingClass.savedClass = newClass.toObject();
+                resolve();
             } else {
-                context.upcomingClass._id = newUpcomingClass._id; resolve(context);
+                context.error = {
+                    message: 'Unable to allocate new upcoming class',
+                    db_error: error
+                };
+                reject();
+            }
+            debug(FUNCTIONALITY.Database_Upcoming_allocateNew, { context: context, error: error, newClass: newClass.toObject(), numberAffected: numberAffected } );
+        });
+    }
+    
+    function getAll(context, resolve, reject, notify) {
+        Models.UpcomingClass.find(context.upcomingClass.query, function (error, classes) {
+            if (!error) {
+                context.upcomingClass.classes = classes;
+                resolve();
+            } else {
+                context.error = {
+                    message: 'Error getting upcoming classes from Database',
+                    db_error: error
+                };
+                reject();
             }
         });
     }
+    
+    function update(context, resolve, reject, notify) {
+        Models.UpcomingClass.findOneAndUpdate(context.db.query, context.db.updateArg, function (error, updatedClass) {
+            if (!error) {
+                context.upcoming.db_class = updatedClass;
+                resolve();
+            } else {
+                context.error = {
+                    message: 'Error updating upcoming class in Database',
+                    db_error: error
+                };
+                reject();
+            }
+            debug(FUNCTIONALITY.Database_Upcoming_update, { context: context, error: error, updatedClass: updatedClass });
+        });
+    }
+
     
 }
 
@@ -123,14 +162,14 @@ function User() {
                 reject(context);    
             }
             else { 
-                context.user = user;
+                context.user = user.toObject();
                 resolve(context);
             }
         });
     }
     
     function upsert(context, resolve, reject, notify) {
-        debug(FUNCTIONALITY.Database_User_upsert, 'User_upsert', { context: context });
+        debug(FUNCTIONALITY.Database_User_upsert, 'upsert', { context: context });
         Models.User.findOne(context.user.query, function (error, foundUser) {
             if (foundUser) {
                 Database.User.update(context)().then(resolve, reject);
@@ -322,15 +361,7 @@ module.exports = Database;
 //
 //}
 //
-//function Upcoming_update(query, newClass) {
-//    debug(FUNCTIONALITY.db_Upcoming_update, { query: query, newClass: newClass });
-//    return Q.Promise(function (resolve, reject, notify) {
-//        Models.UpcomingClass.findOneAndUpdate(query, newClass, function (error, updatedClass) {
-//            debug(FUNCTIONALITY.db_Upcoming_update, { error: error, updatedClass: updatedClass });
-//            error ? reject(error) : resolve(updatedClass);
-//        });
-//    });
-//}
+
 //
 //function Upcoming_updateAll(upcomingClasses) {
 //    return Q.Promise(function (resolve, reject, notify) {
