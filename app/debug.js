@@ -1,22 +1,24 @@
-var _ = require('../node_modules/underscore');
-var prettyjson = require('../node_modules/prettyjson');
+var _           = require(LL_NODE_MODULES_DIR + 'underscore');
+var prettyjson  = require(LL_NODE_MODULES_DIR + 'prettyjson');
 
 global.FUNCTIONALITY = {
     Authentication_deserializeUser      : 'Authentication_deserializeUser',
     Authentication_ensureAuthenticated  : 'Authentication_ensureAuthenticated',
     api_get_upcoming_by_id              : 'api_get_upcoming_by_id',
     api_post_upcoming                   : 'api_post_upcoming',
+    api_profile_get                     : 'api_profile_get',
     Database_User_update                : 'Database_User_update',
     Database_User_upsert                : 'Database_User_upsert',
     fakemeetupapi                       : 'fakemeetupapi',
-    meetup_api_profile_get              : 'meetup_api_profile_get',
+    MeetupApi_Profile_get               : 'MeetupApi_Profile_get',
     meetup_api_Event_get                : 'meetup_api_Event_get',
     MeetupApi_Event_post                : 'MeetupApi_Event_post',
     meetup_api_RSVP_get                 : 'meetup_api_RSVP_get',
     meetup_sync                         : 'meetup_sync',
     meetup_sync_show_events             : 'meetup_sync_show_events',
     meetup_sync_show_event_updates      : 'meetup_sync_show_event_updates',
-    Database_User_add                   : 'Database_User_add',
+    Database_User_insert                : 'Database_User_insert',
+    Database_User_get                   : 'Database_User_get',
     db_Requested_remove                 : 'db_Requested_remove',
     db_Upcoming_add                     : 'db_Upcoming_add',
     Database_Upcoming_allocateNew       : 'Database_Upcoming_allocateNew',
@@ -37,14 +39,16 @@ var tracks = {
     userAuthentication: {
         active: false,
         functionalities: [
-            FUNCTIONALITY.meetup_api_profile_get,
-            FUNCTIONALITY.Database_User_add,
+            FUNCTIONALITY.api_profile_get,
+            FUNCTIONALITY.MeetupApi_Profile_get,
+            FUNCTIONALITY.Database_User_insert,
             FUNCTIONALITY.Database_User_update,
-            FUNCTIONALITY.Database_User_upsert
+            FUNCTIONALITY.Database_User_upsert,
+            FUNCTIONALITY.Database_User_get
         ]
     },
     postingUpcomingClass: {
-        active: true,
+        active: false,
         functionalities: [
             FUNCTIONALITY.api_post_upcoming,
             FUNCTIONALITY.MeetupApi_Event_post,

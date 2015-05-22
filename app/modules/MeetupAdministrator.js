@@ -1,30 +1,21 @@
-var Q = require(LL_NODE_MODULES_DIR + 'q');
-//
-const Browser = require(LL_NODE_MODULES_DIR + 'zombie');
-//var NodeRestClient = require('node-rest-client').Client();
-//var restClient = new NodeRestClient();
+var Q       = require(LL_NODE_MODULES_DIR + 'q');
+var Browser = require(LL_NODE_MODULES_DIR + 'zombie');
 
-var restClient = require('node-rest-client').Client();
+//var restClient  = require(LL_NODE_MODULES_DIR + 'node-rest-client').Client();
 
 var _localLeanersAdministratorAccessCode;
 var _localLeanersAdministratorAccessToken;
 
 var _meetupApiAuthorizeUrl = 'https://secure.meetup.com/oauth2/authorize';
 
-var MeetupAdministrator = function (functionName, context) {
+var MeetupAdministrator = (function () {
+    registerAdministratorServerCallback();
 
-    registerAdministratorServerCallback(THE_APP);
-
-    var _masterFunctionList = {
-        'getAccessToken': getAccessToken
+    return {
+        getAccessToken: CONTEXTPROMISE(getAccessToken)
     };
 
-    return function() {
-        return Q.Promise(function (resolve, reject, notify) {
-            _masterFunctionList[functionName](context, resolve, reject, notify);
-        });
-    };
-}
+})();
 
 function getAccessToken(context, resolve, reject, notify) {
     
@@ -72,8 +63,10 @@ function authorizeLocalLearnersAdministratorWithMeetup() {
         });
 }
 
-function registerAdministratorServerCallback(app) {
+function registerAdministratorServerCallback() {
 
+    var app = THE_APP;
+    
     app.get('/meetupServerLinkCallback', function (req, res) {
         _localLeanersAdministratorAccessCode = req.query.code;
 

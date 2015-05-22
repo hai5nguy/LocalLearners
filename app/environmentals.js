@@ -37,6 +37,7 @@ global.MEETUP_API_URL = {
     ACCESSTOKEN:                'https://secure.meetup.com/oauth2/access',
     DEFAULT_PHOTO_THUMB_LINK:   'http://photos4.meetupstatic.com/img/noPhoto_50.png',
     MEMBER:                     'https://api.meetup.com/2/member',
+    MEMBER_QUERYSTRING:         '/self?&sign=true&photo-host=public&page=20',
     PROFILE:                    'https://api.meetup.com/2/profile'
 }
 

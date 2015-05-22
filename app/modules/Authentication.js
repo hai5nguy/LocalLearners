@@ -48,11 +48,11 @@ function setupPassport() {
     });
 
     passport.deserializeUser(function(id, done) {
-        var context = { user: { query: { _id: id } } };
+        var context = { Database: { query: { _id: id } } };
         
-        Database.User.get(context)().then(function (context) {
+        Database.User.get(context)().then(function () {
             done(null, context.user);
-        }, function (context) {
+        }, function () {
             debug(FUNCTIONALITY.Authentication_deserializeUser, { context: context });
             done(null, false);
         });
@@ -76,13 +76,14 @@ function setupPassport() {
         clientID: LL_MEETUP_OAUTH2_CLIENTID,
         clientSecret: LL_MEETUP_OAUTH2_SECRET,
         callbackURL: LL_MEETUP_OAUTH2_CALLBACKURL
-    }, authenticationHandler);
+    }, authenticationCallbackHandler);
     
     passport.use('provider', strategy);
     
 }
 
-function authenticationHandler(accessToken, refreshToken, profile, done) {
+function authenticationCallbackHandler(accessToken, refreshToken, profile, done) {
+    debug(FUNCTIONALITY.authentication, 'authenticationCallbackHandler', { accessToken: accessToken, refreshToken: refreshToken, profile: profile, done: done });
     
     var context = {
         user: {
@@ -92,14 +93,16 @@ function authenticationHandler(accessToken, refreshToken, profile, done) {
     
     Q.fcall(MeetupApi.Profile.get(context))
         .then(function() {
-            context.user.query = { 'meetupProfile.id': context.user.meetupProfile.id };
+            context.Database = {
+                query: { 'meetupProfile.id': context.user.meetupProfile.id }
+            };
         })
         .then(Database.User.upsert(context))
         .then(function () {
             done(null, context.user);
         })
         .catch(function () {
-            debug(FUNCTIONALITY.authentication, 'authenticationHandler', { context: context });
+            debug(FUNCTIONALITY.authentication, 'authenticationCallbackHandler error!!!!!!!!! tell hai', { context: context });
         })
         .done();
 }

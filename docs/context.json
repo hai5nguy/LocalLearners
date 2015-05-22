@@ -6,17 +6,25 @@
  */
 
 {
-    category: {
+    Category: {
         all: []                     //all categories from DB
-        query: {}
     },
     
-    db: {                           //all database operations
+    Database: { 	               //all database operations
         query: {}
-        update: {}                  //object for update operation
-    }
+        arg: {}
+        args: []
+        result: {}                  //one result
+        results: []                 //multiple results
+    },
     
-    error: Object,                  //master error object, null when no error, else contains message property with error message    
+    error: {
+        message:
+    },                    
+    
+    MeetupAdministrator: {
+        accessToken: String  
+    },
     
     MeetupApi: {
         Event: {
@@ -30,13 +38,12 @@
     },
     
     UpcomingClass: {
-        newClass: {
+        class: {
             
         },
-        savedClass: {
-            _id: ObjectId
-        }
-        _id: ObjectId,              
+        classList: {                  //list of upcoming classes
+                
+        },           
         status: String,             //UPCOMING_CLASS_STATUS.NEW: just created
             
         valid: undefined,           //undefined = unknown, or has not yet been checked
@@ -52,6 +59,12 @@
         url: String
         args: {},
         result: {}
+    }
+    
+    Session: {
+        savedUser: {
+            
+        }
     }
     
     session: {

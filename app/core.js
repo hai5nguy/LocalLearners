@@ -1,6 +1,9 @@
 require('./environmentals.js');
 
-var Q = require(LL_NODE_MODULES_DIR + 'q');
+var Q       = require(LL_NODE_MODULES_DIR + 'q');
+var Assert  = require(LL_MODULES_DIR + 'Assert.js');
+
+global.ASSERT = Assert;
 
 var EventEmitter = require('events').EventEmitter;
 global.globalEventEmitter = new EventEmitter();

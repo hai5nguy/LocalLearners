@@ -92,9 +92,12 @@ function Upcoming() {
     }
     
     function getAll(context, resolve, reject, notify) {
-        Models.UpcomingClass.find(context.upcomingClass.query, function (error, classes) {
+        var q = context.Database.query;
+        ASSERT.exists(q, 'context.Database.query must be passed into Database.Upcoming.getAll');
+        ASSERT.exists(context.UpcomingClass, 'context.UpcomingClass must exist');
+        Models.UpcomingClass.find(q, function (error, classes) {
             if (!error) {
-                context.upcomingClass.classes = classes;
+                context.UpcomingClass.classList = classes;
                 resolve();
             } else {
                 context.error = {
@@ -107,9 +110,9 @@ function Upcoming() {
     }
     
     function update(context, resolve, reject, notify) {
-        Models.UpcomingClass.findOneAndUpdate(context.db.query, context.db.updateArg, function (error, updatedClass) {
+        Models.UpcomingClass.findOneAndUpdate(context.db.query, context.db.arg, function (error, updatedClass) {
             if (!error) {
-                context.upcoming.db_class = updatedClass;
+                context.UpcomingClass.savedClass = updatedClass;
                 resolve();
             } else {
                 context.error = {
@@ -118,7 +121,7 @@ function Upcoming() {
                 };
                 reject();
             }
-            debug(FUNCTIONALITY.Database_Upcoming_update, { context: context, error: error, updatedClass: updatedClass });
+            debug(FUNCTIONALITY.Database_Upcoming_update, 'Upcoming.update', { context: context, error: error, updatedClass: updatedClass });
         });
     }
 
@@ -127,54 +130,55 @@ function Upcoming() {
 
 function User() {
     return {
-        add: CONTEXTPROMISE(add),
         get: CONTEXTPROMISE(get),
+        insert: CONTEXTPROMISE(insert),
         update: CONTEXTPROMISE(update),
         upsert: CONTEXTPROMISE(upsert)
+    };
+
+    function get(context, resolve, reject, notify) {
+        var q = context.Database.query;
+        ASSERT.exists(q, 'context.Database.query must be passed into Datbase.User.get');
+        Models.User.findOne(q, function(error, user) {
+            if (error) { 
+                context.error = {
+                    message: 'Error querying user',
+                    db_error: error
+                };
+                reject();    
+            }
+            else {
+                context.user = user.toObject();
+                resolve();
+            }
+            debug(FUNCTIONALITY.Database_User_get, 'User.get', { context: context });
+        });
     }
     
-    function add(context, resolve, reject, notify) {
-        var newUser = new Models.User({
-            meetupProfile: context.user.meetupProfile
-        });
+    function insert(context, resolve, reject, notify) {
+        var newUser = new Models.User(context.user);
         newUser.save(function(error, newUser, numberAffected) {
-            debug(FUNCTIONALITY.Database_User_add, 'add', { error: error, newUser: newUser.toObject(), numberAfftected: numberAffected });
             if (error) {
                 context.error = {
-                    message: 'Unable to add user to database',
-                    innerError: error
+                    message: 'Unable insert user to database',
+                    db_Error: error
                 };
                 reject();
             } else {
                 context.user = newUser;
                 resolve();
             }
-        });
-    }
-
-    function get(context, resolve, reject, notify) {
-        Models.User.findOne(context.user.query, function(error, user) {
-            if (error) { 
-                context.error = {
-                    message: 'Error querying user',
-                    innerError: error
-                };
-                reject(context);    
-            }
-            else { 
-                context.user = user.toObject();
-                resolve(context);
-            }
+            debug(FUNCTIONALITY.Database_User_insert, 'User.insert', { error: error, newUser: newUser.toObject(), numberAfftected: numberAffected });
         });
     }
     
     function upsert(context, resolve, reject, notify) {
-        debug(FUNCTIONALITY.Database_User_upsert, 'upsert', { context: context });
+        debug(FUNCTIONALITY.Database_User_upsert, 'User.upsert', { context: context });
         Models.User.findOne(context.user.query, function (error, foundUser) {
             if (foundUser) {
                 Database.User.update(context)().then(resolve, reject);
             } else {
-                Database.User.add(context)().then(resolve, reject);
+                Database.User.insert(context)().then(resolve, reject);
             }
         });
     }
@@ -188,7 +192,7 @@ function User() {
             if (error) {
                 context.error = {
                     message: 'Error updating user to database',
-                    innerError: error
+                    db_Error: error
                 }
                 reject(context);
             } else {

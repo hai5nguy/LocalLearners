@@ -15,7 +15,10 @@ var UpcomingClass = (function () {
     };
     
     function getAll(context, resolve, reject, notify) {
-        context.upcomingClass.query = {};
+        context.Database = {
+            query: {}
+        };
+        context.UpcomingClass = {};
         Database.Upcoming.getAll(context)().then(resolve, reject);
     }
     
@@ -28,11 +31,12 @@ var UpcomingClass = (function () {
     }
     
     function buildNew(context, resolve, reject, notify) {
-        Q.fcall(MeetupApi.Event.post(context))
+        Q.fcall(MeetupApi.Profile.ensureOrganizer(context))
+            .then(MeetupApi.Event.post(context))
             .then(function() {
-                context.db = {
-                    query: { _id: context.upcoming.db_class._id },
-                    updateArg: { $set: context.upcoming.db_class }  
+                context.Database = {
+                    query: { _id: context.UpcomingClass.class._id },
+                    args: { $set: context.UpcomingClass.class }  
                 };
             })
             .then(Database.Upcoming.update(context))

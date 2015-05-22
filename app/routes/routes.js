@@ -3,7 +3,7 @@ module.exports = function (app) {
     
     //authentication related routes are in authentication.js
     
-    require('./profile.js')(app);
+    require('./profile.js');
     require('./upcoming.js');
     require('./requested.js');
     require('./categories.js');
