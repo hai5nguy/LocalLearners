@@ -16,7 +16,7 @@ module.exports = (function () {
         UpcomingClass.getAll(context)().then(function () {
             res.json(context.UpcomingClass.classList);
         }, function () {
-            res.status(500).send(context.error);
+            res.status(500).send(context.Error);
         });
         
     });
@@ -37,18 +37,18 @@ module.exports = (function () {
 
     app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
         
-        var context = {
-            UpcomingClass: {
-                newClass: {
-                    name: req.body.name,
-                    category: req.body.category,
-                    time: req.body.time
-                }
-            },
+        var context = new CONTEXT();
+        context.Authentication = {
             user: req.user
         };
+        context.UpcomingClass = {
+            newClass: {
+                name: req.body.name,
+                category: req.body.category,
+                time: req.body.time
+            }
+        };
         
-        //debug(FUNCTIONALITY.api_post_upcoming, '/api/upcoming', { context: context });
         
         Q.fcall(UpcomingClass.allocateNew(context))
             .then(function () {
@@ -56,7 +56,7 @@ module.exports = (function () {
                 UpcomingClass.buildNew(context)();
             })
             .catch(function () {
-                res.status(500).send(context.error);
+                res.status(500).send(context.Error);
             })
             .done();
         

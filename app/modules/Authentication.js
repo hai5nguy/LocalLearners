@@ -48,12 +48,13 @@ function setupPassport() {
     });
 
     passport.deserializeUser(function(id, done) {
-        var context = { Database: { query: { _id: id } } };
+        var context = new CONTEXT();
+        context.Database = { query: { _id: id } };
         
         Database.User.get(context)().then(function () {
-            done(null, context.user);
+            done(null, context.Authentication.user);
         }, function () {
-            debug(FUNCTIONALITY.Authentication_deserializeUser, { context: context });
+            d('serious authentication failure', context);
             done(null, false);
         });
     });
@@ -71,8 +72,8 @@ function setupPassport() {
     app.use(passport.session());
     
     var strategy = new OAuth2Strategy({
-        authorizationURL: MEETUP_API_URL.AUTHORIZATION,
-        tokenURL: MEETUP_API_URL.ACCESSTOKEN,
+        authorizationURL: MEETUP_API_URL.AUTHORIZE,
+        tokenURL: MEETUP_API_URL.ACCESS,
         clientID: LL_MEETUP_OAUTH2_CLIENTID,
         clientSecret: LL_MEETUP_OAUTH2_SECRET,
         callbackURL: LL_MEETUP_OAUTH2_CALLBACKURL
@@ -85,7 +86,8 @@ function setupPassport() {
 function authenticationCallbackHandler(accessToken, refreshToken, profile, done) {
     debug(FUNCTIONALITY.authentication, 'authenticationCallbackHandler', { accessToken: accessToken, refreshToken: refreshToken, profile: profile, done: done });
     
-    var context = {
+    var context = new CONTEXT();
+    context.Authentication = {
         user: {
             accessToken: accessToken
         }
@@ -94,12 +96,12 @@ function authenticationCallbackHandler(accessToken, refreshToken, profile, done)
     Q.fcall(MeetupApi.Profile.get(context))
         .then(function() {
             context.Database = {
-                query: { 'meetupProfile.id': context.user.meetupProfile.id }
+                query: { 'meetupProfile.id': context.Authentication.user.meetupProfile.id }
             };
         })
         .then(Database.User.upsert(context))
         .then(function () {
-            done(null, context.user);
+            done(null, context.Authentication.user);
         })
         .catch(function () {
             debug(FUNCTIONALITY.authentication, 'authenticationCallbackHandler error!!!!!!!!! tell hai', { context: context });

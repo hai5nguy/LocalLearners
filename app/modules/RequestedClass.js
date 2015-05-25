@@ -11,7 +11,7 @@ var RequestedClass = (function () {
 	}
 	
 	function getAll(context, resolve, reject, notify) {
-		context.requested.query = {};
+		context.Database.query = {};
 		Database.Requested.getAll(context)().then(resolve, reject);
 	}
 	

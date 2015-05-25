@@ -29,13 +29,13 @@ function Category() {
     function getAll(context, resolve, reject, notify) {
         Models.Category.find({}, function(error, categories) {
             if (error) {
-                context.error = {
+                context.Error = {
                     message: 'Unable to get all categories',
-                    db_error: error
+                    database_error: error
                 };
                 reject();
             } else { 
-                context.category.all = categories;
+                context.Category.all = categories;
                 resolve();
             }
         });
@@ -49,16 +49,16 @@ function Requested() {
     };
     
     function getAll(context, resolve, reject, notify) {
-        var query = Models.RequestedClass.find(context.requested.query);
+        var query = Models.RequestedClass.find(context.Database.query);
         query.populate('category');
         query.exec(function (error, requestedClasses) {
             if (!error) {
-                context.requested.allClasses = requestedClasses; 
+                context.RequestedClass.classList = requestedClasses; 
                 resolve();
             } else {
-                context.error = {
+                context.Error = {
                     message: 'Error trying to get requested classes from database.',
-                    db_error: error
+                    database_error: error
                 }; 
                 reject();
             }
@@ -81,9 +81,9 @@ function Upcoming() {
                 context.UpcomingClass.savedClass = newClass.toObject();
                 resolve();
             } else {
-                context.error = {
+                context.Error = {
                     message: 'Unable to allocate new upcoming class',
-                    db_error: error
+                    database_error: error
                 };
                 reject();
             }
@@ -92,17 +92,14 @@ function Upcoming() {
     }
     
     function getAll(context, resolve, reject, notify) {
-        var q = context.Database.query;
-        ASSERT.exists(q, 'context.Database.query must be passed into Database.Upcoming.getAll');
-        ASSERT.exists(context.UpcomingClass, 'context.UpcomingClass must exist');
-        Models.UpcomingClass.find(q, function (error, classes) {
+        Models.UpcomingClass.find(context.Database.query, function (error, classes) {
             if (!error) {
                 context.UpcomingClass.classList = classes;
                 resolve();
             } else {
-                context.error = {
+                context.Error = {
                     message: 'Error getting upcoming classes from Database',
-                    db_error: error
+                    database_error: error
                 };
                 reject();
             }
@@ -110,14 +107,14 @@ function Upcoming() {
     }
     
     function update(context, resolve, reject, notify) {
-        Models.UpcomingClass.findOneAndUpdate(context.db.query, context.db.arg, function (error, updatedClass) {
+        Models.UpcomingClass.findOneAndUpdate(context.Database.query, context.Database.arg, function (error, updatedClass) {
             if (!error) {
                 context.UpcomingClass.savedClass = updatedClass;
                 resolve();
             } else {
-                context.error = {
+                context.Error = {
                     message: 'Error updating upcoming class in Database',
-                    db_error: error
+                    database_error: error
                 };
                 reject();
             }
@@ -137,18 +134,16 @@ function User() {
     };
 
     function get(context, resolve, reject, notify) {
-        var q = context.Database.query;
-        ASSERT.exists(q, 'context.Database.query must be passed into Datbase.User.get');
-        Models.User.findOne(q, function(error, user) {
+        Models.User.findOne(context.Database.query, function(error, user) {
             if (error) { 
-                context.error = {
+                context.Error = {
                     message: 'Error querying user',
-                    db_error: error
+                    database_error: error
                 };
                 reject();    
             }
             else {
-                context.user = user.toObject();
+                context.Authentication.user = user.toObject();
                 resolve();
             }
             debug(FUNCTIONALITY.Database_User_get, 'User.get', { context: context });
@@ -156,16 +151,16 @@ function User() {
     }
     
     function insert(context, resolve, reject, notify) {
-        var newUser = new Models.User(context.user);
+        var newUser = new Models.User(context.Authentication.user);
         newUser.save(function(error, newUser, numberAffected) {
             if (error) {
-                context.error = {
+                context.Error = {
                     message: 'Unable insert user to database',
                     db_Error: error
                 };
                 reject();
             } else {
-                context.user = newUser;
+                context.Authentication.user = newUser;
                 resolve();
             }
             debug(FUNCTIONALITY.Database_User_insert, 'User.insert', { error: error, newUser: newUser.toObject(), numberAfftected: numberAffected });
@@ -174,7 +169,7 @@ function User() {
     
     function upsert(context, resolve, reject, notify) {
         debug(FUNCTIONALITY.Database_User_upsert, 'User.upsert', { context: context });
-        Models.User.findOne(context.user.query, function (error, foundUser) {
+        Models.User.findOne(context.Database.query, function (error, foundUser) {
             if (foundUser) {
                 Database.User.update(context)().then(resolve, reject);
             } else {
@@ -185,18 +180,18 @@ function User() {
 
     function update(context, resolve, reject, notify) {
         var updatedUser = {
-            meetupProfile: context.user.meetupProfile
+            meetupProfile: context.Authentication.user.meetupProfile
         };
-        Models.User.update(context.user.query, { $set: updatedUser }, function (error, numberAffected) {
+        Models.User.update(context.Database.query, { $set: updatedUser }, function (error, numberAffected) {
             debug(FUNCTIONALITY.Database_User_update, 'update', { context: context, error: error, numberAffected: numberAffected });
             if (error) {
-                context.error = {
+                context.Error = {
                     message: 'Error updating user to database',
                     db_Error: error
                 }
                 reject(context);
             } else {
-                context.user.query = { 'meetupProfile.id': context.user.meetupProfile.id };
+                context.Database.query = { 'meetupProfile.id': context.Authentication.user.meetupProfile.id };
                 Database.User.get(context)().then(resolve, reject);
             }
         });

@@ -3,14 +3,13 @@
 var Assert = (function () {
     return {
         exists: exists
-    }
-	
-	function exists(valueToCheck, message) {
-		if (typeof valueToCheck === 'undefined' || valueToCheck === null) {
-			throw "AssertionError: " + message;
-		}
-	}
+    };
 })();
-
 module.exports = Assert;
+
+function exists(valueToCheck, message) {
+	if (!valueToCheck || typeof valueToCheck === 'undefined') {
+		throw "AssertionError: " + message;
+	}
+}
 

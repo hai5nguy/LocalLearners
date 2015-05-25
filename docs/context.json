@@ -22,9 +22,7 @@
         message:
     },                    
     
-    MeetupAdministrator: {
-        accessToken: String  
-    },
+
     
     MeetupApi: {
         Event: {
@@ -38,9 +36,6 @@
     },
     
     UpcomingClass: {
-        class: {
-            
-        },
         classList: {                  //list of upcoming classes
                 
         },           
@@ -55,11 +50,7 @@
         query: {}                   //query to pass to Database for any Upcoming class operations
     },
     
-    RestService: {
-        url: String
-        args: {},
-        result: {}
-    }
+
     
     Session: {
         savedUser: {

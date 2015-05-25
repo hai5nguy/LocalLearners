@@ -9,7 +9,7 @@ module.exports = function () {
     var app = THE_APP;
     
     app.get('/api/requested', function (req, res) {
-        var context = {};
+        var context = new CONTEXT();
         RequestedClass.getAll(context)().then(function () {
             res.json(context.requested);
         }, function () {

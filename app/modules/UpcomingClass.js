@@ -31,31 +31,32 @@ var UpcomingClass = (function () {
     }
     
     function buildNew(context, resolve, reject, notify) {
-        Q.fcall(MeetupApi.Profile.ensureOrganizer(context))
-            .then(MeetupApi.Event.post(context))
+        Q.fcall(MeetupApi.Event.post(context))
             .then(function() {
+                t();
                 context.Database = {
                     query: { _id: context.UpcomingClass.class._id },
                     args: { $set: context.UpcomingClass.class }  
                 };
             })
-            .then(Database.Upcoming.update(context))
+//            .then(Database.Upcoming.update(context))
             .catch(function () {
-                //debug
+                d('buildNew error', context.Error);
             })
             .done();
     }
     
     function validate(context, resolve, reject, notify) {
+        ASSERT.exists(context.UpcomingClass.newClass, 'context.UpcomingClass.newClass must exist');
         var newClass = context.UpcomingClass.newClass;
         if (!IsPopulatedString(newClass.name)) {
-            context.error = {
+            context.Error = {
                 message: 'Invalid class name'
             };
             reject(); return;
         }
         if (!IsPopulatedString(newClass.category)) {
-            context.error = {
+            context.Error = {
                 message: 'Invalid class category'
             }
             reject(); return;
@@ -69,6 +70,7 @@ var UpcomingClass = (function () {
     }
     
 })();
+module.exports = UpcomingClass;
 
 
 function RSVP() {
@@ -258,20 +260,19 @@ function RSVP() {
     //}
 
 
+//
+//function buildNew(context, resolve, reject, notify) {
+//    Q.fcall(MeetupApi('Event.post', context))
+//        .then(Database.Upcoming.update(context))
+//        .catch(function(context) {
+//            Database.Upcoming.update(context);
+//        })
+//        .done();
+//}
+//
+//function test(context, resolve, reject, notify) {
+//    console.log('inside test');
+////    console.log('inside upcoming test: ', context.test);
+////    (context.resolve) ? resolve(context) : reject(context);
+//}
 
-function buildNew(context, resolve, reject, notify) {
-    Q.fcall(MeetupApi('Event.post', context))
-        .then(Database.Upcoming.update(context))
-        .catch(function(context) {
-            Database.Upcoming.update(context);
-        })
-        .done();
-}
-
-function test(context, resolve, reject, notify) {
-    console.log('inside test');
-//    console.log('inside upcoming test: ', context.test);
-//    (context.resolve) ? resolve(context) : reject(context);
-}
-
-module.exports = UpcomingClass;

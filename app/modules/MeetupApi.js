@@ -13,6 +13,7 @@ var MeetupApi = (function () {
         Profile: Profile()
     };
 })();
+module.exports = MeetupApi;
 
 function Event() {
     return {
@@ -20,29 +21,47 @@ function Event() {
     }
     
     function post(context, resolve, reject, notify) {
-//        debug(FUNCTIONALITY.MeetupApi_Event_post, 'Event.post', { context: context });
-        
-        Q.fcall(MeetupApi.Profile.getRole(context))
-            .then(function() {
-                var currentRole = context.user.meetupProfile.role;
-//                if (currentRole !== 'Event Organizer' || currentRole !== 'Organizer') {
-                if (true) {
-                    return MeetupApi.Profile.promoteToEventOrganizer(context)();
+        MeetupApi.Profile.ensureOrganizer(context)().then(function() {
+            context.RestService = {
+                url: MEETUP_API_ENDPOINT + '/event',
+                args: {
+                    data: (LL_ENVIRONMENT === 'development') ? context.Authentication.user : {},
+                    parameters: {
+                        group_id: _localLearnersGroupId,
+                        group_urlname: _localLearnersGroupUrlName,
+                        name: context.UpcomingClass.newClass.name,
+                        time: context.UpcomingClass.newClass.time
+                    }
+                },
+                headers: {
+                    Authorization: 'Bearer ' + context.Authentication.user.accessToken,
+                    'Content-Type': 'application/json'
                 }
-            })
-            .then(postToMeetup(context))
-            .then(resolve)
-            .catch(reject)
-            .done();
-        
-//        Q.fcall(ensureUserIsEventOrganizer(context))
-//            .then(postViaRestClient(context))
-//            .then(resolve)
-//            .catch(reject)
-//            .done();
-        
-    }
-}
+            };
+        	d(context);
+            RestService.post(context)().then(function () {
+                
+                var createdEvent = context.RestService.result;
+                if (createdEvent.problem) {
+                    context.Error = {
+                        message: 'Error creating event on meetup',
+                        createdEvent: createdEvent
+                    };
+                    reject();
+                } else {
+                    context.UpcomingClass.event = event;
+                    resolve();
+                }
+                
+            }, reject);
+            
+        }, reject);
+            
+                
+    } //post
+    
+} //Event
+
 
 function Profile() {
     return {
@@ -55,7 +74,7 @@ function Profile() {
     function ensureOrganizer(context, resolve, reject, notify) {
         
         MeetupApi.Profile.getRole(context)().then(function () {
-            var currentRole = context.user.meetupProfile.role;
+            var currentRole = context.Authentication.user.meetupProfile.role;
             if (currentRole === 'Event Organizer' || currentRole === 'Organizer') {
                 resolve();
             } else {
@@ -69,7 +88,7 @@ function Profile() {
         context.RestService = {
             url:  MEETUP_API_URL.MEMBER + MEETUP_API_URL.MEMBER_QUERYSTRING,
             args: {
-                headers: { Authorization: 'Bearer ' + context.user.accessToken }
+                headers: { Authorization: 'Bearer ' + context.Authentication.user.accessToken }
             }
         };
         
@@ -80,145 +99,163 @@ function Profile() {
                 meetupProfile.photo = {};
                 meetupProfile.photo.thumb_link = MEETUP_API_URL.DEFAULT_PHOTO_THUMB_LINK;
             }
-            context.user.meetupProfile = meetupProfile;
+            context.Authentication.user.meetupProfile = meetupProfile;
             resolve();
         }, reject);
 
     }
     
     function getRole(context, resolve, reject, notify) {
-        ASSERT.exists(context.user.meetupProfile, 'context.user.meetupProfile must exists');
+        ASSERT.exists(context.Authentication.user);
+        var user = context.Authentication.user;
+        MeetupAdministrator.getAccessToken(context)().then(function () {
+            context.RestService = {
+                url: MEETUP_API_URL.PROFILE + '/' + _localLearnersGroupId + '/' + user.meetupProfile.id,
+                args: {
+                    headers: {
+                        Authorization: 'Bearer ' + context.MeetupAdministrator.accessToken 
+                    }
+                }
+            };
         
-        context.RestService = {
-            url: MEETUP_API_URL.PROFILE + '/' + _localLearnersGroupId + '/' + context.user.meetupProfile.id;,
-            args: {
-            headers: {
-                Authorization: 'Bearer ' + context.user.accessToken }
-            }
-        };
-        
-        RestService.get(context)().then(function () {
-            var meetupProfile = context.RestService.result;
-            context.user.meetupProfile.role = meetupProfile.role;
-            resolve();
+            RestService.get(context)().then(function () {
+                var meetupProfile = context.RestService.result;
+                context.Authentication.user.meetupProfile.role = meetupProfile.role;
+                resolve();
+            }, reject);
+            
         }, reject);
         
-    }
+        
+    } //getRole
     
     function promoteUser(context, resolve, reject, notify) {
+        ASSERT.exists(context.Authentication.user, 'context.Authentication.user must exists');
         MeetupAdministrator.getAccessToken(context)().then(function () {
+            var user = context.Authentication.user;
             
             context.RestService = {
-                url: MEETUP_API_URL.PROFILE + '/' + _localLearnersGroupId + '/' + context.user.meetupProfile.id,
                 args: {
                     parameters: {
                         add_role: 'event_organizer'
                     },
                     headers: {
-                        Authorization: 'Bearer ' + context.user.accessToken
+                        Authorization: 'Bearer ' + context.MeetupAdministrator.accessToken
                     }
-                }
+                },
+                url: MEETUP_API_URL.PROFILE + '/' + _localLearnersGroupId + '/' + user.meetupProfile.id
             };
     
-            RestService.post(context)().then(resolve, reject);
+            RestService.post(context)().then(function() {
+                var result = context.RestService.result;
+                if (result.code && result.code === 'not_authorized') {
+                    context.Error = {
+                        message: 'Problem encountered with promoting user',
+                        restService_result: result
+                    };
+                    reject();
+                } else {
+                    resolve();
+                }
+            }, reject);
             
         }, reject);
-}
+        
+	} //promoteUser
 
-
+} //Profile
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Public Functions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function ensureUserIsEventOrganizer(context) {
-    return FCALLWRAPPER(function (resolve, reject, notify) {
-        getUserMeetupRole(context).then(function (context) {
-//            debug(FUNCTIONALITY.MeetupApi_Event_post, 'ensureUserIsEventOrganizer', { context: context });
-            var currentRole = context.user.meetupProfile.role;
-            if (currentRole === 'Event Organizer' || currentRole === 'Organizer') {
-                resolve();
-            } else {
-                promoteUserToEventOrganizer(context).then(resolve, reject);
-            }
-        }, reject);
-    })();
-}
+//function ensureUserIsEventOrganizer(context) {
+//    return FCALLWRAPPER(function (resolve, reject, notify) {
+//        getUserMeetupRole(context).then(function (context) {
+////            debug(FUNCTIONALITY.MeetupApi_Event_post, 'ensureUserIsEventOrganizer', { context: context });
+//            var currentRole = context.user.meetupProfile.role;
+//            if (currentRole === 'Event Organizer' || currentRole === 'Organizer') {
+//                resolve();
+//            } else {
+//                promoteUserToEventOrganizer(context).then(resolve, reject);
+//            }
+//        }, reject);
+//    })();
+//}
 
-function getUserMeetupRole(context) {
-    return Q.Promise(function (resolve, reject, notify) {
-        var getArgs = {
-            headers: {
-                Authorization: 'Bearer ' + context.user.accessToken
-            }
-        };
-        
-        var url = MEETUP_API_URL.PROFILE + '/' + _localLearnersGroupId + '/' + context.user.meetupProfile.id;
+//function getUserMeetupRole(context) {
+//    return Q.Promise(function (resolve, reject, notify) {
+//        var getArgs = {
+//            headers: {
+//                Authorization: 'Bearer ' + context.user.accessToken
+//            }
+//        };
+//        
+//        var url = MEETUP_API_URL.PROFILE + '/' + _localLearnersGroupId + '/' + context.user.meetupProfile.id;
+//
+//        restClient.get(url, getArgs, function(meetupProfile) {
+//            debug(FUNCTIONALITY.MeetupApi_Event_post, 'getUserMeetupRole', { meetupProfile: meetupProfile });
+//            context.user.meetupProfile.role = meetupProfile.role;
+//            resolve(context);
+//        }).on('error', function (error) {
+//            context.Error = {
+//                message: 'Failed to get user role on meetup.',
+//                innerError: error
+//            }
+//            reject(context);
+//        });
+//    });
+//}
 
-        restClient.get(url, getArgs, function(meetupProfile) {
-            debug(FUNCTIONALITY.MeetupApi_Event_post, 'getUserMeetupRole', { meetupProfile: meetupProfile });
-            context.user.meetupProfile.role = meetupProfile.role;
-            resolve(context);
-        }).on('error', function (error) {
-            context.error = {
-                message: 'Failed to get user role on meetup.',
-                innerError: error
-            }
-            reject(context);
-        });
-    });
-}
+//function promoteUserToEventOrganizer(context) {
+//    return Q.Promise(function (resolve, reject, notify) {
+//        
+//    });
+//}
 
-function promoteUserToEventOrganizer(context) {
-    return Q.Promise(function (resolve, reject, notify) {
-        
-    });
-}
-
-
-function postViaRestClient(context) {
-    return Q.Promise(function (resolve, reject, notify) {
-        context.RestService = {
-            url: MEETUP_API_ENDPOINT + '/event',
-            args: {
-                data: (LL_ENVIRONMENT === 'development') ? context.user : {},
-                parameters: {
-                    group_id: _localLearnersGroupId,
-                    group_urlname: _localLearnersGroupUrlName,
-                    name: context.upcomingClass.name,
-                    time: context.upcomingClass.time
-                },
-                headers: {
-                    Authorization: 'Bearer ' + context.user.accessToken,
-                    'Content-Type': 'application/json'
-                }
-            }
-        }
-
-        //context.RestService.args
-        //context.RestService.result || context.error
-        RestService.post(context)().then(function () {
-            
-            var createdEvent = context.result;
-            if (createdEvent.problem) {
-                context.error = {
-                    message: 'Error create event on meetup',
-                    createdEvent: createdEvent
-                };
-                reject();
-            } else {
-                context.MeetupApi.Event.posted = createdEvent;
-                resolve();
-            }
-            debug(FUNCTIONALITY.MeetupApi_Event_post, 'postViaRestClient', { context: context, createdEvent: createdEvent });
-            
-        }, reject);
-        
-    });
-}
+//
+//function postViaRestClient(context) {
+//    return Q.Promise(function (resolve, reject, notify) {
+//        context.RestService = {
+//            url: MEETUP_API_ENDPOINT + '/event',
+//            args: {
+//                data: (LL_ENVIRONMENT === 'development') ? context.user : {},
+//                parameters: {
+//                    group_id: _localLearnersGroupId,
+//                    group_urlname: _localLearnersGroupUrlName,
+//                    name: context.upcomingClass.name,
+//                    time: context.upcomingClass.time
+//                },
+//                headers: {
+//                    Authorization: 'Bearer ' + context.user.accessToken,
+//                    'Content-Type': 'application/json'
+//                }
+//            }
+//        }
+//
+//        //context.RestService.args
+//        //context.RestService.result || context.Error
+//        RestService.post(context)().then(function () {
+//            
+//            var createdEvent = context.result;
+//            if (createdEvent.problem) {
+//                context.Error = {
+//                    message: 'Error create event on meetup',
+//                    createdEvent: createdEvent
+//                };
+//                reject();
+//            } else {
+//                context.MeetupApi.Event.posted = createdEvent;
+//                resolve();
+//            }
+//            debug(FUNCTIONALITY.MeetupApi_Event_post, 'postViaRestClient', { context: context, createdEvent: createdEvent });
+//            
+//        }, reject);
+//        
+//    });
+//}
 
 
-module.exports = MeetupApi;
 
 
 

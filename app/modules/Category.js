@@ -8,7 +8,7 @@ var Category = (function () {
 	};
 	
 	function getAll(context, resolve, reject, notify) {
-		context.category.query = {};
+		context.Database.query = {};
 		Database.Category.getAll(context)().then(resolve, reject);
 	}
 	

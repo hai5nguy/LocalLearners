@@ -28,7 +28,7 @@ var RestService = (function () {
 			context.RestService.result = result;
 			resolve();			
 		}).on('error', function (error) {
-			context.error = {
+			context.Error = {
 				messsage: 'RestService.get error',
 				restService_error: error
 			};
@@ -63,7 +63,7 @@ var RestService = (function () {
 			context.RestService.result = result; 
 			resolve();
         }).on('error', function (error) {
-			context.error = {
+			context.Error = {
 				messsage: 'RestService.post error',
 				restService_error: error
 			};

@@ -1,12 +1,10 @@
-var Q       = require(LL_NODE_MODULES_DIR + 'q');
-var Browser = require(LL_NODE_MODULES_DIR + 'zombie');
+var Q           = require(LL_NODE_MODULES_DIR + 'q');
+var Browser     = require(LL_NODE_MODULES_DIR + 'zombie');
 
-//var restClient  = require(LL_NODE_MODULES_DIR + 'node-rest-client').Client();
+var RestService = require(LL_MODULES_DIR + 'RestService.js');
 
 var _localLeanersAdministratorAccessCode;
 var _localLeanersAdministratorAccessToken;
-
-var _meetupApiAuthorizeUrl = 'https://secure.meetup.com/oauth2/authorize';
 
 var MeetupAdministrator = (function () {
     registerAdministratorServerCallback();
@@ -18,16 +16,16 @@ var MeetupAdministrator = (function () {
 })();
 
 function getAccessToken(context, resolve, reject, notify) {
-    
     //TODO: account in expired time;
 
     if (_localLeanersAdministratorAccessToken) {
-        resolve(_localLeanersAdministratorAccessToken);
+        context.MeetupAdministrator.accessToken = _localLeanersAdministratorAccessToken;
+        resolve();
     } else {
-        authorizeLocalLearnersAdministratorWithMeetup();
-        globalEventEmitter.on(EMITTEREVENTS.AdministratorAccessTokenAcquired, function (accessToken) {
-            console.log('administrator accesss token ', accessToken);
-            resolve(accessToken);
+        authorizeLocalLearnersAdministratorWithMeetup(context);
+        globalEventEmitter.on(EMITTEREVENTS.AdministratorAccessTokenAcquired, function (token) {
+            context.MeetupAdministrator.accessToken = _localLeanersAdministratorAccessToken = token;
+            resolve();
         });
     }
 
@@ -44,9 +42,9 @@ function getAccessToken(context, resolve, reject, notify) {
 //
 
 function authorizeLocalLearnersAdministratorWithMeetup() {
-    const browser = new Browser();
+    var browser = new Browser();
 
-    var url = _meetupApiAuthorizeUrl +
+    var url = MEETUP_API_URL.AUTHORIZE +
         '?client_id=' + LL_ADMINISTRATOR_CONSUMER_KEY +
         '&response_type=code' +
         '&redirect_uri=' + LL_ADMINISTRATOR_REDIRECT_URL;
@@ -64,32 +62,35 @@ function authorizeLocalLearnersAdministratorWithMeetup() {
 }
 
 function registerAdministratorServerCallback() {
-
-    var app = THE_APP;
     
-    app.get('/meetupServerLinkCallback', function (req, res) {
+    THE_APP.get('/meetupServerLinkCallback', function (req, res) {
         _localLeanersAdministratorAccessCode = req.query.code;
 
-        var url = 'https://secure.meetup.com/oauth2/access';
+        var context = new CONTEXT();
 
-        var args = {
-            parameters: {
-                client_id: LL_ADMINISTRATOR_CONSUMER_KEY,
-                client_secret: LL_ADMINISTRATOR_CONSUMER_SECRET,
-                grant_type: 'authorization_code',
-                redirect_uri: LL_ADMINISTRATOR_REDIRECT_URL,
-                code: _localLeanersAdministratorAccessCode
-            },
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+        context.RestService = {
+            url: MEETUP_API_URL.ACCESS,
+            args: {
+                parameters: {
+                    client_id: LL_ADMINISTRATOR_CONSUMER_KEY,
+                    client_secret: LL_ADMINISTRATOR_CONSUMER_SECRET,
+                    grant_type: 'authorization_code',
+                    redirect_uri: LL_ADMINISTRATOR_REDIRECT_URL,
+                    code: _localLeanersAdministratorAccessCode
+                },
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             }
-        }
-
-        restClient.post(url, args, function (response) {
+        };
+    
+        RestService.post(context)().then(function () {
             //TODO: handle errors
-            _localLeanersAdministratorAccessToken = response.access_token
-            globalEventEmitter.emit(EMITTEREVENTS.AdministratorAccessTokenAcquired, _localLeanersAdministratorAccessToken);
+            globalEventEmitter.emit(EMITTEREVENTS.AdministratorAccessTokenAcquired, context.RestService.result.access_token);
             res.send('');
+    	}, function () {
+            console.error("oh sh*t f*@k morty, this is serious, tell hai ", context);
+            res.status(500).send('');
         });
     });
 }

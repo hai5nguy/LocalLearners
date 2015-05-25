@@ -1,7 +1,10 @@
 var Q               = require(LL_NODE_MODULES_DIR + 'q');
+
 var Database        = require(LL_MODULES_DIR + 'Database.js');
 var MeetupApi       = require(LL_MODULES_DIR + 'MeetupApi.js');
 var Authentication  = require(LL_MODULES_DIR + 'Authentication.js');
+
+
 
 var meetupAdministrator = require('../meetup-administrator.js');
 
@@ -105,11 +108,16 @@ module.exports = function () {
     });
 
     app.get('/changeuserrole', function (req, res) {
-
-        meetupApi.changeUserRole(req, res, 'event_organizer');
-
-
-        res.send('user role changed')
+    	var context = new CONTEXT();
+        context.Authentication.user = req.user;
+        
+        
+        MeetupApi.Profile.promoteUser(context)().then(function () {
+            res.send('success');
+        }, function () {
+            res.send('fail');
+        });
+        
     });
 
     app.get('/testadmin', function (req, res) {

@@ -86,9 +86,43 @@ var tracks = {
 //tracks.getUpcomingClassById.active  = true;
 
 
+/* from:  http://stackoverflow.com/questions/11386492/accessing-line-number-in-v8-javascript-chrome-node-js */
+Object.defineProperty(global, '__stack', {
+  get: function(){
+    var orig = Error.prepareStackTrace;
+    Error.prepareStackTrace = function(_, stack){ return stack; };
+    var err = new Error;
+    Error.captureStackTrace(err, arguments.callee);
+    var stack = err.stack;
+    Error.prepareStackTrace = orig;
+    return stack;
+  }
+});
+
+Object.defineProperty(global, '__lineNumber', {
+  get: function(){
+    return __stack[2].getLineNumber();
+  }
+});
+
+Object.defineProperty(global, '__fileName', {
+  get: function(){
+    return __stack[2].getFileName();
+  }
+});
+
+Object.defineProperty(global, '__functionName', {
+  get: function(){
+    return __stack[2].getFunctionName();
+  }
+});
+
+/***************/
+
 
 
 global.debug = function(functionality) {
+    
     if (functionality === true || isTrackingFunctionality(functionality)) {
         console.log('');
         console.log('=== ' + functionality + ' ===========================================================');
@@ -101,7 +135,32 @@ global.debug = function(functionality) {
     }
 }
 
+global.d = function(debugValue) {
+    console.log('===' + __fileName + ' - ' + __functionName + ' - ' + __lineNumber + ' ==============================================================');
+    for (var i = 0; i < arguments.length; i++) {
+        console.log(prettyjson.render(arguments[i]));
+        console.log('---');
+    }
+}
 
+global.t = function() {
+    var names = __fileName.split(/[/\\]/);
+    var file = names[names.length - 1];
+    console.log('-> ' + file + ' - ' + __lineNumber + ' - ' + __functionName);
+}
+
+global.cage = function() {
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+    console.log('FFFFFFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!!!');
+}
 
 
 function isTrackingFunctionality(functionality) {

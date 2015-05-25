@@ -5,11 +5,11 @@ var Category    = require(LL_MODULES_DIR + 'Category.js');
 
 module.exports = (function () {
     THE_APP.get('/api/category/all', function (req, res) {
-        var context = { category: {} };
+        var context = new CONTEXT();
         Category.getAll(context)().then(function() {
-            res.json(context.category.all);
+            res.json(context.Category.all);
         }, function () {
-            res.status(500).send(context.error);
+            res.status(500).send(context.Error);
         });
     });
 })();
