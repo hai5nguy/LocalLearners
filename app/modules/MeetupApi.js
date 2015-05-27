@@ -25,20 +25,22 @@ function Event() {
             context.RestService = {
                 url: MEETUP_API_ENDPOINT + '/event',
                 args: {
-                    data: (LL_ENVIRONMENT === 'development') ? context.Authentication.user : {},
+                    data: (LL_ENVIRONMENT === 'development') ? { user: context.Authentication.user } : {},
                     parameters: {
                         group_id: _localLearnersGroupId,
                         group_urlname: _localLearnersGroupUrlName,
                         name: context.UpcomingClass.newClass.name,
                         time: context.UpcomingClass.newClass.time
+                    },
+                    headers: {
+                        Authorization: 'Bearer ' + context.Authentication.user.accessToken,
+                        'Content-Type': 'application/json'
                     }
-                },
-                headers: {
-                    Authorization: 'Bearer ' + context.Authentication.user.accessToken,
-                    'Content-Type': 'application/json'
                 }
             };
-        	d(context);
+            
+            d(context);
+            
             RestService.post(context)().then(function () {
                 
                 var createdEvent = context.RestService.result;
