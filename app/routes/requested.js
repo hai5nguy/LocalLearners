@@ -1,11 +1,12 @@
-//var Q               = require(LL_NODE_MODULES + 'q');
 
 //var meetupApi = require('../meetup-api.js')(THE_APP);
 //var Database        = require(LL_MODULES_DIR + 'Database.js');
+var Q               = require(LL_NODE_MODULES_DIR + 'q');
+
 var Authentication  = require(LL_MODULES_DIR + 'Authentication.js');
 var RequestedClass  = require(LL_MODULES_DIR + 'RequestedClass.js');
 
-module.exports = function () {
+module.exports = (function () {
     var app = THE_APP;
     
     app.get('/api/requested', function (req, res) {
@@ -28,31 +29,53 @@ module.exports = function () {
         
     });
 
-    app.post('/api/requested', function (req, res, next) {
+    app.post('/api/requested', Authentication.ensureAuthenticated, function (req, res, next) {
         
-        //todo: authentication
-        //if (!req.isAuthenticated()) {
-        //    authentication.logUserIn(req, res);
-        //}
-        
-        var requestedClass = {
+        var context = new CONTEXT();
+        context.Authentication.user = req.user;
+        context.RequestedClass.newRequest = {
             name: req.body.name,
-            category: req.body.category,
-            requester: req.user._id,
-            interestedUsers: [ req.user._id ]
+            category: null
+//            category: req.body.category
+//            requester: req.user._id,
+//            interestedUsers: [ req.user._id ]
         };
+        
+        
+//        var requestedClass = {
 
-        Q.fcall(validateRequestedClass(requestedClass))
-            .then(saveRequestedClass(requestedClass))
-            .then(function (savedRequested) {
-                res.json({ status: 'success', savedRequested: savedRequested });
+//        };
+
+//        d(context);
+        t();
+//        res.json(context);
+        
+//        
+    	Q.fcall(RequestedClass.allocateNew(context))
+            .then(function () {
+                t();
+                res.json(context.RequestedClass.savedRequest);
+//                RequestedClass.buildNew(context)();
             })
-            .catch(function (error) {
-                res.status(500).send({ error: error });
+            .catch(function () {
+                t();
+                res.status(500).send(context.Error);
             })
             .done();
+//        
+////        
+//
+//        Q.fcall(validateRequestedClass(requestedClass))
+//            .then(saveRequestedClass(requestedClass))
+//            .then(function (savedRequested) {
+//                res.json({ status: 'success', savedRequested: savedRequested });
+//            })
+//            .catch(function (error) {
+//                res.status(500).send({ error: error });
+//            })
+//            .done();
         
-    });
+    }); //api/requested
 
     app.post('/api/requested/:id/setuserinterested', function (req, res) {
         var setInterested = db.Requested.setUserInterested(req.params.id, req.user._id, req.body.interested);
@@ -63,7 +86,7 @@ module.exports = function () {
         });
     });
     
-}
+})();
 
 function validateRequestedClass(requestedClass) {
     return function() {

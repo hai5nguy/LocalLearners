@@ -19,7 +19,8 @@ module.exports = function () {
 			accessToken: null
 		},
 		RequestedClass: {
-			classList: null
+			classList: null,
+			newRequest: null			
 		},
 		RestService: {
 			args: null,

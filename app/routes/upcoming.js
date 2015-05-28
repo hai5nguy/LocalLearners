@@ -38,9 +38,7 @@ module.exports = (function () {
     app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
         
         var context = new CONTEXT();
-        context.Authentication = {
-            user: req.user
-        };
+        context.Authentication.user = req.user;
         context.UpcomingClass = {
             newClass: {
                 name: req.body.name,

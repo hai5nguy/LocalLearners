@@ -22,6 +22,10 @@ function Event() {
     
     function post(context, resolve, reject, notify) {
         MeetupApi.Profile.ensureOrganizer(context)().then(function() {
+            t();
+            console.log('11111 ', context.UpcomingClass.newClass.time);
+            console.log('222 ', typeof context.UpcomingClass.newClass.time);
+            console.log(new Date(context.UpcomingClass.newClass.time).getTime());
             context.RestService = {
                 url: MEETUP_API_ENDPOINT + '/event',
                 args: {
@@ -30,7 +34,7 @@ function Event() {
                         group_id: _localLearnersGroupId,
                         group_urlname: _localLearnersGroupUrlName,
                         name: context.UpcomingClass.newClass.name,
-                        time: context.UpcomingClass.newClass.time
+                        time: new Date(context.UpcomingClass.newClass.time).getTime()
                     },
                     headers: {
                         Authorization: 'Bearer ' + context.Authentication.user.accessToken,
@@ -38,8 +42,6 @@ function Event() {
                     }
                 }
             };
-            
-            d(context);
             
             RestService.post(context)().then(function () {
                 
