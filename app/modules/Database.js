@@ -45,15 +45,51 @@ function Category() {
 
 function Requested() {
     return {
+        allocateNew: CONTEXTPROMISE(allocateNew),
+        get: CONTEXTPROMISE(get),
         getAll: CONTEXTPROMISE(getAll)
     };
+    
+    function allocateNew(context, resolve, reject, notify) {
+        var newRequest = new Models.RequestedClass(context.RequestedClass.newRequest);
+        newRequest.save(function(error, newRequest, numberAffected) {
+            if (!error) {
+                context.RequestedClass.savedRequest = newRequest.toObject();
+                resolve();
+            } else {
+                context.Error = {
+                    message: 'Unable to allocate new request',
+                    database_error: error
+                };
+                reject();
+            }
+        });
+    }
+    
+    function get(context, resolve, reject, notify) {
+        var query = Models.RequestedClass.find(context.Database.query);
+        query.populate('requester', 'name thumbLink');
+        query.populate('interestedUsers', 'name thumbLink');
+        query.exec(function (error, requests) {
+            if (!error) {
+                context.RequestedClass.savedRequest = requests[0];
+                resolve();
+        	} else {
+                context.Error = {
+                    message: 'Unable to get requested class',
+                    database_error: error
+                };
+                reject();
+            }
+        });
+    }
     
     function getAll(context, resolve, reject, notify) {
         var query = Models.RequestedClass.find(context.Database.query);
         query.populate('category');
         query.exec(function (error, requestedClasses) {
             if (!error) {
-                context.RequestedClass.classList = requestedClasses; 
+                context.RequestedClass.requestList = requestedClasses; 
                 resolve();
             } else {
                 context.Error = {
@@ -454,18 +490,7 @@ module.exports = Database;
 //}
 //
 //function Requested_get(id) {
-//    var defer = Q.defer();
-//    var query = Models.RequestedClass.find({ _id: id});
-//    query.populate('requester', 'name thumbLink');
-//    query.populate('interestedUsers', 'name thumbLink');
-//    query.exec(function (err, requestClasses) {
-//        if (!err) {
-//            defer.resolve(requestClasses[0]);
-//        } else {
-//            defer.reject(err);
-//        }
-//    });
-//    return defer.promise;
+
 //}
 //
 //function Requested_getAll() {

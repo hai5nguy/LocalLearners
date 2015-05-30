@@ -12,21 +12,33 @@ module.exports = (function () {
     app.get('/api/requested', function (req, res) {
         var context = new CONTEXT();
         RequestedClass.getAll(context)().then(function () {
-            res.json(context.requested);
+            res.json(context.RequestedClass.requestList);
         }, function () {
-            res.status(500).send(context);
+            res.status(500).send(context.Error);
         });
     });
     
     app.get('/api/requested/:id', function (req, res) {
         
-        db.getRequestedClass(req.params.id).then(function(requestedClass) {
-            //console.log('api/requested/:id requestedClass', JSON.stringify(requestedClass));
-            res.json(requestedClass);
-        }, function (err) {
-            serverError(res, err);
-        });
+        var context = new CONTEXT();
+        context.RequestedClass.getId = req.params.id;
         
+        RequestedClass.get(context)().then(function(requestedClass) {
+            res.json(context.RequestedClass.savedRequest);
+        }, function (err) {
+            res.status(500).send(context.Error);
+        });       
+        
+//        
+//        
+//        
+//        db.getRequestedClass(req.params.id).then(function(requestedClass) {
+//            //console.log('api/requested/:id requestedClass', JSON.stringify(requestedClass));
+//            res.json(requestedClass);
+//        }, function (err) {
+//            serverError(res, err);
+//        });
+//        
     });
 
     app.post('/api/requested', Authentication.ensureAuthenticated, function (req, res, next) {
@@ -35,45 +47,19 @@ module.exports = (function () {
         context.Authentication.user = req.user;
         context.RequestedClass.newRequest = {
             name: req.body.name,
-            category: null
-//            category: req.body.category
-//            requester: req.user._id,
-//            interestedUsers: [ req.user._id ]
+            category: req.body.category,
+            requester: req.user._id,
+            interestedUsers: [ req.user._id ]
         };
         
-        
-//        var requestedClass = {
-
-//        };
-
-//        d(context);
-        t();
-//        res.json(context);
-        
-//        
     	Q.fcall(RequestedClass.allocateNew(context))
             .then(function () {
-                t();
                 res.json(context.RequestedClass.savedRequest);
-//                RequestedClass.buildNew(context)();
             })
             .catch(function () {
-                t();
                 res.status(500).send(context.Error);
             })
             .done();
-//        
-////        
-//
-//        Q.fcall(validateRequestedClass(requestedClass))
-//            .then(saveRequestedClass(requestedClass))
-//            .then(function (savedRequested) {
-//                res.json({ status: 'success', savedRequested: savedRequested });
-//            })
-//            .catch(function (error) {
-//                res.status(500).send({ error: error });
-//            })
-//            .done();
         
     }); //api/requested
 
