@@ -68,10 +68,12 @@ function Requested() {
     
     function get(context, resolve, reject, notify) {
         var query = Models.RequestedClass.find(context.Database.query);
-        query.populate('requester', 'name thumbLink');
+        query.populate('category');
+        query.populate('requester', 'name meetupProfile');
         query.populate('interestedUsers', 'name thumbLink');
         query.exec(function (error, requests) {
             if (!error) {
+                d(requests[0].toObject());
                 context.RequestedClass.savedRequest = requests[0];
                 resolve();
         	} else {
