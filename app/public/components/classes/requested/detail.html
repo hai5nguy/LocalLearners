@@ -9,7 +9,7 @@
         <li>interested users:
             <ul>
                 <li ng-repeat="user in requestedClass.interestedUsers">
-                    {{user.name}} <img style="width: 36px; height: 36px;" ng-src="{{user.thumbLink}}" />
+                    {{user.name}} <img style="width: 36px; height: 36px;" ng-src="{{user.meetupProfile.photo.thumb_link}}" />
                 </li>
             </ul>
         </li>

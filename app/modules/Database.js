@@ -47,14 +47,16 @@ function Requested() {
     return {
         allocateNew: CONTEXTPROMISE(allocateNew),
         get: CONTEXTPROMISE(get),
-        getAll: CONTEXTPROMISE(getAll)
+        getAll: CONTEXTPROMISE(getAll),
+        sync: CONTEXTPROMISE(sync),
+        update: CONTEXTPROMISE(update)
     };
     
     function allocateNew(context, resolve, reject, notify) {
         var newRequest = new Models.RequestedClass(context.RequestedClass.newRequest);
         newRequest.save(function(error, newRequest, numberAffected) {
             if (!error) {
-                context.RequestedClass.savedRequest = newRequest.toObject();
+                context.RequestedClass.record = newRequest.toObject();
                 resolve();
             } else {
                 context.Error = {
@@ -69,12 +71,11 @@ function Requested() {
     function get(context, resolve, reject, notify) {
         var query = Models.RequestedClass.find(context.Database.query);
         query.populate('category');
-        query.populate('requester', 'name meetupProfile');
-        query.populate('interestedUsers', 'name thumbLink');
+        query.populate('requester', 'name meetupProfile.photo.thumb_link');
+        query.populate('interestedUsers', 'name meetupProfile.photo.thumb_link');
         query.exec(function (error, requests) {
             if (!error) {
-                d(requests[0].toObject());
-                context.RequestedClass.savedRequest = requests[0];
+                context.RequestedClass.record = requests[0];
                 resolve();
         	} else {
                 context.Error = {
@@ -102,6 +103,40 @@ function Requested() {
             }
         });
     }
+    
+    function sync(context, resolve, reject, notify) {
+        var query = { _id: context.RequestedClass.record._id };
+        Models.RequestedClass.findOneAndUpdate(query, context.RequestedClass.record, function (error, updatedRequest) {
+            if (!error) {
+                context.Database.query = { _id: updatedRequest._id };
+                Database.Requested.get(context)().then(resolve, reject);
+            } else {
+                context.Error = {
+                    message: "Error syncing requested class",
+                    database_error: error
+                };
+                reject();
+            }
+        });
+    }
+    
+    //deprecated, use sync
+    function update(context, resolve, reject, notify) {
+         Models.RequestedClass.findOneAndUpdate(context.Database.query, context.Database.arg, function (error, updatedRequest) {
+            if (!error) {
+                context.RequestedClass.record = updatedRequest;
+                resolve();
+            } else {
+                context.Error = {
+                    message: 'Error updating requested class in Database',
+                    database_error: error
+                };
+                reject();
+            }
+        });
+    }
+    
+    
     
 }
 

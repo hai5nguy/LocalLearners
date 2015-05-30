@@ -37,7 +37,7 @@ localLearnersApp.controller('Requested.DetailController', function($scope, $root
     
     function determineAction() {
         var isUserLoggedIn = !!CurrentUser._id;
-        if (!isUserLoggedIn) return 'login';
+        if (!isUserLoggedIn || !$scope.requestedClass) return 'login';
 
         var userIsAlreadyInterested = _.some($scope.requestedClass.interestedUsers, function (user) {
             return (user._id === CurrentUser._id)

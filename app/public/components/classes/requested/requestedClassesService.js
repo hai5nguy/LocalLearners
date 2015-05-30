@@ -26,13 +26,8 @@ localLearnersApp.factory('RequestedClassesService', function ($http, $q) {
         var defer = $q.defer();
 
         $http.post('/api/requested/' + classId + '/setuserinterested', { interested: interested }).then(function (response) {
-            console.log('1111 ', response);
-            if (response && response.data && response.data.status === 'success') {
-                defer.resolve(response.data.requestedClass);
-            } else {
-                console.error('RequestedClassesService setuserinterested response: ', JSON.stringify(response));
-                defer.reject('Unable to added you to requested class');
-            }
+            console.log('response 1111', response);
+            defer.resolve(response.data);
         }, function (err) {
             console.error('RequestedClassesService setuserinterested error: ', JSON.stringify(err));
             defer.reject('Unable to added you to requested class');

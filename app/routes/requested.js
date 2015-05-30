@@ -24,21 +24,11 @@ module.exports = (function () {
         context.RequestedClass.getId = req.params.id;
         
         RequestedClass.get(context)().then(function(requestedClass) {
-            res.json(context.RequestedClass.savedRequest);
+            res.json(context.RequestedClass.record);
         }, function (err) {
             res.status(500).send(context.Error);
         });       
-        
-//        
-//        
-//        
-//        db.getRequestedClass(req.params.id).then(function(requestedClass) {
-//            //console.log('api/requested/:id requestedClass', JSON.stringify(requestedClass));
-//            res.json(requestedClass);
-//        }, function (err) {
-//            serverError(res, err);
-//        });
-//        
+
     });
 
     app.post('/api/requested', Authentication.ensureAuthenticated, function (req, res, next) {
@@ -54,7 +44,7 @@ module.exports = (function () {
         
     	Q.fcall(RequestedClass.allocateNew(context))
             .then(function () {
-                res.json(context.RequestedClass.savedRequest);
+                res.json(context.RequestedClass.record);
             })
             .catch(function () {
                 res.status(500).send(context.Error);
@@ -63,44 +53,58 @@ module.exports = (function () {
         
     }); //api/requested
 
-    app.post('/api/requested/:id/setuserinterested', function (req, res) {
-        var setInterested = db.Requested.setUserInterested(req.params.id, req.user._id, req.body.interested);
-        setInterested.then(function(requestedClass) {
-            res.json({ status: 'success', requestedClass: requestedClass })
-        }, function (err) {
-            serverError(res, err);
+    app.post('/api/requested/:id/setuserinterested', Authentication.ensureAuthenticated, function (req, res) {
+        
+        var context = new CONTEXT();
+        context.Authentication.user = req.user;
+        context.RequestedClass = {
+            Interested: {
+                requestId: req.params.id,
+                userId: req.user._id,
+                setInterested: req.body.interested
+            }
+        };
+        
+        d(context.RequestedClass);
+        
+        RequestedClass.setUserInterested(context)().then(function () {
+            t();
+            res.json(context.RequestedClass.record);
+        }, function () {
+            res.status(500).send(context.Error);
         });
-    });
+        
+    });  //api/requested/:id/setuserinterested
     
 })();
+//
+//function validateRequestedClass(requestedClass) {
+//    return function() {
+//        return Q.Promise(function(resolve, reject, notify) {
+//            if (IsPopulatedString(requestedClass.name) &&
+//                IsPopulatedString(requestedClass.category)) {
+//                
+//                resolve(true);
+//            } else {
+//                reject('Invalid requested class');
+//            }
+//        });
+//    }
+//}
 
-function validateRequestedClass(requestedClass) {
-    return function() {
-        return Q.Promise(function(resolve, reject, notify) {
-            if (IsPopulatedString(requestedClass.name) &&
-                IsPopulatedString(requestedClass.category)) {
-                
-                resolve(true);
-            } else {
-                reject('Invalid requested class');
-            }
-        });
-    }
-}
-
-function saveRequestedClass(requestedClass) {
-    return function() {
-        return Q.Promise(function(resolve, reject, notify) {
-            
-            db.Requested.add(requestedClass).then(function (savedRequested) {
-                resolve(savedRequested);
-            }, function (error) {
-                reject(error);
-            });
-
-        });
-    }
-}
+//function saveRequestedClass(requestedClass) {
+//    return function() {
+//        return Q.Promise(function(resolve, reject, notify) {
+//            
+//            db.Requested.add(requestedClass).then(function (savedRequested) {
+//                resolve(savedRequested);
+//            }, function (error) {
+//                reject(error);
+//            });
+//
+//        });
+//    }
+//}
 
 function serverError(res, err) {
     res.status(500).send({ error: err });
