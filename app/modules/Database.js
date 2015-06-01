@@ -45,12 +45,25 @@ function Category() {
 
 function Requested() {
     return {
+        addInterestedUser: CONTEXTPROMISE(addInterestedUser),
         allocateNew: CONTEXTPROMISE(allocateNew),
         get: CONTEXTPROMISE(get),
         getAll: CONTEXTPROMISE(getAll),
         sync: CONTEXTPROMISE(sync),
         update: CONTEXTPROMISE(update)
     };
+    
+    function addInterestedUser(context, resolve, reject, notify) {
+        context.Database.record = { _id: context.RequestedClass.Interested.requestId };
+        Q.fcall(Database.Requested.sync(context))
+            .then(function () {
+                context.RequestedClass.record.interestedUsers.push({ _id: context.RequestedClass.Interested.userId });
+            })
+            .then(Database.Requested.sync(context))
+            .then(resolve)
+            .then(reject)
+            .done();
+    }
     
     function allocateNew(context, resolve, reject, notify) {
         var newRequest = new Models.RequestedClass(context.RequestedClass.newRequest);

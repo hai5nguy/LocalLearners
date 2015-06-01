@@ -33,41 +33,22 @@ var RequestedClass = (function () {
 	}
 	
 	function setUserInterested(context, resolve, reject, notify) {
-		context.Database.query = { _id: context.RequestedClass.Interested.requestId };
         
-        Q.fcall(Database.Requested.get(context))
-            .then(function () {
-                if (context.RequestedClass.Interested.setInterested) {
-                    addUserToInterested();
-                } else {
-                    removeUserFromInterested();
-                }
-            })
-            .then(Database.Requested.sync(context))
-            .then(resolve)
-            .catch(reject)
-            .done();
+        Q.fcall(function () {
+            t();
+            Database.Requested.addInterestedUser(context)();
             
-        function addUserToInterested() {
-            var interestedUsers = context.RequestedClass.record.interestedUsers;
-            var interestedUserId = context.RequestedClass.Interested.userId;
-            
-            if (interestedUsers.indexOf(interestedUserId) === -1) {
-                context.RequestedClass.record.interestedUsers.push(interestedUserId);
-            }
-        }
-
-        function removeUserFromInterested() {
-            var interestedUsers = context.RequestedClass.record.interestedUsers;
-            var interestedUserId = context.RequestedClass.Interested.userId;
-            
-            d(interestedUsers.indexOf(interestedUserId), interestedUsers.toObject(), interestedUserId);
-            if (interestedUsers.indexOf(interestedUserId) !== -1) {
-                d(context.RequestedClass.record.interestedUser.toObject());
-                context.RequestedClass.record.interestedUsers.splice(interestedUserId, 1);
-                d(context.RequestedClass.record.interestedUser.toObject());
-            }
-        }
+//            if (context.RequestedClass.Interested.userIsInterested) {
+//                Database.Requested.addInterestedUser(context)();
+//            } else {
+//                Database.Requested.removeInterestedUser(context)();
+//            }
+            context.Database.query = { _id: context.RequestedClass.Interested.requestId };
+        })
+        .then(Database.Requested.get(context))
+        .then(resolve)
+        .catch(reject)
+        .done();
         
     } //setUserInterested
 	

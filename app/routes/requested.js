@@ -61,7 +61,7 @@ module.exports = (function () {
             Interested: {
                 requestId: req.params.id,
                 userId: req.user._id,
-                setInterested: req.body.interested
+                userIsInterested: req.body.interested
             }
         };
         
