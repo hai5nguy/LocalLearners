@@ -65,7 +65,7 @@ module.exports = (function () {
             }
         };
         
-        d(context.RequestedClass);
+//        d(context.RequestedClass);
         
         RequestedClass.setUserInterested(context)().then(function () {
             t();

@@ -54,10 +54,17 @@ function Requested() {
     };
     
     function addInterestedUser(context, resolve, reject, notify) {
-        context.Database.record = { _id: context.RequestedClass.Interested.requestId };
-        Q.fcall(Database.Requested.sync(context))
+        context.Database.query = { _id: context.RequestedClass.Interested.requestId };
+        Q.fcall(Database.Requested.get(context))
             .then(function () {
-                context.RequestedClass.record.interestedUsers.push({ _id: context.RequestedClass.Interested.userId });
+                var interestedUsers = context.RequestedClass.record.interestedUsers;
+                var userId = context.RequestedClass.Interested.userId;
+                t();
+                d(interestedUsers, userId);
+                if (interestedUsers.indexOf({ _id: userId }) === -1) {
+                    t();
+                    interestedUsers.push({ _id: userId });
+                }
             })
             .then(Database.Requested.sync(context))
             .then(resolve)
