@@ -33,23 +33,11 @@ var RequestedClass = (function () {
 	}
 	
 	function setUserInterested(context, resolve, reject, notify) {
-        
-        Q.fcall(function () {
-            t();
-            Database.Requested.addInterestedUser(context)();
-            
-//            if (context.RequestedClass.Interested.userIsInterested) {
-//                Database.Requested.addInterestedUser(context)();
-//            } else {
-//                Database.Requested.removeInterestedUser(context)();
-//            }
-            context.Database.query = { _id: context.RequestedClass.Interested.requestId };
-        })
-        .then(Database.Requested.get(context))
-        .then(resolve)
-        .catch(reject)
-        .done();
-        
+        if (context.RequestedClass.Interested.userIsInterested) {
+            Database.Requested.addInterestedUser(context)().then(resolve, reject);
+        } else {
+            Database.Requested.removeInterestedUser(context)().then(resolve, reject);
+        }
     } //setUserInterested
 	
 	function validate(context, resolve, reject, notify) {

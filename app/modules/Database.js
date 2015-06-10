@@ -46,6 +46,7 @@ function Category() {
 function Requested() {
     return {
         addInterestedUser: CONTEXTPROMISE(addInterestedUser),
+        removeInterestedUser: CONTEXTPROMISE(removeInterestedUser),
         allocateNew: CONTEXTPROMISE(allocateNew),
         get: CONTEXTPROMISE(get),
         getAll: CONTEXTPROMISE(getAll),
@@ -60,10 +61,49 @@ function Requested() {
                 var interestedUsers = context.RequestedClass.record.interestedUsers;
                 var userId = context.RequestedClass.Interested.userId;
                 t();
-                d(interestedUsers, userId);
+//                d(interestedUsers.toObject(), userId);
+                d(interestedUsers.indexOf({ _id: userId }));
                 if (interestedUsers.indexOf({ _id: userId }) === -1) {
                     t();
                     interestedUsers.push({ _id: userId });
+                }
+            })
+            .then(Database.Requested.sync(context))
+            .then(resolve)
+            .then(reject)
+            .done();
+    }
+    
+    function removeInterestedUser(context, resolve, reject, notify) {
+        context.Database.query = { _id: context.RequestedClass.Interested.requestId };
+        Q.fcall(Database.Requested.get(context))
+            .then(function () {
+                var interestedUsers = context.RequestedClass.record.interestedUsers;
+                var userId = context.RequestedClass.Interested.userId;
+                t();
+                
+                var user = {
+                    "_id":"556640cc44fd17af0444740a",
+                    "meetupProfile":
+                    {
+                        "photo":
+                        {
+                            "thumb_link":"http://photos3.meetupstatic.com/photos/member/2/c/3/c/thumb_241631324.jpeg"
+                        }
+                    }
+                };
+                
+                d(interestedUsers.indexOf(user));
+                d(interestedUsers.indexOf(userId.toString()));
+                d(interestedUsers.indexOf({ _id: userId.toString() }));
+                console.log('============');
+                console.log(JSON.stringify(interestedUsers));
+                console.log('============');
+                console.log(userId);
+//                d(interestedUsers);
+                if (interestedUsers.indexOf({ _id: userId }) !== -1) {
+                    t();
+                    interestedUsers.pull({ _id: userId });
                 }
             })
             .then(Database.Requested.sync(context))
