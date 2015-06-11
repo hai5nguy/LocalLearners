@@ -34,7 +34,7 @@ function Category() {
                     database_error: error
                 };
                 reject();
-            } else { 
+            } else {
                 context.Category.all = categories;
                 resolve();
             }
@@ -55,7 +55,28 @@ function Requested() {
     };
     
     function addInterestedUser(context, resolve, reject, notify) {
+        Q.fcall(Database.Requested.sync(context))
+            .then(function () {
+                var interestedUsers = context.RequestedClass.record.interestedUsers;
+                var user = context.Authentication.user;
+//              d(interestedUsers.toObject(), userId);
+                
+                djson(user._id);
+                djson(interestedUsers);
+                d('blah', interestedUsers.id(user._id) );
+                
+//                if (interestedUsers.indexOf(user) === -1) {
+//                    t();
+//                    interestedUsers.push({ _id: userId });
+            })
+            .then(resolve)
+            .catch(reject)
+            .done();
+        
+        /*
         context.Database.query = { _id: context.RequestedClass.Interested.requestId };
+        
+        
         Q.fcall(Database.Requested.get(context))
             .then(function () {
                 var interestedUsers = context.RequestedClass.record.interestedUsers;
@@ -72,6 +93,7 @@ function Requested() {
             .then(resolve)
             .then(reject)
             .done();
+            */
     }
     
     function removeInterestedUser(context, resolve, reject, notify) {
@@ -165,12 +187,17 @@ function Requested() {
     }
     
     function sync(context, resolve, reject, notify) {
+        t('s1');
+        d(context);
         var query = { _id: context.RequestedClass.record._id };
         Models.RequestedClass.findOneAndUpdate(query, context.RequestedClass.record, function (error, updatedRequest) {
+            
             if (!error) {
+                t('s2');
                 context.Database.query = { _id: updatedRequest._id };
                 Database.Requested.get(context)().then(resolve, reject);
             } else {
+                t('s3')
                 context.Error = {
                     message: "Error syncing requested class",
                     database_error: error
@@ -262,6 +289,7 @@ function User() {
     return {
         get: CONTEXTPROMISE(get),
         insert: CONTEXTPROMISE(insert),
+        sync: CONTEXTPROMISE(sync),
         update: CONTEXTPROMISE(update),
         upsert: CONTEXTPROMISE(upsert)
     };
@@ -274,12 +302,10 @@ function User() {
                     database_error: error
                 };
                 reject();    
-            }
-            else {
-                context.Authentication.user = user.toObject();
+            } else {
+                context.Authentication.user = user;
                 resolve();
             }
-            debug(FUNCTIONALITY.Database_User_get, 'User.get', { context: context });
         });
     }
     
@@ -297,6 +323,21 @@ function User() {
                 resolve();
             }
             debug(FUNCTIONALITY.Database_User_insert, 'User.insert', { error: error, newUser: newUser.toObject(), numberAfftected: numberAffected });
+        });
+    }
+    
+    function sync(context, resolve, reject, notify) {
+        Models.User.findOneAndUpdate({ _id: context.Authentication.user._id }, context.Authentication.user, function(error, user) {
+            if (!error) {
+                context.Authentication.user = user;
+                resolve();
+            } else { 
+                context.Error = {
+                    message: 'Error syncing user',
+                    database_error: error
+                };
+                reject();    
+            } 
         });
     }
     

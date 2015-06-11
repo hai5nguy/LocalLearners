@@ -135,6 +135,10 @@ global.debug = function(functionality) {
     }
 }
 
+global.djson = function (obj) {
+    console.log(JSON.stringify(obj));
+}
+
 global.d = function(debugValue) {
     console.log('===' + __fileName + ' - ' + __functionName + ' - ' + __lineNumber + ' ==============================================================');
     for (var i = 0; i < arguments.length; i++) {
@@ -143,10 +147,11 @@ global.d = function(debugValue) {
     }
 }
 
-global.t = function() {
+global.t = function(message) {
+    var msg = message ? ' - ' + message : '';
     var names = __fileName.split(/[/\\]/);
     var file = names[names.length - 1];
-    console.log('-> ' + file + ' - ' + __lineNumber + ' - ' + __functionName);
+    console.log('-> ' + file + ' - ' + __lineNumber + ' - ' + __functionName + msg);
 }
 
 global.cage = function() {

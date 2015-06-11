@@ -33,11 +33,20 @@ var RequestedClass = (function () {
 	}
 	
 	function setUserInterested(context, resolve, reject, notify) {
-        if (context.RequestedClass.Interested.userIsInterested) {
-            Database.Requested.addInterestedUser(context)().then(resolve, reject);
-        } else {
-            Database.Requested.removeInterestedUser(context)().then(resolve, reject);
-        }
+		Q.fcall(Database.User.sync(context))
+			.then(function () {
+				t('2');
+//				if (context.RequestedClass.Interested.userIsInterested) {
+            		Database.Requested.addInterestedUser(context)();
+//        		} else {
+//        			Database.Requested.removeInterestedUser(context)();
+//    			}		
+			})
+			.then(resolve)
+			.catch(reject)
+			.done();
+		
+        
     } //setUserInterested
 	
 	function validate(context, resolve, reject, notify) {
