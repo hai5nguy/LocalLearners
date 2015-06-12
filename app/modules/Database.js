@@ -72,7 +72,7 @@ function Requested() {
             var user = context.Authentication.user;
             var existingIndex = interestedUsers.indexOf(user._id);
             if (existingIndex !== -1) {
-                interestedUsers.splice(existingIndex);
+                interestedUsers.splice(existingIndex, 1);
             }
             Database.Requested.syncRecord(context)().then(resolve, reject);
         }, reject);
