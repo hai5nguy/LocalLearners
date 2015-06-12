@@ -21,9 +21,9 @@ module.exports = function () {
 		RequestedClass: {
 			record: null,
 			getId: null,  		
-			Interested: null,		
 			requestList: null,
-			newRequest: null
+			newRequest: null,
+			userIsInterested: null
 		},
 		RestService: {
 			args: null,

@@ -34,14 +34,15 @@ var RequestedClass = (function () {
 	
 	function setUserInterested(context, resolve, reject, notify) {
 		Q.fcall(Database.User.sync(context))
+			.then(Database.Requested.syncRecord(context))
 			.then(function () {
-				t('2');
-//				if (context.RequestedClass.Interested.userIsInterested) {
-            		Database.Requested.addInterestedUser(context)();
-//        		} else {
-//        			Database.Requested.removeInterestedUser(context)();
-//    			}		
+				if (context.RequestedClass.userIsInterested) {
+            		return Database.Requested.addInterestedUser(context)();
+        		} else {
+        			return Database.Requested.removeInterestedUser(context)();
+				}
 			})
+			.then(Database.Requested.populateRecord(context))
 			.then(resolve)
 			.catch(reject)
 			.done();

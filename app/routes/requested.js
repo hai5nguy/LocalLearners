@@ -54,16 +54,12 @@ module.exports = (function () {
     }); //api/requested
 
     app.post('/api/requested/:id/setuserinterested', Authentication.ensureAuthenticated, function (req, res) {
-        
         var context = new CONTEXT();
-        context.Authentication.user = { _id: req.user._id };
+        context.Authentication.user = req.user;
         context.RequestedClass.record = { _id: req.params.id };
-        context.RequestedClass.Insterested = { userIsInterested: req.body.interested }
-        
-        t('start');
+        context.RequestedClass.userIsInterested = req.body.interested;
         
         RequestedClass.setUserInterested(context)().then(function () {
-            t('end');
             res.json(context.RequestedClass.record);
         }, function () {
             res.status(500).send(context.Error);

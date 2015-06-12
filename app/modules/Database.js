@@ -50,88 +50,32 @@ function Requested() {
         allocateNew: CONTEXTPROMISE(allocateNew),
         get: CONTEXTPROMISE(get),
         getAll: CONTEXTPROMISE(getAll),
-        sync: CONTEXTPROMISE(sync),
+        populateRecord: CONTEXTPROMISE(populateRecord),
+        syncRecord: CONTEXTPROMISE(syncRecord),
         update: CONTEXTPROMISE(update)
     };
     
     function addInterestedUser(context, resolve, reject, notify) {
-        Q.fcall(Database.Requested.sync(context))
-            .then(function () {
-                var interestedUsers = context.RequestedClass.record.interestedUsers;
-                var user = context.Authentication.user;
-//              d(interestedUsers.toObject(), userId);
-                
-                djson(user._id);
-                djson(interestedUsers);
-                d('blah', interestedUsers.id(user._id) );
-                
-//                if (interestedUsers.indexOf(user) === -1) {
-//                    t();
-//                    interestedUsers.push({ _id: userId });
-            })
-            .then(resolve)
-            .catch(reject)
-            .done();
-        
-        /*
-        context.Database.query = { _id: context.RequestedClass.Interested.requestId };
-        
-        
-        Q.fcall(Database.Requested.get(context))
-            .then(function () {
-                var interestedUsers = context.RequestedClass.record.interestedUsers;
-                var userId = context.RequestedClass.Interested.userId;
-                t();
-//                d(interestedUsers.toObject(), userId);
-                d(interestedUsers.indexOf({ _id: userId }));
-                if (interestedUsers.indexOf({ _id: userId }) === -1) {
-                    t();
-                    interestedUsers.push({ _id: userId });
-                }
-            })
-            .then(Database.Requested.sync(context))
-            .then(resolve)
-            .then(reject)
-            .done();
-            */
+        Database.Requested.syncRecord(context)().then(function () {
+            var interestedUsers = context.RequestedClass.record.interestedUsers;
+            var user = context.Authentication.user;
+            if (interestedUsers.indexOf(user._id) === -1) {
+                interestedUsers.push(user);
+            }
+            Database.Requested.syncRecord(context)().then(resolve, reject);
+        }, reject);
     }
     
     function removeInterestedUser(context, resolve, reject, notify) {
-        context.Database.query = { _id: context.RequestedClass.Interested.requestId };
-        Q.fcall(Database.Requested.get(context))
-            .then(function () {
-                var interestedUsers = context.RequestedClass.record.interestedUsers;
-                var userId = context.RequestedClass.Interested.userId;
-                t();
-                
-                var user = {
-                    "_id":"556640cc44fd17af0444740a",
-                    "meetupProfile":
-                    {
-                        "photo":
-                        {
-                            "thumb_link":"http://photos3.meetupstatic.com/photos/member/2/c/3/c/thumb_241631324.jpeg"
-                        }
-                    }
-                };
-                
-                d(interestedUsers.indexOf(user));
-                d(interestedUsers.indexOf(userId.toString()));
-                d(interestedUsers.indexOf({ _id: userId.toString() }));
-                console.log('============');
-                console.log(JSON.stringify(interestedUsers));
-                console.log('============');
-                console.log(userId);
-//                d(interestedUsers);
-                if (interestedUsers.indexOf({ _id: userId }) !== -1) {
-                    t();
-                    interestedUsers.pull({ _id: userId });
-                }
-            })
-            .then(Database.Requested.sync(context))
-            .then(resolve)
-            .then(reject)
-            .done();
+        Database.Requested.syncRecord(context)().then(function () {
+            var interestedUsers = context.RequestedClass.record.interestedUsers;
+            var user = context.Authentication.user;
+            var existingIndex = interestedUsers.indexOf(user._id);
+            if (existingIndex !== -1) {
+                interestedUsers.splice(existingIndex);
+            }
+            Database.Requested.syncRecord(context)().then(resolve, reject);
+        }, reject);
     }
     
     function allocateNew(context, resolve, reject, notify) {
@@ -150,6 +94,7 @@ function Requested() {
         });
     }
     
+    //this is going to be phase out by populate
     function get(context, resolve, reject, notify) {
         var query = Models.RequestedClass.find(context.Database.query);
         query.populate('category');
@@ -186,20 +131,34 @@ function Requested() {
         });
     }
     
-    function sync(context, resolve, reject, notify) {
-        t('s1');
-        d(context);
+    function populateRecord(context, resolve, reject, notify) {
+        var query = Models.RequestedClass.find({ _id: context.RequestedClass.record._id });
+        query.populate('category');
+        query.populate('requester', 'name meetupProfile.photo.thumb_link');
+        query.populate('interestedUsers', 'name meetupProfile.photo.thumb_link');
+        query.exec(function (error, requests) {
+            if (!error) {
+                context.RequestedClass.record = requests[0];
+                resolve();
+        	} else {
+                context.Error = {
+                    message: 'Unable to populate requested class',
+                    database_error: error
+                };
+                reject();
+            }
+        });
+    }
+    
+    function syncRecord(context, resolve, reject, notify) {
         var query = { _id: context.RequestedClass.record._id };
         Models.RequestedClass.findOneAndUpdate(query, context.RequestedClass.record, function (error, updatedRequest) {
-            
             if (!error) {
-                t('s2');
-                context.Database.query = { _id: updatedRequest._id };
-                Database.Requested.get(context)().then(resolve, reject);
+                context.RequestedClass.record = updatedRequest;
+                resolve();
             } else {
-                t('s3')
                 context.Error = {
-                    message: "Error syncing requested class",
+                    message: "Error syncing requested class record",
                     database_error: error
                 };
                 reject();
