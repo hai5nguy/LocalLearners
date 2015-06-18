@@ -12,9 +12,9 @@ module.exports = (function () {
     var app = THE_APP;
 
     app.get('/api/upcoming', function (req, res) {
-        var context = {};
+        var context = new CONTEXT();
         UpcomingClass.getAll(context)().then(function () {
-            res.json(context.UpcomingClass.classList);
+            res.json(context.UpcomingClass.list);
         }, function () {
             res.status(500).send(context.Error);
         });
@@ -40,23 +40,31 @@ module.exports = (function () {
         var context = new CONTEXT();
         context.Authentication.user = req.user;
         
-        context.UpcomingClass.record = {
+        var meetupEvent = {
             name: req.body.name,
-            category: req.body.category,
-            time: req.body.time,
-            teachers: [ req.user._id ]
+            time: req.body.time
         };
+        
+        context.UpcomingClass.record = {
+            category: req.body.category,
+            teachers: [ req.user._id ],
+            meetup: {
+                event: meetupEvent
+            }
+        };
+        
         
         
         Q.fcall(UpcomingClass.allocateNew(context))
             .then(function () {
-                t();
                 res.json(context.UpcomingClass.record);
-                UpcomingClass.buildNew(context)().then(function {
+                UpcomingClass.buildNew(context)().then(function () {
+                    t("buildnew success");
                     //success
                 }, function () {
-                    
-                })
+                    //fail, bad bad fail
+                    t('buildNew failed');
+                });
             })
             .catch(function () {
                 res.status(500).send(context.Error);

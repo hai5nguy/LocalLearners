@@ -21,7 +21,11 @@ function Event() {
     }
     
     function post(context, resolve, reject, notify) {
+        
         MeetupApi.Profile.ensureOrganizer(context)().then(function() {
+            
+            var event = context.UpcomingClass.record.meetup.event;
+            
             context.RestService = {
                 url: MEETUP_API_ENDPOINT + '/event',
                 args: {
@@ -29,8 +33,8 @@ function Event() {
                     parameters: {
                         group_id: _localLearnersGroupId,
                         group_urlname: _localLearnersGroupUrlName,
-                        name: context.UpcomingClass.newClass.name,
-                        time: new Date(context.UpcomingClass.newClass.time).getTime()
+                        name: event.name,
+                        time: new Date(event.time).getTime()
                     },
                     headers: {
                         Authorization: 'Bearer ' + context.Authentication.user.accessToken,
@@ -39,6 +43,7 @@ function Event() {
                 }
             };
             
+            t();
             RestService.post(context)().then(function () {
                 t();
                 var createdEvent = context.RestService.result;

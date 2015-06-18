@@ -1,5 +1,6 @@
 var _           = require(LL_NODE_MODULES_DIR + 'underscore');
 var prettyjson  = require(LL_NODE_MODULES_DIR + 'prettyjson');
+var colors      = require(LL_NODE_MODULES_DIR + 'colors');
 
 global.FUNCTIONALITY = {
     Authentication_deserializeUser      : 'Authentication_deserializeUser',
@@ -151,7 +152,7 @@ global.t = function(message) {
     var msg = message ? ' - ' + message : '';
     var names = __fileName.split(/[/\\]/);
     var file = names[names.length - 1];
-    console.log('-> ' + file + ' - ' + __lineNumber + ' - ' + __functionName + msg);
+    console.log('-> ' + file + ' - ' + __lineNumber + ' - ' + __functionName + msg.red);
 }
 
 global.cage = function() {

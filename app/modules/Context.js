@@ -20,7 +20,8 @@ module.exports = function () {
 		},
 		RequestedClass: {
 			record: null,
-			getId: null,  		
+			getId: null,
+			list: null,	
 			requestList: null,
 			newRequest: null,
 			userIsInterested: null

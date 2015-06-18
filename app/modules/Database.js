@@ -211,18 +211,26 @@ function Upcoming() {
     }
     
     function getAll(context, resolve, reject, notify) {
-        Models.UpcomingClass.find(context.Database.query, function (error, classes) {
+        
+        var query = Models.RequestedClass.find(context.Database.query);
+        query.populate('category');
+        query.populate('teachers', 'name');
+        query.exec(function (error, classes) {
+            
+            djson(classes);
+            
             if (!error) {
-                context.UpcomingClass.classList = classes;
+                context.UpcomingClass.list = classes;
                 resolve();
-            } else {
+        	} else {
                 context.Error = {
-                    message: 'Error getting upcoming classes from Database',
+                    message: 'Unable to get upcoming classes',
                     database_error: error
                 };
                 reject();
             }
         });
+        
     }
     
     function update(context, resolve, reject, notify) {
