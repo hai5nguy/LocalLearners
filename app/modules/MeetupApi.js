@@ -22,10 +22,6 @@ function Event() {
     
     function post(context, resolve, reject, notify) {
         MeetupApi.Profile.ensureOrganizer(context)().then(function() {
-            t();
-            console.log('11111 ', context.UpcomingClass.newClass.time);
-            console.log('222 ', typeof context.UpcomingClass.newClass.time);
-            console.log(new Date(context.UpcomingClass.newClass.time).getTime());
             context.RestService = {
                 url: MEETUP_API_ENDPOINT + '/event',
                 args: {
@@ -44,7 +40,7 @@ function Event() {
             };
             
             RestService.post(context)().then(function () {
-                
+                t();
                 var createdEvent = context.RestService.result;
                 if (createdEvent.problem) {
                     context.Error = {
@@ -53,7 +49,7 @@ function Event() {
                     };
                     reject();
                 } else {
-                    context.UpcomingClass.event = event;
+                    context.UpcomingClass.record.meetup.event = event;
                     resolve();
                 }
                 

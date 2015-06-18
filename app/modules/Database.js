@@ -194,10 +194,10 @@ function Upcoming() {
     }
     
     function allocateNew(context, resolve, reject, notify) {
-        var newClass = new Models.UpcomingClass(context.UpcomingClass.newClass);
+        var newClass = new Models.UpcomingClass(context.UpcomingClass.record);
         newClass.save(function(error, newClass, numberAffected) {
             if (!error) {
-                context.UpcomingClass.savedClass = newClass.toObject();
+                context.UpcomingClass.record = newClass;
                 resolve();
             } else {
                 context.Error = {

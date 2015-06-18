@@ -44,13 +44,13 @@ localLearnersApp.directive('llClassCreationForm', function() {
                 //todo: validation
                 $scope.loading = true;
                 
-                var now = new Date(2015, 5,20);
+                var testdate = new Date(2015, 8, 20);
                 var associatedRequestedClassId = $stateParams.classDetails ? $stateParams.classDetails.associatedRequestedClassId : null;
                 
                 var classToPost = {
                     name: $scope.newClass.name,
                     category: $scope.newClass.category._id,
-                    time: now,
+                    time: testdate,
                     associatedRequestedClassId: associatedRequestedClassId
                 };
                 

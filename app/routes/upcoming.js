@@ -39,19 +39,24 @@ module.exports = (function () {
         
         var context = new CONTEXT();
         context.Authentication.user = req.user;
-        context.UpcomingClass = {
-            newClass: {
-                name: req.body.name,
-                category: req.body.category,
-                time: req.body.time
-            }
+        
+        context.UpcomingClass.record = {
+            name: req.body.name,
+            category: req.body.category,
+            time: req.body.time,
+            teachers: [ req.user._id ]
         };
         
         
         Q.fcall(UpcomingClass.allocateNew(context))
             .then(function () {
-                res.json(context.UpcomingClass.savedClass);
-                UpcomingClass.buildNew(context)();
+                t();
+                res.json(context.UpcomingClass.record);
+                UpcomingClass.buildNew(context)().then(function {
+                    //success
+                }, function () {
+                    
+                })
             })
             .catch(function () {
                 res.status(500).send(context.Error);

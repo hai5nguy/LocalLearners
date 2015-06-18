@@ -47,8 +47,8 @@ var UpcomingClass = (function () {
     }
     
     function validate(context, resolve, reject, notify) {
-        ASSERT.exists(context.UpcomingClass.newClass, 'context.UpcomingClass.newClass must exist');
-        var newClass = context.UpcomingClass.newClass;
+        ASSERT.exists(context.UpcomingClass.record, 'context.UpcomingClass.record must exist');
+        var newClass = context.UpcomingClass.record;
         if (!IsPopulatedString(newClass.name)) {
             context.Error = {
                 message: 'Invalid class name'
