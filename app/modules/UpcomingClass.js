@@ -30,15 +30,17 @@ var UpcomingClass = (function () {
     function buildNew(context, resolve, reject, notify) {
         Q.fcall(MeetupApi.Event.post(context))
             .then(function() {
+                t();
                 djson(context.UpcomingClass);
                 context.Database = {
                     query: { _id: context.UpcomingClass.class._id },
                     args: { $set: context.UpcomingClass.class }  
                 };
+                resolve();
             })
 //            .then(Database.Upcoming.update(context))
 
-            .then(resolve)
+            //.then(resolve)
             .catch(reject)
             .done();
     }

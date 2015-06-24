@@ -64,6 +64,7 @@ module.exports = (function () {
                 }, function () {
                     //fail, bad bad fail
                     t('buildNew failed');
+                    d(context.Error);
                 });
             })
             .catch(function () {

@@ -149,10 +149,10 @@ global.d = function(debugValue) {
 }
 
 global.t = function(message) {
-    var msg = message ? ' - ' + message : '';
+    var msg = message ? ' - ' + message.red : '';
     var names = __fileName.split(/[/\\]/);
     var file = names[names.length - 1];
-    console.log('-> ' + file + ' - ' + __lineNumber + ' - ' + __functionName + msg.red);
+    console.log('-> ' + file + ' - ' + __lineNumber + ' - ' + __functionName + msg);
 }
 
 global.cage = function() {

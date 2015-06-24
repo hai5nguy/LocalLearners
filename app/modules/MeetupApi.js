@@ -43,9 +43,7 @@ function Event() {
                 }
             };
             
-            t();
             RestService.post(context)().then(function () {
-                t();
                 var createdEvent = context.RestService.result;
                 if (createdEvent.problem) {
                     context.Error = {
