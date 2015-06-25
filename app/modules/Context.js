@@ -1,5 +1,20 @@
 
 module.exports = function () {
+	
+	var self = {};
+	
+	self.store = {};
+	
+	self.get = function (identifier) {
+		return self.store[identifier];
+	};
+	
+	self.set = function (identifier, value) {
+		self.store[identifier] = value;
+	};
+	
+	return self;
+	/*
     return {
 		Authentication: {
 			user: null
@@ -39,5 +54,6 @@ module.exports = function () {
 			savedClass: null
 		},
     };
+	*/
 };
 

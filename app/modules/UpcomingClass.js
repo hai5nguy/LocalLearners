@@ -33,7 +33,7 @@ var UpcomingClass = (function () {
                 t();
                 djson(context.UpcomingClass);
                 context.Database = {
-                    query: { _id: context.UpcomingClass.class._id },
+                    query: { _id: context.get('upcomingClassId') },
                     args: { $set: context.UpcomingClass.class }  
                 };
                 resolve();
