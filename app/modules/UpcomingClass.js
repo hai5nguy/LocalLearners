@@ -15,7 +15,7 @@ var UpcomingClass = (function () {
     };
     
     function getAll(context, resolve, reject, notify) {
-        context.Database.query = {};
+        context.set('database.query', {});
         Database.Upcoming.getAll(context)().then(resolve, reject);
     }
     
@@ -30,31 +30,28 @@ var UpcomingClass = (function () {
     function buildNew(context, resolve, reject, notify) {
         Q.fcall(MeetupApi.Event.post(context))
             .then(function() {
-                t();
-                djson(context.UpcomingClass);
                 context.Database = {
                     query: { _id: context.get('upcomingClassId') },
                     args: { $set: context.UpcomingClass.class }  
                 };
                 resolve();
+                
+                return Database.Upcoming.update(context)();
             })
-//            .then(Database.Upcoming.update(context))
-
-            //.then(resolve)
+            .then(resolve)
             .catch(reject)
             .done();
     }
     
     function validate(context, resolve, reject, notify) {
-        ASSERT.exists(context.UpcomingClass.record, 'context.UpcomingClass.record must exist');
-        var record = context.UpcomingClass.record;
-        if (!IsPopulatedString(record.meetup.event.name)) {
+        var newClass = context.get('upcomingclass.new');
+        if (!IsPopulatedString(newClass.name)) {
             context.Error = {
                 message: 'Invalid class name'
             };
             reject(); return;
         }
-        if (!IsPopulatedString(record.category)) {
+        if (!IsPopulatedString(newClass.category)) {
             context.Error = {
                 message: 'Invalid class category'
             }

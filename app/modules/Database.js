@@ -194,39 +194,45 @@ function Upcoming() {
     }
     
     function allocateNew(context, resolve, reject, notify) {
-        var newClass = new Models.UpcomingClass(context.UpcomingClass.record);
-        newClass.save(function(error, newClass, numberAffected) {
+        var newClass = context.get('upcomingclass.new');
+        var model = new Models.UpcomingClass({
+            category: newClass.category,
+            meetup: {
+                event: {
+                    name: newClass.name,
+                    time: newClass.time
+                }
+            },
+            teachers: newClass.teachers
+        });
+        model.save(function(error, newClass, numberAffected) {
             if (!error) {
-                context.UpcomingClass.record = newClass;
+                context.get('upcomingclass.allocated', newClass);
                 resolve();
             } else {
-                context.Error = {
+                context.set('error', {
                     message: 'Unable to allocate new upcoming class',
                     database_error: error
-                };
+                });
                 reject();
             }
-            debug(FUNCTIONALITY.Database_Upcoming_allocateNew, { context: context, error: error, newClass: newClass.toObject(), numberAffected: numberAffected } );
         });
     }
     
     function getAll(context, resolve, reject, notify) {
         
-        var query = Models.RequestedClass.find(context.Database.query);
+        var query = Models.UpcomingClass.find(context.get('database.query'));
         query.populate('category');
         query.populate('teachers', 'name');
         query.exec(function (error, classes) {
-            
-            djson(classes);
-            
             if (!error) {
-                context.UpcomingClass.list = classes;
+                context.set('upcomingclass.list', classes);
                 resolve();
         	} else {
-                context.Error = {
+                context.set('error', {
                     message: 'Unable to get upcoming classes',
                     database_error: error
-                };
+                });
                 reject();
             }
         });

@@ -14,6 +14,8 @@ module.exports = function () {
 	};
 	
 	return self;
+	
+	//it needs to self check
 	/*
     return {
 		Authentication: {

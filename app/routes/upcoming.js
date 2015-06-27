@@ -14,9 +14,9 @@ module.exports = (function () {
     app.get('/api/upcoming', function (req, res) {
         var context = new CONTEXT();
         UpcomingClass.getAll(context)().then(function () {
-            res.json(context.UpcomingClass.list);
+            res.json(context.get('upcomingclass.list'));
         }, function () {
-            res.status(500).send(context.Error);
+            res.status(500).send(context.get('error'));
         });
         
     });
@@ -38,65 +38,31 @@ module.exports = (function () {
     app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
         
         var context = new CONTEXT();
-        context.Authentication.user = req.user;
+        context.set('authentication.user', req.user);
         
-        var meetupEvent = {
-            name: req.body.name,
-            time: req.body.time
-        };
-        
-        context.UpcomingClass.record = {
+        context.set('upcomingclass.new', {
             category: req.body.category,
+            name: req.body.name,
             teachers: [ req.user._id ],
-            meetup: {
-                event: meetupEvent
-            }
-        };
-        
-        
+            time: req.body.time
+        });
         
         Q.fcall(UpcomingClass.allocateNew(context))
             .then(function () {
-                res.json(context.UpcomingClass.record);
+                res.json(context.get('upcomingclass.allocated'));
                 UpcomingClass.buildNew(context)().then(function () {
                     t("buildnew success");
                     //success
                 }, function () {
                     //fail, bad bad fail
                     t('buildNew failed');
-                    d(context.Error);
+                    d(context.get('error'));
                 });
             })
             .catch(function () {
-                res.status(500).send(context.Error);
+                res.status(500).send(context.get('error'));
             })
             .done();
-        
-        
-        
-        //
-        //newClass.validate().then(function () {
-        //    res.json({ status: 'initialzing', postingId: newClass.postingId })
-        //}, function (error) {
-        //    debug(FUNCTIONALITY.api_post_upcoming, 'error', error);
-        //    res.status(500).send({ error: error });
-        //});
-        
-        /*
-        Q.fcall(validateUpcomingClass(newClass))
-            .then(postToMeetup(req, res, upcomingClass))
-            .then(savePostedClassToDB(upcomingClass))
-            .then(deleteAssocatedRequestedClass(upcomingClass))
-            .then(function (createdUpcomingClass) {
-                debug(FUNCTIONALITY.api_post_upcoming, { createdUpcomingClass: createdUpcomingClass.toObject() } );
-                res.json({status: 'success', createdUpcomingClass: createdUpcomingClass});
-            })
-            .catch(function (error) {
-                debug(FUNCTIONALITY.api_post_upcoming, 'error', error);
-                res.status(500).send({error: error});
-            })
-            .done();
-            */
     });
 
     app.post('/api/upcoming/:classId/setrsvp', function (req, res) {
