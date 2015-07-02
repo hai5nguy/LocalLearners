@@ -37,6 +37,23 @@ module.exports = (function () {
 
     app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
         
+        var upcomingClass = new UpcomingClass({
+            req: req
+        });
+        
+        
+        Q.fcall(upcomingClass.allocate())
+            .then(function () {
+                res.json(upcomingClass.allocated);
+                upcomingClass.startBuild();
+            })
+            .catch(function () {
+                res.json(upcomingClass.error);
+            })
+            .done();
+       
+        /*
+        
         var context = new CONTEXT();
         context.set('authentication.user', req.user);
         
@@ -63,6 +80,8 @@ module.exports = (function () {
                 res.status(500).send(context.get('error'));
             })
             .done();
+            
+            */
     });
 
     app.post('/api/upcoming/:classId/setrsvp', function (req, res) {

@@ -1,8 +1,21 @@
-var Context = require('../app/Modules/Context.js');
+require('../app/core.js');
+var UpcomingClass = require('../app/Modules/UpcomingClass.js');
 
-var c1 = new Context();
-c1.set('id', 'cone');;
-var c2 = new Context();
-c2.set('id', 'ctwo');
+var u1 = new UpcomingClass('u1');
+var u2 = new UpcomingClass('u2');
 
-console.log(c1.get('id'), c2.get('id'));
+u1.allocate().then(function (a) {
+	console.log('a: ', a);
+}, function (error) {
+	console.log('error: ', error);
+});
+
+u2.allocate().then(function (a) {
+	console.log('a: ', a);
+}, function (error) {
+	console.log('error: ', error);
+});
+
+console.log('u1 ', u1);
+console.log('u2 ', u2);
+console.log(u1.allocate === u2.allocate);

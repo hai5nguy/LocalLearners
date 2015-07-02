@@ -53,3 +53,9 @@ global.FCALLWRAPPER = function (promiseFunction) {
         });
     };
 };
+
+global.PROMISIFY = function (workFunction) {
+    return function () {
+        return Q.Promise(workFunction);
+    };
+};
