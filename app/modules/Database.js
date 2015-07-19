@@ -1,5 +1,6 @@
 var Q   	            = require(LL_NODE_MODULES_DIR + 'q');
 var mongoose            = require(LL_NODE_MODULES_DIR + 'mongoose');
+var _                   = require(LL_NODE_MODULES_DIR + 'underscore');
 
 var Models              = require(LL_MODULES_DIR + 'Models.js')(mongoose);
 
@@ -14,12 +15,53 @@ mongooseConnection.once('open', function() {
 
 var Database = (function () {
     return {
+        UpcomingClassRecord: UpcomingClassRecord,
         Category: Category(),
         Requested: Requested(),
         Upcoming: Upcoming(),
         User: User()
     };
 })();
+
+function Record() {
+    var record = {
+        attributes: {}
+    };
+    
+    record.get = function (attributeName) {
+        if (!attributeName) {
+            return 
+        }
+    }
+    return record;
+}
+
+function UpcomingClassRecord(options) {
+    
+    
+    var record = new Record();
+    
+    
+    var defaultOptions = {};
+    
+    var record = {};
+    
+
+    
+    record.create = PROMISIFY(function (resolve, reject, notify) {
+        var model = new Models.UpcomingClass(_.extend(defaultOptions, options));
+        
+        model.save(function (error, newRecord, numberAffected) {
+            if (!error) {
+                resolve(model);
+            } else {
+                reject(error);
+            }
+        });
+    });
+    
+    return record;
+}
 
 function Category() {
     return {

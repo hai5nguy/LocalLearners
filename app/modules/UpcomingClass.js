@@ -9,13 +9,20 @@ module.exports = function (options) {
     //console.assert(options.req !== undefined, 'UpcomingClass requires the request object');
     
     var self = {
-        error: {},
-        req: options.req
+        attributes: {},
+        get: function (attributeName) { return this.attributes[attributeName]; },
+        set: function (attributeName, value) { this.attributes[attributeName] = value; }
     };
     
     self.allocate = PROMISIFY(function (resolve, reject, notify) {
         
+        var record = new Database.UpcomingClassRecord({});
         
+        record.create().then(function () {
+            resolve(record);
+        }, function (error) {
+            reject(error);
+        });
         
     });
     

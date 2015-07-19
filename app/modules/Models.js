@@ -9,11 +9,15 @@ module.exports = function (mongoose) {
         imageUrl: String
     });
 
+    var MeetupEventSchema = new Schema({
+        name: String
+    });
+
     var UpcomingClassSchema = new Schema({
         category: { type: ObjectId, ref: 'Category' },
-        meetup: Object,
-//        status: String,
-        teachers: [{ type: ObjectId, ref: 'User' }]
+        meetupEvent: { type: ObjectId, ref: 'MeetupEvent' },
+        teachers: [{ type: ObjectId, ref: 'User' }],
+        test: String
     });
     
     var RequestedClassSchema = new Schema({
@@ -63,6 +67,7 @@ module.exports = function (mongoose) {
     return {
         Category: mongoose.model('Category', CategorySchema),
         FakeEvent: mongoose.model('FakeEvent', FakeEventSchema),
+        MeetupEvent: mongoose.model('MeetupEvent', MeetupEventSchema),
         RequestedClass: mongoose.model('RequestedClass', RequestedClassSchema),
         UpcomingClass: mongoose.model('UpcomingClass', UpcomingClassSchema),
         User: mongoose.model('User', UserSchema)
