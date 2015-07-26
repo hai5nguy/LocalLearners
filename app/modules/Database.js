@@ -14,6 +14,7 @@ mongooseConnection.once('open', function() {
 });
 
 module.exports = {
+    CategoryRecord: CategoryRecord,
     UpcomingClassRecord: UpcomingClassRecord
     //Category: Category(),
     //Requested: Requested(),
@@ -28,9 +29,9 @@ function UpcomingClassRecord() {
         error: null
     });
     
-    self.create = PROMISIFY(function (options, resolve, reject) {
+    self.create = PROMISIFY(function (params, resolve, reject) {
         
-        var model = new Models.UpcomingClass(_.extend({}, options));
+        var model = new Models.UpcomingClass(_.extend({}, params));
         
         model.save(function (error, newModel, numberAffected) {
             if (!error) {
@@ -46,6 +47,32 @@ function UpcomingClassRecord() {
     return self;
 }
 
+function CategoryRecord() {
+
+    var self = new DEITYOBJECT({
+        error: null
+    });
+
+    self.retrieveAll = PROMISIFY(function (params, resolve, reject) {
+
+        var query = params || {};
+        Models.Category.find(query, function(error, categories) {
+            if (!error) {
+                self.set(categories);
+                resolve();
+            } else {
+                self.error = {
+                    message: 'Unable to retrieve all categories',
+                    database_error: error
+                };
+                reject();
+            }
+            
+        });
+    });
+
+    return self;
+}
 
 //function Category() {
 //    return {

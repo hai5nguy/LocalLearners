@@ -12,17 +12,18 @@ module.exports = function (options) {
 	self.retrieveAll = PROMISIFY(function (params, resolve, reject) {
 		
 		var record = new Database.CategoryRecord();
-
-		record.create(params).then(function () {
-			self.set(record.get());
-			resolve();
-		}, function () {
-			self.error = {
-				message: 'Unable to allocate upcoming class',
-				databaseError: record.error
-			};
-			reject();
-		});
+        
+        record.retrieveAll(params).then(function () {
+            self.set(record.get());
+            resolve();
+        }, function () {
+            self.error = {
+                message: 'Unable to retrieve all categories',
+                databaseError: record.error
+            };
+            reject();
+        });
+        
 	});
 	
 	return self;

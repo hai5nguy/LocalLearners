@@ -1,7 +1,7 @@
 var Q           = require(LL_NODE_MODULES_DIR + 'q');
 
 var Category            = require(LL_MODULES_DIR + 'Category.js');
-var CategoryCollection  = require(LL_MODULES_DIR + 'CategoryCollection.js');
+//var CategoryCollection  = require(LL_MODULES_DIR + 'CategoryCollection.js');
 
 module.exports = (function () {
     THE_APP.get('/api/category/all', function (req, res) {
@@ -11,7 +11,7 @@ module.exports = (function () {
             req: req
         });
 
-        category.retrieve().then(function () {
+        category.retrieveAll().then(function () {
             res.json(category.get());
         }, function () {
             res.status(500).send(category.error);
