@@ -1,6 +1,7 @@
 require('./environmentals.js');
 
 var Q       = require(LL_NODE_MODULES_DIR + 'q');
+var _       = require(LL_NODE_MODULES_DIR + 'underscore');
 var Assert  = require(LL_MODULES_DIR + 'Assert.js');
 var Context = require(LL_MODULES_DIR + 'Context.js');
 
@@ -54,8 +55,30 @@ global.FCALLWRAPPER = function (promiseFunction) {
     };
 };
 
-global.PROMISIFY = function (workFunction) {
-    return function () {
-        return Q.Promise(workFunction);
-    };
+global.PROMISIFY = function(workFunction) {
+    return function (params) {
+        return Q.Promise(function (resolve, reject) {
+            workFunction(params, resolve, reject);
+        });
+    }
+};
+
+global.DEITYOBJECT = function(initialData) {
+    return {
+        _data: initialData || {},
+        get: function (name) {
+            if (!name) {
+                return this._data;
+            } else {
+                return this._data[name];
+            }
+        },
+        set: function (nameOrObject, value) {
+            if (typeof nameOrObject === 'object') {
+                this._data = nameOrObject;
+            } else {
+                this._data[nameOrObject] = value;
+            }
+        }
+    }
 };

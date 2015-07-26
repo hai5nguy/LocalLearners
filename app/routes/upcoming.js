@@ -31,26 +31,23 @@ module.exports = (function () {
             })
             .catch(function (error) {
                 res.status(500).send({error: error});  
-            });
+            })
+            .done();
         
     });
 
-    app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
+    //app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
+    app.post('/api/upcoming', function (req, res) {
         
         var upcomingClass = new UpcomingClass({
             req: req
         });
         
-        
-        Q.fcall(upcomingClass.allocate())
-            .then(function () {
-                res.json(upcomingClass.allocated);
-                upcomingClass.startBuild();
-            })
-            .catch(function () {
-                res.json(upcomingClass.error);
-            })
-            .done();
+        upcomingClass.allocate().then(function () {
+            res.json(upcomingClass.get());
+        }, function () {
+            res.status(500).send(upcomingClass.error);
+        });
        
         /*
         
@@ -108,6 +105,8 @@ module.exports = (function () {
         });
         
         */
+        
+        
     });
     
 })();

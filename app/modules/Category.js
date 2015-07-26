@@ -2,16 +2,31 @@ var Q               = require(LL_NODE_MODULES_DIR + 'q');
 
 var Database        = require(LL_MODULES_DIR + 'Database.js');
 
-var Category = (function () {
-	return {
-		getAll: CONTEXTPROMISE(getAll)
-	};
-	
-	function getAll(context, resolve, reject, notify) {
-		context.Database.query = {};
-		Database.Category.getAll(context)().then(resolve, reject);
-	}
-	
-})();
+module.exports = function (options) {
 
-module.exports = Category;
+	var self = new DEITYOBJECT({
+		error: null,
+		req: options.req
+	});
+	
+	self.retrieveAll = PROMISIFY(function (params, resolve, reject) {
+		
+		var record = new Database.CategoryRecord();
+
+		record.create(params).then(function () {
+			self.set(record.get());
+			resolve();
+		}, function () {
+			self.error = {
+				message: 'Unable to allocate upcoming class',
+				databaseError: record.error
+			};
+			reject();
+		});
+	});
+	
+	return self;
+	
+};
+
+

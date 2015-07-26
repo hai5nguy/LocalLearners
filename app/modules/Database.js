@@ -13,382 +13,366 @@ mongooseConnection.once('open', function() {
     console.log('Connected to mongolab, database ready.');
 });
 
-var Database = (function () {
-    return {
-        UpcomingClassRecord: UpcomingClassRecord,
-        Category: Category(),
-        Requested: Requested(),
-        Upcoming: Upcoming(),
-        User: User()
-    };
-})();
+module.exports = {
+    UpcomingClassRecord: UpcomingClassRecord
+    //Category: Category(),
+    //Requested: Requested(),
+    //Upcoming: Upcoming(),
+    //User: User()
+};
 
-function Record() {
-    var record = {
-        attributes: {}
-    };
-    
-    record.get = function (attributeName) {
-        if (!attributeName) {
-            return 
-        }
-    }
-    return record;
-}
 
-function UpcomingClassRecord(options) {
+function UpcomingClassRecord() {
     
+    var self = new DEITYOBJECT({
+        error: null
+    });
     
-    var record = new Record();
-    
-    
-    var defaultOptions = {};
-    
-    var record = {};
-    
-
-    
-    record.create = PROMISIFY(function (resolve, reject, notify) {
-        var model = new Models.UpcomingClass(_.extend(defaultOptions, options));
+    self.create = PROMISIFY(function (options, resolve, reject) {
         
-        model.save(function (error, newRecord, numberAffected) {
+        var model = new Models.UpcomingClass(_.extend({}, options));
+        
+        model.save(function (error, newModel, numberAffected) {
             if (!error) {
-                resolve(model);
+                self.set(newModel.toObject());
+                resolve();
             } else {
-                reject(error);
+                self.error = { message: 'Unable to create record' };
+                reject();
             }
         });
     });
     
-    return record;
+    return self;
 }
 
-function Category() {
-    return {
-        getAll: CONTEXTPROMISE(getAll)
-    };
-    
-    function getAll(context, resolve, reject, notify) {
-        Models.Category.find({}, function(error, categories) {
-            if (error) {
-                context.Error = {
-                    message: 'Unable to get all categories',
-                    database_error: error
-                };
-                reject();
-            } else {
-                context.Category.all = categories;
-                resolve();
-            }
-        });
-    }
-    
-}
 
-function Requested() {
-    return {
-        addInterestedUser: CONTEXTPROMISE(addInterestedUser),
-        removeInterestedUser: CONTEXTPROMISE(removeInterestedUser),
-        allocateNew: CONTEXTPROMISE(allocateNew),
-        get: CONTEXTPROMISE(get),
-        getAll: CONTEXTPROMISE(getAll),
-        populateRecord: CONTEXTPROMISE(populateRecord),
-        syncRecord: CONTEXTPROMISE(syncRecord),
-        update: CONTEXTPROMISE(update)
-    };
-    
-    function addInterestedUser(context, resolve, reject, notify) {
-        Database.Requested.syncRecord(context)().then(function () {
-            var interestedUsers = context.RequestedClass.record.interestedUsers;
-            var user = context.Authentication.user;
-            if (interestedUsers.indexOf(user._id) === -1) {
-                interestedUsers.push(user);
-            }
-            Database.Requested.syncRecord(context)().then(resolve, reject);
-        }, reject);
-    }
-    
-    function removeInterestedUser(context, resolve, reject, notify) {
-        Database.Requested.syncRecord(context)().then(function () {
-            var interestedUsers = context.RequestedClass.record.interestedUsers;
-            var user = context.Authentication.user;
-            var existingIndex = interestedUsers.indexOf(user._id);
-            if (existingIndex !== -1) {
-                interestedUsers.splice(existingIndex, 1);
-            }
-            Database.Requested.syncRecord(context)().then(resolve, reject);
-        }, reject);
-    }
-    
-    function allocateNew(context, resolve, reject, notify) {
-        var newRequest = new Models.RequestedClass(context.RequestedClass.newRequest);
-        newRequest.save(function(error, newRequest, numberAffected) {
-            if (!error) {
-                context.RequestedClass.record = newRequest.toObject();
-                resolve();
-            } else {
-                context.Error = {
-                    message: 'Unable to allocate new request',
-                    database_error: error
-                };
-                reject();
-            }
-        });
-    }
-    
-    //this is going to be phase out by populate
-    function get(context, resolve, reject, notify) {
-        var query = Models.RequestedClass.find(context.Database.query);
-        query.populate('category');
-        query.populate('requester', 'name meetupProfile.photo.thumb_link');
-        query.populate('interestedUsers', 'name meetupProfile.photo.thumb_link');
-        query.exec(function (error, requests) {
-            if (!error) {
-                context.RequestedClass.record = requests[0];
-                resolve();
-        	} else {
-                context.Error = {
-                    message: 'Unable to get requested class',
-                    database_error: error
-                };
-                reject();
-            }
-        });
-    }
-    
-    function getAll(context, resolve, reject, notify) {
-        var query = Models.RequestedClass.find(context.Database.query);
-        query.populate('category');
-        query.exec(function (error, requestedClasses) {
-            if (!error) {
-                context.RequestedClass.requestList = requestedClasses; 
-                resolve();
-            } else {
-                context.Error = {
-                    message: 'Error trying to get requested classes from database.',
-                    database_error: error
-                }; 
-                reject();
-            }
-        });
-    }
-    
-    function populateRecord(context, resolve, reject, notify) {
-        var query = Models.RequestedClass.find({ _id: context.RequestedClass.record._id });
-        query.populate('category');
-        query.populate('requester', 'name meetupProfile.photo.thumb_link');
-        query.populate('interestedUsers', 'name meetupProfile.photo.thumb_link');
-        query.exec(function (error, requests) {
-            if (!error) {
-                context.RequestedClass.record = requests[0];
-                resolve();
-        	} else {
-                context.Error = {
-                    message: 'Unable to populate requested class',
-                    database_error: error
-                };
-                reject();
-            }
-        });
-    }
-    
-    function syncRecord(context, resolve, reject, notify) {
-        var query = { _id: context.RequestedClass.record._id };
-        Models.RequestedClass.findOneAndUpdate(query, context.RequestedClass.record, function (error, updatedRequest) {
-            if (!error) {
-                context.RequestedClass.record = updatedRequest;
-                resolve();
-            } else {
-                context.Error = {
-                    message: "Error syncing requested class record",
-                    database_error: error
-                };
-                reject();
-            }
-        });
-    }
-    
-    //deprecated, use sync
-    function update(context, resolve, reject, notify) {
-         Models.RequestedClass.findOneAndUpdate(context.Database.query, context.Database.arg, function (error, updatedRequest) {
-            if (!error) {
-                context.RequestedClass.record = updatedRequest;
-                resolve();
-            } else {
-                context.Error = {
-                    message: 'Error updating requested class in Database',
-                    database_error: error
-                };
-                reject();
-            }
-        });
-    }
-    
-    
-    
-}
+//function Category() {
+//    return {
+//        getAll: CONTEXTPROMISE(getAll)
+//    };
+//    
+//    function getAll(context, resolve, reject, notify) {
+//        Models.Category.find({}, function(error, categories) {
+//            if (error) {
+//                context.Error = {
+//                    message: 'Unable to get all categories',
+//                    database_error: error
+//                };
+//                reject();
+//            } else {
+//                context.Category.all = categories;
+//                resolve();
+//            }
+//        });
+//    }
+//    
+//}
+//
+//function Requested() {
+//    return {
+//        addInterestedUser: CONTEXTPROMISE(addInterestedUser),
+//        removeInterestedUser: CONTEXTPROMISE(removeInterestedUser),
+//        allocateNew: CONTEXTPROMISE(allocateNew),
+//        get: CONTEXTPROMISE(get),
+//        getAll: CONTEXTPROMISE(getAll),
+//        populateRecord: CONTEXTPROMISE(populateRecord),
+//        syncRecord: CONTEXTPROMISE(syncRecord),
+//        update: CONTEXTPROMISE(update)
+//    };
+//    
+//    function addInterestedUser(context, resolve, reject, notify) {
+//        Database.Requested.syncRecord(context)().then(function () {
+//            var interestedUsers = context.RequestedClass.record.interestedUsers;
+//            var user = context.Authentication.user;
+//            if (interestedUsers.indexOf(user._id) === -1) {
+//                interestedUsers.push(user);
+//            }
+//            Database.Requested.syncRecord(context)().then(resolve, reject);
+//        }, reject);
+//    }
+//    
+//    function removeInterestedUser(context, resolve, reject, notify) {
+//        Database.Requested.syncRecord(context)().then(function () {
+//            var interestedUsers = context.RequestedClass.record.interestedUsers;
+//            var user = context.Authentication.user;
+//            var existingIndex = interestedUsers.indexOf(user._id);
+//            if (existingIndex !== -1) {
+//                interestedUsers.splice(existingIndex, 1);
+//            }
+//            Database.Requested.syncRecord(context)().then(resolve, reject);
+//        }, reject);
+//    }
+//    
+//    function allocateNew(context, resolve, reject, notify) {
+//        var newRequest = new Models.RequestedClass(context.RequestedClass.newRequest);
+//        newRequest.save(function(error, newRequest, numberAffected) {
+//            if (!error) {
+//                context.RequestedClass.record = newRequest.toObject();
+//                resolve();
+//            } else {
+//                context.Error = {
+//                    message: 'Unable to allocate new request',
+//                    database_error: error
+//                };
+//                reject();
+//            }
+//        });
+//    }
+//    
+//    //this is going to be phase out by populate
+//    function get(context, resolve, reject, notify) {
+//        var query = Models.RequestedClass.find(context.Database.query);
+//        query.populate('category');
+//        query.populate('requester', 'name meetupProfile.photo.thumb_link');
+//        query.populate('interestedUsers', 'name meetupProfile.photo.thumb_link');
+//        query.exec(function (error, requests) {
+//            if (!error) {
+//                context.RequestedClass.record = requests[0];
+//                resolve();
+//        	} else {
+//                context.Error = {
+//                    message: 'Unable to get requested class',
+//                    database_error: error
+//                };
+//                reject();
+//            }
+//        });
+//    }
+//    
+//    function getAll(context, resolve, reject, notify) {
+//        var query = Models.RequestedClass.find(context.Database.query);
+//        query.populate('category');
+//        query.exec(function (error, requestedClasses) {
+//            if (!error) {
+//                context.RequestedClass.requestList = requestedClasses; 
+//                resolve();
+//            } else {
+//                context.Error = {
+//                    message: 'Error trying to get requested classes from database.',
+//                    database_error: error
+//                }; 
+//                reject();
+//            }
+//        });
+//    }
+//    
+//    function populateRecord(context, resolve, reject, notify) {
+//        var query = Models.RequestedClass.find({ _id: context.RequestedClass.record._id });
+//        query.populate('category');
+//        query.populate('requester', 'name meetupProfile.photo.thumb_link');
+//        query.populate('interestedUsers', 'name meetupProfile.photo.thumb_link');
+//        query.exec(function (error, requests) {
+//            if (!error) {
+//                context.RequestedClass.record = requests[0];
+//                resolve();
+//        	} else {
+//                context.Error = {
+//                    message: 'Unable to populate requested class',
+//                    database_error: error
+//                };
+//                reject();
+//            }
+//        });
+//    }
+//    
+//    function syncRecord(context, resolve, reject, notify) {
+//        var query = { _id: context.RequestedClass.record._id };
+//        Models.RequestedClass.findOneAndUpdate(query, context.RequestedClass.record, function (error, updatedRequest) {
+//            if (!error) {
+//                context.RequestedClass.record = updatedRequest;
+//                resolve();
+//            } else {
+//                context.Error = {
+//                    message: "Error syncing requested class record",
+//                    database_error: error
+//                };
+//                reject();
+//            }
+//        });
+//    }
+//    
+//    //deprecated, use sync
+//    function update(context, resolve, reject, notify) {
+//         Models.RequestedClass.findOneAndUpdate(context.Database.query, context.Database.arg, function (error, updatedRequest) {
+//            if (!error) {
+//                context.RequestedClass.record = updatedRequest;
+//                resolve();
+//            } else {
+//                context.Error = {
+//                    message: 'Error updating requested class in Database',
+//                    database_error: error
+//                };
+//                reject();
+//            }
+//        });
+//    }
+//    
+//    
+//    
+//}
+//
+//function Upcoming() {
+//    return {
+//        allocateNew: CONTEXTPROMISE(allocateNew),
+//        getAll: CONTEXTPROMISE(getAll),
+//        update: CONTEXTPROMISE(update)
+//    }
+//    
+//    function allocateNew(context, resolve, reject, notify) {
+//        var newClass = context.get('upcomingclass.new');
+//        var model = new Models.UpcomingClass({
+//            category: newClass.category,
+//            meetup: {
+//                event: {
+//                    name: newClass.name,
+//                    time: newClass.time
+//                }
+//            },
+//            teachers: newClass.teachers
+//        });
+//        model.save(function(error, newClass, numberAffected) {
+//            if (!error) {
+//                context.get('upcomingclass.allocated', newClass);
+//                resolve();
+//            } else {
+//                context.set('error', {
+//                    message: 'Unable to allocate new upcoming class',
+//                    database_error: error
+//                });
+//                reject();
+//            }
+//        });
+//    }
+//    
+//    function getAll(context, resolve, reject, notify) {
+//        
+//        var query = Models.UpcomingClass.find(context.get('database.query'));
+//        query.populate('category');
+//        query.populate('teachers', 'name');
+//        query.exec(function (error, classes) {
+//            if (!error) {
+//                context.set('upcomingclass.list', classes);
+//                resolve();
+//        	} else {
+//                context.set('error', {
+//                    message: 'Unable to get upcoming classes',
+//                    database_error: error
+//                });
+//                reject();
+//            }
+//        });
+//        
+//    }
+//    
+//    function update(context, resolve, reject, notify) {
+//        Models.UpcomingClass.findOneAndUpdate(context.Database.query, context.Database.arg, function (error, updatedClass) {
+//            if (!error) {
+//                context.UpcomingClass.savedClass = updatedClass;
+//                resolve();
+//            } else {
+//                context.Error = {
+//                    message: 'Error updating upcoming class in Database',
+//                    database_error: error
+//                };
+//                reject();
+//            }
+//            debug(FUNCTIONALITY.Database_Upcoming_update, 'Upcoming.update', { context: context, error: error, updatedClass: updatedClass });
+//        });
+//    }
+//
+//    
+//}
+//
+//function User() {
+//    return {
+//        get: CONTEXTPROMISE(get),
+//        insert: CONTEXTPROMISE(insert),
+//        sync: CONTEXTPROMISE(sync),
+//        update: CONTEXTPROMISE(update),
+//        upsert: CONTEXTPROMISE(upsert)
+//    };
+//
+//    function get(context, resolve, reject, notify) {
+//        Models.User.findOne(context.Database.query, function(error, user) {
+//            if (error) { 
+//                context.Error = {
+//                    message: 'Error querying user',
+//                    database_error: error
+//                };
+//                reject();    
+//            } else {
+//                context.Authentication.user = user;
+//                resolve();
+//            }
+//        });
+//    }
+//    
+//    function insert(context, resolve, reject, notify) {
+//        var newUser = new Models.User(context.Authentication.user);
+//        newUser.save(function(error, newUser, numberAffected) {
+//            if (error) {
+//                context.Error = {
+//                    message: 'Unable insert user to database',
+//                    db_Error: error
+//                };
+//                reject();
+//            } else {
+//                context.Authentication.user = newUser;
+//                resolve();
+//            }
+//            debug(FUNCTIONALITY.Database_User_insert, 'User.insert', { error: error, newUser: newUser.toObject(), numberAfftected: numberAffected });
+//        });
+//    }
+//    
+//    function sync(context, resolve, reject, notify) {
+//        Models.User.findOneAndUpdate({ _id: context.Authentication.user._id }, context.Authentication.user, function(error, user) {
+//            if (!error) {
+//                context.Authentication.user = user;
+//                resolve();
+//            } else { 
+//                context.Error = {
+//                    message: 'Error syncing user',
+//                    database_error: error
+//                };
+//                reject();    
+//            } 
+//        });
+//    }
+//    
+//    function upsert(context, resolve, reject, notify) {
+//        debug(FUNCTIONALITY.Database_User_upsert, 'User.upsert', { context: context });
+//        Models.User.findOne(context.Database.query, function (error, foundUser) {
+//            if (foundUser) {
+//                Database.User.update(context)().then(resolve, reject);
+//            } else {
+//                Database.User.insert(context)().then(resolve, reject);
+//            }
+//        });
+//    }
+//
+//    function update(context, resolve, reject, notify) {
+//        var updatedUser = {
+//            meetupProfile: context.Authentication.user.meetupProfile
+//        };
+//        Models.User.update(context.Database.query, { $set: updatedUser }, function (error, numberAffected) {
+//            debug(FUNCTIONALITY.Database_User_update, 'update', { context: context, error: error, numberAffected: numberAffected });
+//            if (error) {
+//                context.Error = {
+//                    message: 'Error updating user to database',
+//                    db_Error: error
+//                }
+//                reject(context);
+//            } else {
+//                context.Database.query = { 'meetupProfile.id': context.Authentication.user.meetupProfile.id };
+//                Database.User.get(context)().then(resolve, reject);
+//            }
+//        });
+//    }
+//
+//}
 
-function Upcoming() {
-    return {
-        allocateNew: CONTEXTPROMISE(allocateNew),
-        getAll: CONTEXTPROMISE(getAll),
-        update: CONTEXTPROMISE(update)
-    }
-    
-    function allocateNew(context, resolve, reject, notify) {
-        var newClass = context.get('upcomingclass.new');
-        var model = new Models.UpcomingClass({
-            category: newClass.category,
-            meetup: {
-                event: {
-                    name: newClass.name,
-                    time: newClass.time
-                }
-            },
-            teachers: newClass.teachers
-        });
-        model.save(function(error, newClass, numberAffected) {
-            if (!error) {
-                context.get('upcomingclass.allocated', newClass);
-                resolve();
-            } else {
-                context.set('error', {
-                    message: 'Unable to allocate new upcoming class',
-                    database_error: error
-                });
-                reject();
-            }
-        });
-    }
-    
-    function getAll(context, resolve, reject, notify) {
-        
-        var query = Models.UpcomingClass.find(context.get('database.query'));
-        query.populate('category');
-        query.populate('teachers', 'name');
-        query.exec(function (error, classes) {
-            if (!error) {
-                context.set('upcomingclass.list', classes);
-                resolve();
-        	} else {
-                context.set('error', {
-                    message: 'Unable to get upcoming classes',
-                    database_error: error
-                });
-                reject();
-            }
-        });
-        
-    }
-    
-    function update(context, resolve, reject, notify) {
-        Models.UpcomingClass.findOneAndUpdate(context.Database.query, context.Database.arg, function (error, updatedClass) {
-            if (!error) {
-                context.UpcomingClass.savedClass = updatedClass;
-                resolve();
-            } else {
-                context.Error = {
-                    message: 'Error updating upcoming class in Database',
-                    database_error: error
-                };
-                reject();
-            }
-            debug(FUNCTIONALITY.Database_Upcoming_update, 'Upcoming.update', { context: context, error: error, updatedClass: updatedClass });
-        });
-    }
-
-    
-}
-
-function User() {
-    return {
-        get: CONTEXTPROMISE(get),
-        insert: CONTEXTPROMISE(insert),
-        sync: CONTEXTPROMISE(sync),
-        update: CONTEXTPROMISE(update),
-        upsert: CONTEXTPROMISE(upsert)
-    };
-
-    function get(context, resolve, reject, notify) {
-        Models.User.findOne(context.Database.query, function(error, user) {
-            if (error) { 
-                context.Error = {
-                    message: 'Error querying user',
-                    database_error: error
-                };
-                reject();    
-            } else {
-                context.Authentication.user = user;
-                resolve();
-            }
-        });
-    }
-    
-    function insert(context, resolve, reject, notify) {
-        var newUser = new Models.User(context.Authentication.user);
-        newUser.save(function(error, newUser, numberAffected) {
-            if (error) {
-                context.Error = {
-                    message: 'Unable insert user to database',
-                    db_Error: error
-                };
-                reject();
-            } else {
-                context.Authentication.user = newUser;
-                resolve();
-            }
-            debug(FUNCTIONALITY.Database_User_insert, 'User.insert', { error: error, newUser: newUser.toObject(), numberAfftected: numberAffected });
-        });
-    }
-    
-    function sync(context, resolve, reject, notify) {
-        Models.User.findOneAndUpdate({ _id: context.Authentication.user._id }, context.Authentication.user, function(error, user) {
-            if (!error) {
-                context.Authentication.user = user;
-                resolve();
-            } else { 
-                context.Error = {
-                    message: 'Error syncing user',
-                    database_error: error
-                };
-                reject();    
-            } 
-        });
-    }
-    
-    function upsert(context, resolve, reject, notify) {
-        debug(FUNCTIONALITY.Database_User_upsert, 'User.upsert', { context: context });
-        Models.User.findOne(context.Database.query, function (error, foundUser) {
-            if (foundUser) {
-                Database.User.update(context)().then(resolve, reject);
-            } else {
-                Database.User.insert(context)().then(resolve, reject);
-            }
-        });
-    }
-
-    function update(context, resolve, reject, notify) {
-        var updatedUser = {
-            meetupProfile: context.Authentication.user.meetupProfile
-        };
-        Models.User.update(context.Database.query, { $set: updatedUser }, function (error, numberAffected) {
-            debug(FUNCTIONALITY.Database_User_update, 'update', { context: context, error: error, numberAffected: numberAffected });
-            if (error) {
-                context.Error = {
-                    message: 'Error updating user to database',
-                    db_Error: error
-                }
-                reject(context);
-            } else {
-                context.Database.query = { 'meetupProfile.id': context.Authentication.user.meetupProfile.id };
-                Database.User.get(context)().then(resolve, reject);
-            }
-        });
-    }
-
-}
-
-module.exports = Database;
+//module.exports = Database;
 
 
 

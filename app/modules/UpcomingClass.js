@@ -8,20 +8,24 @@ var Database    = require(LL_MODULES_DIR + 'Database.js');
 module.exports = function (options) {
     //console.assert(options.req !== undefined, 'UpcomingClass requires the request object');
     
-    var self = {
-        attributes: {},
-        get: function (attributeName) { return this.attributes[attributeName]; },
-        set: function (attributeName, value) { this.attributes[attributeName] = value; }
-    };
+    var self = new DEITYOBJECT({
+        error: null,
+        req: options.req
+    });
     
-    self.allocate = PROMISIFY(function (resolve, reject, notify) {
+    self.allocate = PROMISIFY(function (params, resolve, reject) {
         
-        var record = new Database.UpcomingClassRecord({});
+        var record = new Database.UpcomingClassRecord();
         
-        record.create().then(function () {
-            resolve(record);
-        }, function (error) {
-            reject(error);
+        record.create(params).then(function () {
+            self.set(record.get());
+            resolve();
+        }, function () {
+            self.error = {
+                message: 'Unable to allocate upcoming class',
+                databaseError: record.error
+            };
+            reject();
         });
         
     });

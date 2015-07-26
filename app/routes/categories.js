@@ -1,15 +1,31 @@
 var Q           = require(LL_NODE_MODULES_DIR + 'q');
 
-//var Database    = require(LL_MODULES_DIR + 'Database.js');
-var Category    = require(LL_MODULES_DIR + 'Category.js');
+var Category            = require(LL_MODULES_DIR + 'Category.js');
+var CategoryCollection  = require(LL_MODULES_DIR + 'CategoryCollection.js');
 
 module.exports = (function () {
     THE_APP.get('/api/category/all', function (req, res) {
-        var context = new CONTEXT();
-        Category.getAll(context)().then(function() {
-            res.json(context.Category.all);
-        }, function () {
-            res.status(500).send(context.Error);
+
+        
+        var category = Category({
+            req: req
         });
+
+        category.retrieve().then(function () {
+            res.json(category.get());
+        }, function () {
+            res.status(500).send(category.error);
+        });
+
+
+
+
+
+        //var context = new CONTEXT();
+        //Category.getAll(context)().then(function() {
+        //    res.json(context.Category.all);
+        //}, function () {
+        //    res.status(500).send(context.Error);
+        //});
     });
 })();
