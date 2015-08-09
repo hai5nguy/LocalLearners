@@ -16,4 +16,18 @@ module.exports = (function () {
         });
 
     });
+    
+    THE_APP.get('/api/categories', function (req, res) {
+        var categories = new Category.Collection({
+            req: req
+        });
+        
+        categories.load().then(function (categories) {
+            res.json(categories.get());
+        }, function () {
+            res.status(500).send(categories.error);
+        });
+        
+    });
+    
 })();

@@ -15,7 +15,28 @@ mongooseConnection.once('open', function() {
 
 module.exports = {
     CategoryRecord: CategoryRecord,
-    UpcomingClassRecord: UpcomingClassRecord
+    UpcomingClassRecord: UpcomingClassRecord,
+    read: PROMISIFY(function (params, resolve, reject) {
+        if (params.collectionName === 'Categories') {
+            
+        Models.Category.find(query, function({}, categories) {
+            if (!error) {
+                self.set(categories);
+                resolve();
+            } else {
+                self.error = {
+                    message: 'Unable to retrieve all categories',
+                    database_error: error
+                };
+                reject();
+            }
+            
+        });
+        
+            Models.Category
+            
+        }
+    }
     //Category: Category(),
     //Requested: Requested(),
     //Upcoming: Upcoming(),
