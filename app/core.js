@@ -132,3 +132,32 @@ global.RECORDSET = function (initialData) {
         }
     }
 };
+
+global.BASECOLLECTION = function (initialData) {
+    return {
+        _items: initialData || [],
+        get: function (id) {
+            if (id === undefined) {
+                return this._items;
+            } else {
+                return _.findWhere(this._items, { _id: id });
+            }
+        },
+        // set: function (idOrItems, item) {
+        //     if (arguments.length === 1) {
+        //         this._items = idOrItems;
+        //     } else {
+        //         var match = _.findWhere(this._items, { id: idOrItems });
+        //         if (match) {
+        //             match = item;
+        //         }
+        //     }
+        // },
+        add: function (items) {
+            this._items.push(items);
+        },
+        remove: function (id) {
+            this._items = _.without(this._items, _.findWhere(this._items, { _id: id }));
+        }
+    }
+};
