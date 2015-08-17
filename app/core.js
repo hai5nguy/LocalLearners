@@ -104,6 +104,28 @@ global.RECORD = function(initialData) {
     }
 };
 
+global.BASEITEM = function(initialData) {
+    return {
+        _data: initialData || {},
+        get: function (name) {
+            if (!name) {
+                return this._data;
+            } else {
+                return this._data[name];
+            }
+        },
+        set: function (nameOrObject, value) {
+            if (arguments.length === 1) {
+                this._data = nameOrObject;
+            } else {
+                this._data[nameOrObject] = value;
+            }
+        }
+    }
+};
+
+
+
 global.RECORDSET = function (initialData) {
     return {
         _records: initialData || [],
@@ -154,7 +176,7 @@ global.BASECOLLECTION = function (initialData) {
         //     }
         // },
         add: function (items) {
-            this._items.push(items);
+            this._items = this._items.concat(items);
         },
         remove: function (id) {
             this._items = _.without(this._items, _.findWhere(this._items, { _id: id }));

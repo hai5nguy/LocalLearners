@@ -2,36 +2,122 @@ var Q           = require(LL_NODE_MODULES_DIR + 'q');
 //var uuid = require('../../node_modules/node-uuid');
 
 var Database    = require(LL_MODULES_DIR + 'Database.js');
+
 //var MeetupApi   = require(LL_MODULES_DIR + 'MeetupApi.js');
 
 
-module.exports = function (options) {
-    //console.assert(options.req !== undefined, 'UpcomingClass requires the request object');
+// module.exports = function (options) {
+//     //console.assert(options.req !== undefined, 'UpcomingClass requires the request object');
     
-    var self = new DEITYOBJECT({
-        error: null,
-        req: options.req
-    });
+//     var self = new DEITYOBJECT({
+//         error: null,
+//         req: options.req
+//     });
     
-    self.allocate = PROMISIFY(function (params, resolve, reject) {
+//     self.allocate = PROMISIFY(function (params, resolve, reject) {
         
-        var record = new Database.UpcomingClassRecord();
+//         var record = new Database.UpcomingClassRecord();
         
-        record.create(params).then(function () {
-            self.set(record.get());
+//         record.create(params).then(function () {
+//             self.set(record.get());
+//             resolve();
+//         }, function () {
+//             self.error = {
+//                 message: 'Unable to allocate upcoming class',
+//                 databaseError: record.error
+//             };
+//             reject();
+//         });
+        
+//     });
+    
+//     return self;
+// };
+
+
+module.exports = {
+    Item: Item,
+    Collection: Collection
+};
+
+function Item (options) {
+
+    var itemSelf = new BASEITEM();
+
+    itemSelf.error = null;
+    itemSelf.req = options.req;
+    itemSelf.allocate = PROMISIFY(allocate);
+    itemSelf.build = PROMISIFY(build);
+    itemSelf.save = PROMISIFY(save);
+
+    function allocate (params, resolve, reject) {
+        
+        Database.UpcomingClass.allocate({ newClassInfo: params.newClassInfo }).then(function (upcomingClass) {
+            itemSelf.set(upcomingClass);
             resolve();
-        }, function () {
-            self.error = {
-                message: 'Unable to allocate upcoming class',
-                databaseError: record.error
-            };
+        }, function (error) {
+            itemSelf.error = error;
             reject();
         });
-        
+
+    }
+
+    function build (params, resolve, reject) {
+
+        var newMeetupEvent = params.newMeetupEvent;
+
+        MeetupApi.post(meetupEventInfo).then(function (meetupEvent) {
+            itemSelf.set('meetupEvent', meetupEvent);
+
+            console.log(itemSelf);
+            
+            //itemSelf.save();
+            resolve();
+        }, function (error) {
+            console.error('error posting to meetup', itemSelf, error);
+            reject();
+        });
+
+    }
+
+    function save (params, resolve, reject) {
+
+        Database.UpcomingClass.save(itemSelf).then(function (savedUpcomingClass) {
+            resolve();
+        }, function (error) {
+            itemSelf.error = error;
+            reject();
+        });
+
+    }
+
+    return itemSelf;
+}
+
+function Collection (options) {
+
+    var collectionSelf = new BASECOLLECTION();
+
+    collectionSelf.error = null;
+    collectionSelf.req = options.req;
+
+    collectionSelf.load = PROMISIFY(function (options, resolve, reject) {
+            
+            Database.read({ collectionName: 'UpcomingClasses' }).then(function (upcomingClasses) {
+                collectionSelf.add(upcomingClasses);
+                resolve();
+            }, function (error) {
+                collectionSelf.error = error;
+                reject();
+            });
     });
-    
-    return self;
-};
+        
+    return collectionSelf;
+
+}
+
+
+
 
 
 //

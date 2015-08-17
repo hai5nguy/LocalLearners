@@ -4,9 +4,9 @@ module.exports = function (app) {
     //authentication related routes are in authentication.js
     
     require('./profile.js');
-    // require('./upcoming.js');
-    // require('./requested.js');
-    require('./categories.js');
+    require('./upcoming.js');
+    require('./requested.js');
+    require('./category.js');
     require('./testing.js')(app);
     require('./fakemeetupapi.js')(app);
 

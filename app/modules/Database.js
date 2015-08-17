@@ -16,29 +16,72 @@ mongooseConnection.once('open', function() {
 module.exports = {
     CategoryRecord: CategoryRecord,
     UpcomingClassRecord: UpcomingClassRecord,
-    read: PROMISIFY(read)
+    read: PROMISIFY(read),
+    UpcomingClass: UpcomingClass()
 }
 
 function read(params, resolve, reject) {
     if (params.collectionName === 'Categories') {
         readCategories(resolve, reject);
+    } else if (params.collectionName === 'UpcomingClasses') {
+        readUpcomingClasses(resolve, reject);
+    }
+
+    function readCategories(resolve, reject) {
+        Models.Category.find().lean().exec(function (error, categories) {
+            if (!error) {
+                resolve(categories);
+            } else {
+                reject({
+                    message: 'Unable to read categories from database.',
+                    databaseError: error
+                });
+            }
+        });
+    }
+
+    function readUpcomingClasses(resolve, reject) {
+        Models.UpcomingClass.find().lean().exec(function (error, upcomingClasses) {
+            if (!error) {
+                resolve(upcomingClasses);
+            } else {
+                reject({
+                    message: 'Unable to read upcoming classes from database.',
+                    databaseError: error
+                });
+            }
+        });
     }
 }
 
-function readCategories(resolve, reject) {
-    Models.Category.find().lean().exec(function (error, categories) {
-        if (!error) {
-            d(categories);
-            resolve(categories);
-        } else {
-            reject({
-                message: 'Unable to retrieve all categories',
-                database_error: error
-            });
-        }
-    });
 
+function UpcomingClass() {
+    return {
+        allocate: PROMISIFY(allocate)
+    }
+
+    function allocate(params, resolve, reject) {
+
+       var newUpcomingClass = Models.UpcomingClass(params.newClassInfo);
+
+       newUpcomingClass.save(function(error, newClass, numberAffected) {
+           if (!error) {
+               resolve(newClass.toObject());
+           } else {
+               reject({
+                   message: 'Unable to allocate new upcoming class',
+                   databaseError: error
+               });
+           }
+       });
+    }
 }
+
+
+
+
+
+
 
 function UpcomingClassRecord() {
     

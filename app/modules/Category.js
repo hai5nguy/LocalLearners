@@ -13,24 +13,6 @@ function Collection (options) {
     collectionSelf.error = null;
     collectionSelf.req = options.req;
 
-    // collectionSelf.retrieveAll = PROMISIFY(function (params, resolve, reject) {
-        
-    //         var record = new Database.CategoryRecord();
-                
-    //             record.retrieveAll(params).then(function () {
-    //                 collectionSelf.set(record.get());
-    //                 resolve();
-    //             }, function () {
-    //                 collectionSelf.error = {
-    //                     message: 'Unable to retrieve all categories',
-    //                     databaseError: record.error
-    //                 };
-    //                 reject();
-    //             });
-        
-    // });
-    
-    
     collectionSelf.load = PROMISIFY(function (params, resolve, reject) {
             
             Database.read({ collectionName: 'Categories' }).then(function (categories) {

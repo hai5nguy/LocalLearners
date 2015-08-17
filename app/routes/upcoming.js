@@ -12,14 +12,19 @@ module.exports = (function () {
     var app = THE_APP;
 
     app.get('/api/upcoming', function (req, res) {
-        var context = new CONTEXT();
-        UpcomingClass.getAll(context)().then(function () {
-            res.json(context.get('upcomingclass.list'));
-        }, function () {
-            res.status(500).send(context.get('error'));
+
+        var upcomingClasses = new UpcomingClass.Collection({
+            req: req
         });
-        
+
+        upcomingClasses.load().then(function () {
+            res.json(upcomingClasses.get());
+        }, function () {
+            res.status(500).send(upcomingClasses.error);
+        });
+
     });
+
 
     app.get('/api/upcoming/:id', function (req, res) {
         
@@ -39,12 +44,24 @@ module.exports = (function () {
     //app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
     app.post('/api/upcoming', function (req, res) {
         
-        var upcomingClass = new UpcomingClass({
+        var upcomingClass = new UpcomingClass.Item({
             req: req
         });
+
+        var newClassInfo = {
+            category: req.body.category
+        };
+
+        var newMeetupEvent = {
+            name: req.body.name,
+            time: req.body.time
+        };
+
+        d(newClassInfo);
         
-        upcomingClass.allocate().then(function () {
+        upcomingClass.allocate({ newClassInfo: newClassInfo }).then(function () {
             res.json(upcomingClass.get());
+            upcomingClass.build({ newMeetupEvent: newMeetupEvent });
         }, function () {
             res.status(500).send(upcomingClass.error);
         });
