@@ -6,7 +6,7 @@ var cookieParser    = require(LL_NODE_MODULES_DIR + 'cookie-parser');
 var bodyParser      = require(LL_NODE_MODULES_DIR + 'body-parser');
 var MongoStore      = require(LL_NODE_MODULES_DIR + 'connect-mongo')(session);
 
-var MeetupApi       = require(LL_MODULES_DIR + 'MeetupApi.js');
+var MeetupApi       = require(LL_MODULES_DIR + 'Meetup.js');
 var Database        = require(LL_MODULES_DIR + 'Database.js');
 
 var Authentication = (function () {

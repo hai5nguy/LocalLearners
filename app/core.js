@@ -84,26 +84,6 @@ global.DEITYOBJECT = function(initialData) {
 };
 
 
-global.RECORD = function(initialData) {
-    return {
-        _data: initialData || {},
-        get: function (name) {
-            if (!name) {
-                return this._data;
-            } else {
-                return this._data[name];
-            }
-        },
-        set: function (nameOrObject, value) {
-            if (typeof nameOrObject === 'object') {
-                this._data = nameOrObject;
-            } else {
-                this._data[nameOrObject] = value;
-            }
-        }
-    }
-};
-
 global.BASEITEM = function(initialData) {
     return {
         _data: initialData || {},
@@ -124,36 +104,6 @@ global.BASEITEM = function(initialData) {
     }
 };
 
-
-
-global.RECORDSET = function (initialData) {
-    return {
-        _records: initialData || [],
-        get: function (id) {
-            if (id === undefined) {
-                return this._records;
-            } else {
-                return _.findWhere(this._records, { _id: id });
-            }
-        },
-        set: function (idOrRecords, record) {
-            if (arguments.length === 1) {
-                this._records = idOrRecords;
-            } else {
-                var match = _.findWhere(this._records, { _id: idOrRecords });
-                if (match) {
-                    match = record;
-                }
-            }
-        },
-        add: function (record) {
-            this._records.push(record);
-        },
-        remove: function (id) {
-            this._records = _.without(this._records, _.findWhere(this._records, { _id: id }));
-        }
-    }
-};
 
 global.BASECOLLECTION = function (initialData) {
     return {

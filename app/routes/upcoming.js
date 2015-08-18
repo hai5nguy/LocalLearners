@@ -4,7 +4,7 @@ var uuid            = require(LL_NODE_MODULES_DIR + 'node-uuid');
 
 //var Database        = require(LL_MODULES_DIR + 'Database.js');
 var Authentication  = require(LL_MODULES_DIR + 'Authentication.js');
-var MeetupApi       = require(LL_MODULES_DIR + 'MeetupApi.js');
+// var MeetupApi       = require(LL_MODULES_DIR + 'MeetupApi.js');
 var UpcomingClass   = require(LL_MODULES_DIR + 'UpcomingClass.js');
 
 

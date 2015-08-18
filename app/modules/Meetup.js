@@ -7,72 +7,110 @@ var MeetupAdministrator     = require(LL_MODULES_DIR + 'MeetupAdministrator.js')
 var _localLearnersGroupId = 18049722;  //todo: move to environmentals, maybe not??
 var _localLearnersGroupUrlName = 'locallearners';
 
-var MeetupApi = (function () {
-    return {
-        Event: Event(),
-        Profile: Profile()
-    };
-})();
-module.exports = MeetupApi;
+var Meetup = {
+    Event: Event(),
+    Profile: Profile()
+}
+
+module.exports = Meetup;
 
 function Event() {
     return {
-        post: CONTEXTPROMISE(post)
+        Item: Item,
+        Collection: Collection
     }
-    
-    function post(context, resolve, reject, notify) {
-        
-        MeetupApi.Profile.ensureOrganizer(context)().then(function() {
+
+    function Item() {
+        var eventSelf = BASEITEM();
+
+        eventSelf.error = null;
+        eventSelf.req = params.req;
+
+        eventSelf.post = PROMISIFY(post);
+
+        return eventSelf;
+
+
+        function post(params, resolve, reject) {
+
+            var userProfile = new Meetup.Profile.Item({ req: params.req });
+
+            userProfile.ensureOrganizerStatus().then(function () {
+
+            }, function () {
+                
+            })
+
             
-            var event = context.UpcomingClass.record.meetup.event;
-            
-            context.RestService = {
-                url: MEETUP_API_ENDPOINT + '/event',
-                args: {
-                    data: (LL_ENVIRONMENT === 'development') ? { user: context.Authentication.user } : {},
-                    parameters: {
-                        group_id: _localLearnersGroupId,
-                        group_urlname: _localLearnersGroupUrlName,
-                        name: event.name,
-                        time: new Date(event.time).getTime()
-                    },
-                    headers: {
-                        Authorization: 'Bearer ' + context.Authentication.user.accessToken,
-                        'Content-Type': 'application/json'
+            MeetupApi.Profile.ensureOrganizer(context)().then(function() {
+                
+                var event = context.UpcomingClass.record.meetup.event;
+                
+                context.RestService = {
+                    url: MEETUP_API_ENDPOINT + '/event',
+                    args: {
+                        data: (LL_ENVIRONMENT === 'development') ? { user: context.Authentication.user } : {},
+                        parameters: {
+                            group_id: _localLearnersGroupId,
+                            group_urlname: _localLearnersGroupUrlName,
+                            name: event.name,
+                            time: new Date(event.time).getTime()
+                        },
+                        headers: {
+                            Authorization: 'Bearer ' + context.Authentication.user.accessToken,
+                            'Content-Type': 'application/json'
+                        }
                     }
-                }
-            };
-            
-            RestService.post(context)().then(function () {
-                var createdEvent = context.RestService.result;
-                if (createdEvent.problem) {
-                    context.Error = {
-                        message: 'Error creating event on meetup',
-                        createdEvent: createdEvent
-                    };
-                    reject();
-                } else {
-                    context.UpcomingClass.record.meetup.event = event;
-                    resolve();
-                }
+                };
+                
+                RestService.post(context)().then(function () {
+                    var createdEvent = context.RestService.result;
+                    if (createdEvent.problem) {
+                        context.Error = {
+                            message: 'Error creating event on meetup',
+                            createdEvent: createdEvent
+                        };
+                        reject();
+                    } else {
+                        context.UpcomingClass.record.meetup.event = event;
+                        resolve();
+                    }
+                    
+                }, reject);
                 
             }, reject);
-            
-        }, reject);
-            
                 
-    } //post
-    
-} //Event
+                    
+        } //post
+
+
+
+    }
+
+    function Collection() {
+
+    }
+}
 
 
 function Profile() {
     return {
-        ensureOrganizer: CONTEXTPROMISE(ensureOrganizer),
-        get: CONTEXTPROMISE(get),
-        getRole: CONTEXTPROMISE(getRole),
-        promoteUser: CONTEXTPROMISE(promoteUser)
-    };
+        Item: Item,
+        Collection: Collection
+
+        // ensureOrganizer: CONTEXTPROMISE(ensureOrganizer),
+        // get: CONTEXTPROMISE(get),
+        // getRole: CONTEXTPROMISE(getRole),
+        // promoteUser: CONTEXTPROMISE(promoteUser)
+    }
+
+    function Item(params) {
+
+    }
+
+    function Collection(params) {
+
+    }
     
     function ensureOrganizer(context, resolve, reject, notify) {
         

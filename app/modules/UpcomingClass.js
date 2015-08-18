@@ -1,9 +1,7 @@
 var Q           = require(LL_NODE_MODULES_DIR + 'q');
-//var uuid = require('../../node_modules/node-uuid');
-
 var Database    = require(LL_MODULES_DIR + 'Database.js');
 
-//var MeetupApi   = require(LL_MODULES_DIR + 'MeetupApi.js');
+var MeetupApi   = require(LL_MODULES_DIR + 'Meetup.js');
 
 
 // module.exports = function (options) {
@@ -49,6 +47,7 @@ function Item (options) {
     itemSelf.allocate = PROMISIFY(allocate);
     itemSelf.build = PROMISIFY(build);
     itemSelf.save = PROMISIFY(save);
+    
 
     function allocate (params, resolve, reject) {
         
@@ -66,7 +65,7 @@ function Item (options) {
 
         var newMeetupEvent = params.newMeetupEvent;
 
-        MeetupApi.post(meetupEventInfo).then(function (meetupEvent) {
+        MeetupApi.post(newMeetupEvent).then(function (meetupEvent) {
             itemSelf.set('meetupEvent', meetupEvent);
 
             console.log(itemSelf);
