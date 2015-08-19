@@ -1,49 +1,20 @@
 var Q           = require(LL_NODE_MODULES_DIR + 'q');
-var Database    = require(LL_MODULES_DIR + 'Database.js');
 
+var Database    = require(LL_MODULES_DIR + 'Database.js');
 var MeetupApi   = require(LL_MODULES_DIR + 'Meetup.js');
 
+/*
+    req: req,
+    name: req.body.name,
+    category: req.body.category,
+    time: req.body.time
+ */
 
-// module.exports = function (options) {
-//     //console.assert(options.req !== undefined, 'UpcomingClass requires the request object');
-    
-//     var self = new DEITYOBJECT({
-//         error: null,
-//         req: options.req
-//     });
-    
-//     self.allocate = PROMISIFY(function (params, resolve, reject) {
-        
-//         var record = new Database.UpcomingClassRecord();
-        
-//         record.create(params).then(function () {
-//             self.set(record.get());
-//             resolve();
-//         }, function () {
-//             self.error = {
-//                 message: 'Unable to allocate upcoming class',
-//                 databaseError: record.error
-//             };
-//             reject();
-//         });
-        
-//     });
-    
-//     return self;
-// };
+module.exports = function (params) {
+    var upcomingClassSelf       = new BASEMODULE(params.initialData, parms.initialItems);
 
-
-module.exports = {
-    Item: Item,
-    Collection: Collection
-};
-
-function Item (params) {
-
-    var upcomingClassSelf       = new BASEITEM();
-
-    upcomingClassSelf.error     = null;
     upcomingClassSelf.req       = params.req;
+
     upcomingClassSelf.allocate  = PROMISIFY(allocate);
     upcomingClassSelf.build     = PROMISIFY(build);
     upcomingClassSelf.save      = PROMISIFY(save);
@@ -51,8 +22,11 @@ function Item (params) {
 
     function allocate (params, resolve, reject) {
         
-        Database.UpcomingClass.allocate({ newClassInfo: params.newClassInfo }).then(function (upcomingClass) {
-            upcomingClassSelf.set(upcomingClass);
+        var nci = {
+            category: upcomingClassSelf.Data.category
+        };
+        Database.UpcomingClass.allocate({ newClassInfo: nci }).then(function (upcomingClass) {
+            upcomingClassSelf.Data.add(upcomingClass);
             resolve();
         }, function (error) {
             upcomingClassSelf.error = error;
@@ -63,18 +37,21 @@ function Item (params) {
 
     function build (params, resolve, reject) {
 
-        var meetupEvent = new Meetup.Event.Item({
+        var meetupEvent = new Meetup.Event({
             req: upcomingClassSelf.req
         });
         
         var postArgs = {
-            newEventInfo: params.newMeetupEvent
+            newEventInfo: {
+                name: upcomingClassSelf.Data.get('name'),
+                time: upcomingClassSelf.Data.get('time')
+            }
         };
 
         MeetupApi.post(postArgs).then(function (meetupEvent) {
-            upcomingClassSelf.set('meetupEvent', meetupEvent);
+            upcomingClassSelf.Data.set('meetupEvent', meetupEvent);
 
-            console.log(upcomingClassSelf);
+            console.log(upcomingClassSelf.Data);
             
             //upcomingClassSelf.save();
             resolve();
@@ -97,6 +74,12 @@ function Item (params) {
     }
 
     return upcomingClassSelf;
+};
+
+
+function Item (params) {
+
+   
 }
 
 function Collection (options) {

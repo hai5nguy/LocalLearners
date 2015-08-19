@@ -44,24 +44,20 @@ module.exports = (function () {
     //app.post('/api/upcoming', Authentication.ensureAuthenticated, function (req, res) {
     app.post('/api/upcoming', function (req, res) {
         
-        var upcomingClass = new UpcomingClass.Item({
-            req: req
+        var upcomingClass = new UpcomingClass({
+            req: req,
+            initialData: {
+                name: req.body.name,
+                category: req.body.category,
+                time: req.body.time
+            }
         });
 
-        var newClassInfo = {
-            category: req.body.category
-        };
-
-        var newMeetupEvent = {
-            name: req.body.name,
-            time: req.body.time
-        };
-
-        d(newClassInfo);
-        
-        upcomingClass.allocate({ newClassInfo: newClassInfo }).then(function () {
+        upcomingClass.allocate().then(function () {
             res.json(upcomingClass.get());
-            upcomingClass.build({ newMeetupEvent: newMeetupEvent });
+
+            upcomingClass.build();
+
         }, function () {
             res.status(500).send(upcomingClass.error);
         });

@@ -8,13 +8,14 @@ var _localLearnersGroupId = 18049722;  //todo: move to environmentals, maybe not
 var _localLearnersGroupUrlName = 'locallearners';
 
 var Meetup = {
-    Event: Event(),
-    Profile: Profile()
+    Event: Event()
 }
 
 module.exports = Meetup;
 
 function Event() {
+
+    
     return {
         Item: Item,
         Collection: Collection

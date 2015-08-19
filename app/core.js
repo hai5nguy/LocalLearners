@@ -83,48 +83,26 @@ global.DEITYOBJECT = function(initialData) {
     }
 };
 
+global.BASEDATA = function (initialData) {
+    var self = this;
+    self._data = initialData || {};
+    self.get = function (name) {
+        return (name ? self._data[name] | self._data )
+    };
+    self.add = function (newData) {
+        _.extend(self._data, newData);
+    };
+    self.set = function (nameOrObject, value) {
+        (arguments.length === 1) ? self._data = nameOrObject : self._data[nameOrObject] = value;
+    };
+}
 
-global.BASEITEM = function(initialData) {
+global.BASECOLLECTION = function (initialItems) {
     return {
-        _data: initialData || {},
-        get: function (name) {
-            if (!name) {
-                return this._data;
-            } else {
-                return this._data[name];
-            }
-        },
-        set: function (nameOrObject, value) {
-            if (arguments.length === 1) {
-                this._data = nameOrObject;
-            } else {
-                this._data[nameOrObject] = value;
-            }
-        }
-    }
-};
-
-
-global.BASECOLLECTION = function (initialData) {
-    return {
-        _items: initialData || [],
+        _items: initialItems || [],
         get: function (id) {
-            if (id === undefined) {
-                return this._items;
-            } else {
-                return _.findWhere(this._items, { _id: id });
-            }
+            return (id === undefined) ? this._items : _.findWhere(this._items, { _id: id });
         },
-        // set: function (idOrItems, item) {
-        //     if (arguments.length === 1) {
-        //         this._items = idOrItems;
-        //     } else {
-        //         var match = _.findWhere(this._items, { id: idOrItems });
-        //         if (match) {
-        //             match = item;
-        //         }
-        //     }
-        // },
         add: function (items) {
             this._items = this._items.concat(items);
         },
@@ -133,3 +111,13 @@ global.BASECOLLECTION = function (initialData) {
         }
     }
 };
+
+global.BASEMODULE = function (initialData, initialItems) {
+
+    var self = this;
+    self.error = null;
+    self.Data = new BASEDATA(initialData);
+    self.Collection = new BASECOLLECTION(initialItems)
+
+    return self;
+}
