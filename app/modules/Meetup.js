@@ -20,7 +20,7 @@ function Event() {
         Collection: Collection
     }
 
-    function Item() {
+    function Item(params) {
         var eventSelf = BASEITEM();
 
         eventSelf.error = null;
@@ -30,26 +30,21 @@ function Event() {
 
         return eventSelf;
 
-
+        /**
+         * params {
+         *      newEventInfo: {},
+         * }
+         */
         function post(params, resolve, reject) {
 
             var userProfile = new Meetup.Profile.Item({ req: params.req });
 
             userProfile.ensureOrganizerStatus().then(function () {
 
-            }, function () {
-                
-            })
-
-            
-            MeetupApi.Profile.ensureOrganizer(context)().then(function() {
-                
-                var event = context.UpcomingClass.record.meetup.event;
-                
-                context.RestService = {
+                var restParams = {
                     url: MEETUP_API_ENDPOINT + '/event',
                     args: {
-                        data: (LL_ENVIRONMENT === 'development') ? { user: context.Authentication.user } : {},
+                        data: (LL_ENVIRONMENT === 'development') ? { user: eventSelf.req.user } : {},
                         parameters: {
                             group_id: _localLearnersGroupId,
                             group_urlname: _localLearnersGroupUrlName,
@@ -62,6 +57,21 @@ function Event() {
                         }
                     }
                 };
+
+                RestClient.post({
+
+                })
+
+            }, function () {
+                
+            });
+
+            
+            MeetupApi.Profile.ensureOrganizer(context)().then(function() {
+                
+                var event = context.UpcomingClass.record.meetup.event;
+                
+                context.RestService = 
                 
                 RestService.post(context)().then(function () {
                     var createdEvent = context.RestService.result;

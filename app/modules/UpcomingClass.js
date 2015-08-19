@@ -38,24 +38,24 @@ module.exports = {
     Collection: Collection
 };
 
-function Item (options) {
+function Item (params) {
 
-    var itemSelf = new BASEITEM();
+    var upcomingClassSelf       = new BASEITEM();
 
-    itemSelf.error = null;
-    itemSelf.req = options.req;
-    itemSelf.allocate = PROMISIFY(allocate);
-    itemSelf.build = PROMISIFY(build);
-    itemSelf.save = PROMISIFY(save);
+    upcomingClassSelf.error     = null;
+    upcomingClassSelf.req       = params.req;
+    upcomingClassSelf.allocate  = PROMISIFY(allocate);
+    upcomingClassSelf.build     = PROMISIFY(build);
+    upcomingClassSelf.save      = PROMISIFY(save);
     
 
     function allocate (params, resolve, reject) {
         
         Database.UpcomingClass.allocate({ newClassInfo: params.newClassInfo }).then(function (upcomingClass) {
-            itemSelf.set(upcomingClass);
+            upcomingClassSelf.set(upcomingClass);
             resolve();
         }, function (error) {
-            itemSelf.error = error;
+            upcomingClassSelf.error = error;
             reject();
         });
 
@@ -63,17 +63,23 @@ function Item (options) {
 
     function build (params, resolve, reject) {
 
-        var newMeetupEvent = params.newMeetupEvent;
+        var meetupEvent = new Meetup.Event.Item({
+            req: upcomingClassSelf.req
+        });
+        
+        var postArgs = {
+            newEventInfo: params.newMeetupEvent
+        };
 
-        MeetupApi.post(newMeetupEvent).then(function (meetupEvent) {
-            itemSelf.set('meetupEvent', meetupEvent);
+        MeetupApi.post(postArgs).then(function (meetupEvent) {
+            upcomingClassSelf.set('meetupEvent', meetupEvent);
 
-            console.log(itemSelf);
+            console.log(upcomingClassSelf);
             
-            //itemSelf.save();
+            //upcomingClassSelf.save();
             resolve();
         }, function (error) {
-            console.error('error posting to meetup', itemSelf, error);
+            console.error('error posting to meetup', upcomingClassSelf, error);
             reject();
         });
 
@@ -81,16 +87,16 @@ function Item (options) {
 
     function save (params, resolve, reject) {
 
-        Database.UpcomingClass.save(itemSelf).then(function (savedUpcomingClass) {
+        Database.UpcomingClass.save(upcomingClassSelf).then(function (savedUpcomingClass) {
             resolve();
         }, function (error) {
-            itemSelf.error = error;
+            upcomingClassSelf.error = error;
             reject();
         });
 
     }
 
-    return itemSelf;
+    return upcomingClassSelf;
 }
 
 function Collection (options) {
